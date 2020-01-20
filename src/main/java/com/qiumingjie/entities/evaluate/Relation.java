@@ -3,6 +3,7 @@ package com.qiumingjie.entities.evaluate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * @author QiuMingJie
@@ -10,7 +11,7 @@ import javax.persistence.Id;
  * @description 每一个评估单关联的项目
  */
 @Entity
-public class Relation {
+public class Relation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -18,7 +19,6 @@ public class Relation {
     @Column(name = "FORM_ID")
     private String formId;
 
-    @Id
     @Column(name = "ITEM_ID")
     private String itemId;
 

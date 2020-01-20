@@ -3,6 +3,7 @@ package com.qiumingjie.entities.evaluate;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * @author QiuMingJie
@@ -10,7 +11,7 @@ import javax.persistence.Table;
  * @description 储存表单记录的值
  */
 @Table(name = "FORM_VALUE")
-public class FormValue {
+public class FormValue implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id

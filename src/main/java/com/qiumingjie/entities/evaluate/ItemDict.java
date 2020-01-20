@@ -3,18 +3,20 @@ package com.qiumingjie.entities.evaluate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * @author QiuMingJie
  * @date 2020-01-20 21:39
  * @description 项目字典表
  */
-@Entity(name = "ITEM_DICT")
-public class ItemDict {
+@Entity
+public class ItemDict implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(name = "ITEM_ID")
     private String itemId;
 
     @Column(name = "DESC")
@@ -30,7 +32,7 @@ public class ItemDict {
     private String createDateTime;
 
     @Column(name = "USED")
-    private Boolean used;
+    private String used;
 
     public String getItemId() {
         return itemId;
@@ -64,11 +66,15 @@ public class ItemDict {
         this.createDateTime = createDateTime;
     }
 
-    public Boolean getUsed() {
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getUsed() {
         return used;
     }
 
-    public void setUsed(Boolean used) {
+    public void setUsed(String used) {
         this.used = used;
     }
 }

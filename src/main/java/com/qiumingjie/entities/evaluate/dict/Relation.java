@@ -1,4 +1,4 @@
-package com.qiumingjie.entities.evaluate;
+package com.qiumingjie.entities.evaluate.dict;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +19,7 @@ public class Relation implements Serializable {
     @Column(name = "FORM_ID")
     private String formId;
 
+    @Id
     @Column(name = "ITEM_ID")
     private String itemId;
 

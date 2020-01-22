@@ -1,4 +1,4 @@
-package com.qiumingjie.entities.evaluate;
+package com.qiumingjie.entities.evaluate.dict;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,8 +19,8 @@ public class ItemDict implements Serializable {
     @Column(name = "ITEM_ID")
     private String itemId;
 
-    @Column(name = "DESC")
-    private String desc;
+    @Column(name = "CONTENT")
+    private String content;
 
     /**
      * 项目类型
@@ -31,8 +31,9 @@ public class ItemDict implements Serializable {
     @Column(name = "CREATE_DATE_TIME")
     private String createDateTime;
 
-    @Column(name = "USED")
-    private String used;
+    @Column(name = "USE_flag")
+    private String useFlag;
+
 
     public String getItemId() {
         return itemId;
@@ -42,12 +43,12 @@ public class ItemDict implements Serializable {
         this.itemId = itemId;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getContent() {
+        return content;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getType() {
@@ -66,15 +67,11 @@ public class ItemDict implements Serializable {
         this.createDateTime = createDateTime;
     }
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
+    public String getUseFlag() {
+        return useFlag;
     }
 
-    public String getUsed() {
-        return used;
-    }
-
-    public void setUsed(String used) {
-        this.used = used;
+    public void setUseFlag(String useFlag) {
+        this.useFlag = useFlag;
     }
 }

@@ -1,8 +1,6 @@
-package com.qiumingjie.entities.evaluate;
+package com.qiumingjie.entities.evaluate.table;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -10,12 +8,21 @@ import java.io.Serializable;
  * @date 2020-01-20 22:00
  * @description 储存表单记录的值
  */
+@Entity
 @Table(name = "FORM_VALUE")
 public class FormValue implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 实体form的id，为字典表id+五位数
+     */
     @Id
-    private Relation relation;
+    private String entityFormId;
+
+    @Id
+    @Column(name = "ITEM_ID")
+    private String itemId;
 
     @Column
     private String value;
@@ -23,18 +30,26 @@ public class FormValue implements Serializable {
     @Column(name = "CREATE_DATE_TIME")
     private String createDateTime;
 
-    @Column(name = "delete")
-    private Boolean delete;
+    @Column(name = "delete_flag")
+    private Boolean deleteFlag;
 
     @Column(name = "MODIFY_DATE_TIME")
     private String modifyDateTime;
 
-    public Relation getRelation() {
-        return relation;
+    public String getEntityFormId() {
+        return entityFormId;
     }
 
-    public void setRelation(Relation relation) {
-        this.relation = relation;
+    public void setEntityFormId(String entityFormId) {
+        this.entityFormId = entityFormId;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 
     public String getValue() {
@@ -53,12 +68,12 @@ public class FormValue implements Serializable {
         this.createDateTime = createDateTime;
     }
 
-    public Boolean getDelete() {
-        return delete;
+    public Boolean getDeleteFlag() {
+        return deleteFlag;
     }
 
-    public void setDelete(Boolean delete) {
-        this.delete = delete;
+    public void setDeleteFlag(Boolean deleteFlag) {
+        this.deleteFlag = deleteFlag;
     }
 
     public String getModifyDateTime() {

@@ -1,4 +1,4 @@
-package com.qiumingjie.entities.evaluate;
+package com.qiumingjie.entities.evaluate.dict;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,17 +28,23 @@ public class FormDict implements Serializable {
     @Column(name = "FORM_TYPE")
     private String formType;
 
-    @Column(name = "USED")
-    private Boolean used;
+    @Column(name = "USE_FLAG")
+    private Boolean useFlag;
 
-    @Column(name = "DELETE")
-    private Boolean delete;
+    @Column(name = "DELETE_FLAG")
+    private Boolean deleteFlag;
 
     @Column(name = "CREATE_DATE_TIME")
     private String createDateTime;
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getFormId() {
@@ -65,20 +71,20 @@ public class FormDict implements Serializable {
         this.formType = formType;
     }
 
-    public Boolean getUsed() {
-        return used;
+    public Boolean getUseFlag() {
+        return useFlag;
     }
 
-    public void setUsed(Boolean used) {
-        this.used = used;
+    public void setUseFlag(Boolean useFlag) {
+        this.useFlag = useFlag;
     }
 
-    public Boolean getDelete() {
-        return delete;
+    public Boolean getDeleteFlag() {
+        return deleteFlag;
     }
 
-    public void setDelete(Boolean delete) {
-        this.delete = delete;
+    public void setDeleteFlag(Boolean deleteFlag) {
+        this.deleteFlag = deleteFlag;
     }
 
     public String getCreateDateTime() {

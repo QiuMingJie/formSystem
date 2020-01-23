@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author QiuMingJie
@@ -29,7 +30,7 @@ public class ItemDict implements Serializable {
     private String type;
 
     @Column(name = "CREATE_DATE_TIME")
-    private String createDateTime;
+    private Date createDateTime;
 
     @Column(name = "USE_flag")
     private String useFlag;
@@ -59,11 +60,12 @@ public class ItemDict implements Serializable {
         this.type = type;
     }
 
-    public String getCreateDateTime() {
+
+    public Date getCreateDateTime() {
         return createDateTime;
     }
 
-    public void setCreateDateTime(String createDateTime) {
+    public void setCreateDateTime(Date createDateTime) {
         this.createDateTime = createDateTime;
     }
 

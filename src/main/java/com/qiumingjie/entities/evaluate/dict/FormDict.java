@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author QiuMingJie
@@ -35,7 +36,7 @@ public class FormDict implements Serializable {
     private Boolean deleteFlag;
 
     @Column(name = "CREATE_DATE_TIME")
-    private String createDateTime;
+    private Date createDateTime;
 
     private String remark;
 
@@ -87,11 +88,11 @@ public class FormDict implements Serializable {
         this.deleteFlag = deleteFlag;
     }
 
-    public String getCreateDateTime() {
+    public Date getCreateDateTime() {
         return createDateTime;
     }
 
-    public void setCreateDateTime(String createDateTime) {
+    public void setCreateDateTime(Date createDateTime) {
         this.createDateTime = createDateTime;
     }
 }

@@ -1,6 +1,5 @@
 package com.qiumingjie.entities.evaluate.table;
 
-import javax.persistence.Entity;
 import java.io.Serializable;
 
 /**
@@ -8,9 +7,7 @@ import java.io.Serializable;
  * @date 2020-01-21 17:44
  * @description 表格模板表
  */
-@Entity
 public class FormTemplate implements Serializable {
-
 
     /**
      * 患者部分

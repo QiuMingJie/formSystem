@@ -1,9 +1,9 @@
 package com.qiumingjie.entities.evaluate.dict;
 
-import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author QiuMingJie
@@ -15,27 +15,37 @@ public class Relation implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @Column(name = "FORM_ID")
-    private String formId;
+    @EmbeddedId
+    private RelationKeys id;
 
-    @Id
-    @Column(name = "ITEM_ID")
-    private String itemId;
+    private Date createDateTime;
 
-    public String getFormId() {
-        return formId;
+
+    public Date getCreateDateTime() {
+        return createDateTime;
     }
 
-    public void setFormId(String formId) {
-        this.formId = formId;
+    public void setCreateDateTime(Date createDateTime) {
+        this.createDateTime = createDateTime;
     }
 
-    public String getItemId() {
-        return itemId;
+    public RelationKeys getId() {
+        return id;
     }
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    public void setId(RelationKeys id) {
+        this.id = id;
+    }
+
+    public Relation(RelationKeys id) {
+        this.id = id;
+    }
+
+    public Relation(String formId, String itemId,Date createDateTime) {
+        this.setId(new RelationKeys(formId, itemId));
+        this.setCreateDateTime(createDateTime);
+    }
+
+    public Relation() {
     }
 }

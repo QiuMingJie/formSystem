@@ -1,6 +1,11 @@
 package com.qiumingjie.entities.evaluate.table;
 
-import javax.persistence.*;
+import com.qiumingjie.entities.evaluate.dict.RelationKeys;
+
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**
@@ -17,12 +22,8 @@ public class FormValue implements Serializable {
     /**
      * 实体form的id，为字典表id+五位数
      */
-    @Id
-    private String entityFormId;
-
-    @Id
-    @Column(name = "ITEM_ID")
-    private String itemId;
+    @EmbeddedId
+    private RelationKeys id;
 
     @Column
     private String value;
@@ -36,20 +37,13 @@ public class FormValue implements Serializable {
     @Column(name = "MODIFY_DATE_TIME")
     private String modifyDateTime;
 
-    public String getEntityFormId() {
-        return entityFormId;
+
+    public RelationKeys getId() {
+        return id;
     }
 
-    public void setEntityFormId(String entityFormId) {
-        this.entityFormId = entityFormId;
-    }
-
-    public String getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
+    public void setId(RelationKeys id) {
+        this.id = id;
     }
 
     public String getValue() {

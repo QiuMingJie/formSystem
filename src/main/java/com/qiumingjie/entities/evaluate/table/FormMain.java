@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @description
  */
 @Entity
-public class Form extends FormTemplate implements Serializable {
+public class FormMain extends FormTemplate implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,6 +31,10 @@ public class Form extends FormTemplate implements Serializable {
     private String signer;
 
     private String recordDateTime;
+
+    public String getFormId() {
+        return formId;
+    }
 
     public void setFormId(String formId) {
         this.formId = formId;

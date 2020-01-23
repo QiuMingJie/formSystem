@@ -9,6 +9,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,6 +30,60 @@ public class ClassUtils {
 	public static <T, O> void setValue(T target, String field, O value, Class<O> argClass) {
 		setValue(target, field, value, argClass, true);
 	}
+
+
+    /**
+     * 自写的，猜类的类型然后进行注入
+     * @param target 目标类
+     * @param fieldName 成员名
+     * @param valueSource 值
+     * @param <T>
+     * @throws IllegalAccessException
+     * @throws ParseException
+     */
+    public static <T> void setValue(T target, String fieldName, String valueSource) throws IllegalAccessException, ParseException {
+        Field field = null;
+	    Field[] declaredFields = target.getClass().getDeclaredFields();
+        for (Field declaredField : declaredFields) {
+            if (declaredField.getName().equals(fieldName)) {
+                field = declaredField;
+            }
+        }
+        if (field==null) {
+            new  Validate().error("获取不到file"+fieldName);
+        }
+        //8：获取目标类的属性类型
+        String typeTarget = field.getType().toString();
+        field.setAccessible(true);
+        if ("class java.lang.String".equals(typeTarget) && valueSource != null) {
+            field.set(target, String.valueOf(valueSource));
+        }
+        if ("class java.lang.Integer".equals(typeTarget) && CommonUtils.notBlank(valueSource)) {
+            field.set(target, Integer.valueOf(valueSource));
+        } else if ("class java.lang.Long".equals(typeTarget) && valueSource != null) {
+            field.set(target, Long.valueOf(valueSource));
+        } else if ("class java.lang.Double".equals(typeTarget) && valueSource != null) {
+            field.set(target, Double.valueOf(valueSource));
+        } else if ("class java.math.BigDecimal".equals(typeTarget) && valueSource != null) {
+            field.set(target, new BigDecimal(valueSource));
+        } else if ("class java.util.Date".equals(typeTarget) && valueSource != null) {
+            Date date = null;
+            if (!valueSource.contains(":")) {
+                date = new SimpleDateFormat("yyyy-MM-dd").parse(valueSource);
+                field.set(target, date);
+            } else if (valueSource.contains(":") && valueSource.length() < 18) {
+                date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(valueSource);
+                field.set(target, date);
+            } else if (valueSource.contains(":") && valueSource.length() > 18) {
+                date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(valueSource);
+                field.set(target, date);
+            } else {
+                date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(valueSource);
+                field.set(target, date);
+            }
+        }
+
+    }
 	
 	public static <T, O> void setValue(T target, String field, O value, Class<O> argClass, boolean throwException) {
 		try {

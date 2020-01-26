@@ -13,9 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class CopyUtils {
@@ -55,7 +53,7 @@ public class CopyUtils {
                 // 7:根据源实体类注解里的名字去目标实体类中查找对应的属性信息
                 Field field = ClassUtils.getField(target.getClass(), nameSource);
                 if (CommonUtils.empty(field)) continue;
-                ClassUtils.setValue(target,field.getName(),valueSource);
+                ClassUtils.setValue(target, field.getName(), valueSource);
 //
 //                if (CommonUtils.empty(field)) continue;
 //                //8：获取目标类的属性类型
@@ -133,7 +131,7 @@ public class CopyUtils {
      * 获取类中对应ID属性的值
      *
      * @param source
-     * @param target
+     * @param
      * @throws Exception
      * @author 豪
      * @date 2019年3月2日
@@ -566,6 +564,7 @@ public class CopyUtils {
 
     /**
      * 父类子类相互转换
+     *
      * @param son
      * @param father
      * @param <T>
@@ -574,16 +573,36 @@ public class CopyUtils {
      * @throws ParseException
      * @throws IllegalAccessException
      */
-    public static <T, K> T toFather(K son, T father) throws ParseException, IllegalAccessException {
+    public static <T, K extends T> T convertExtend(K son, T father) {
+        //返回标识，默认为true，返回子类，假如父类为空则返回父类
+        Boolean returnSon = true;
         Field[] fatherDeclaredFields = father.getClass().getDeclaredFields();
-        Field[] sonDeclaredFields = son.getClass().getDeclaredFields();
+        Field[] sonDeclaredFields = son.getClass().getSuperclass().getDeclaredFields();
         for (Field fatherDeclaredField : fatherDeclaredFields) {
+            if (fatherDeclaredField.getName().equals("serialVersionUID")) {
+                continue;
+            }
             for (Field sonDeclaredField : sonDeclaredFields) {
                 if (fatherDeclaredField.getName().equals(sonDeclaredField.getName())) {
-                    ClassUtils.setValue(father, fatherDeclaredField.getName(), ClassUtils.getValue(son, sonDeclaredField.getName()));
+                    if (ClassUtils.getValue(son, sonDeclaredField.getName())==null&&ClassUtils.getValue(father, fatherDeclaredField.getName())==null) {
+                        continue;
+                    }
+                    if (ClassUtils.getValue(son, sonDeclaredField.getName()) == null) {
+                        ClassUtils.setValue(son, sonDeclaredField.getName(), ClassUtils.getValue(father, fatherDeclaredField.getName()), (Class)fatherDeclaredField.getGenericType());
+                    }
+                    if (ClassUtils.getValue(father, fatherDeclaredField.getName())==null){
+                        ClassUtils.setValue(father, fatherDeclaredField.getName(), ClassUtils.getValue(son, sonDeclaredField.getName()), (Class)sonDeclaredField.getGenericType());
+                        returnSon = false;
+                    }
                 }
             }
         }
-        return father;
+        if (returnSon) {
+            return son;
+        }else {
+            return father;
+        }
     }
+
+
 }

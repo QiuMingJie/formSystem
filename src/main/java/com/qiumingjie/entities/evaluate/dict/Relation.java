@@ -33,6 +33,10 @@ public class Relation implements Serializable {
         return id;
     }
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
     public void setId(RelationKeys id) {
         this.id = id;
     }

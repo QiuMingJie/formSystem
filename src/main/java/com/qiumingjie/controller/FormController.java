@@ -6,6 +6,7 @@ import com.qiumingjie.service.FormAddDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -31,14 +32,27 @@ public class FormController {
        return   formAddDictService.addFormDict(formDictDto);
     }
 
-    @RequestMapping("/deleteForm")
-    public JsonHandler deleteFormDict(@RequestBody FormDictDto formDictDto) {
-        return formAddDictService.deleteFormDict(formDictDto);
+    /**
+     * 删除表
+     * @param formId 表单id
+     * @param deleteItem 是否删除项目，true/false
+     * @return 运行过程
+     */
+    @RequestMapping(value = "/deleteForm",method = RequestMethod.GET)
+    public JsonHandler deleteFormDict(String formId,Boolean deleteItem) {
+        return formAddDictService.deleteFormDict(formId,deleteItem);
     }
 
-    @RequestMapping("/getFormById")
-    public JsonHandler getFormById(@RequestBody FormDictDto formDictDto) {
-        return formAddDictService.getFormById(formDictDto.getFormId());
+    /**
+     * 获取表单
+     * @param formId 表单id
+     * @return 表单的基本信息
+     */
+    @RequestMapping(value = "/getFormById",method = RequestMethod.GET)
+    public JsonHandler getFormById(String formId) {
+        return formAddDictService.getFormById(formId);
     }
+
+
 
 }

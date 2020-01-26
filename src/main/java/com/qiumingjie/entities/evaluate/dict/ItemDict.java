@@ -35,6 +35,9 @@ public class ItemDict implements Serializable {
     @Column(name = "USE_flag")
     private String useFlag;
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public String getItemId() {
         return itemId;

@@ -38,6 +38,11 @@ public class FormDict implements Serializable {
     @Column(name = "CREATE_DATE_TIME")
     private Date createDateTime;
 
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
     private String remark;
 
     public String getRemark() {

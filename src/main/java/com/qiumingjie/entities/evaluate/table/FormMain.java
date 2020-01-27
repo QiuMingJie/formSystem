@@ -19,14 +19,7 @@ public class FormMain extends FormTemplate implements Serializable {
     @Column(name = "FORM_ID")
     private String formId;
 
-    @Column(name = "DELETE_FLAG")
-    private Boolean deleteFlag;
-
-    private String createDateTime;
-
     private String creator;
-
-    private String remark;
 
     private String signer;
 
@@ -40,38 +33,12 @@ public class FormMain extends FormTemplate implements Serializable {
         this.formId = formId;
     }
 
-    public Boolean getDeleteFlag() {
-        return deleteFlag;
-    }
-
-    public void setDeleteFlag(Boolean deleteFlag) {
-        this.deleteFlag = deleteFlag;
-    }
-
-    public String getCreateDateTime() {
-        return createDateTime;
-    }
-
-    public void setCreateDateTime(String createDateTime) {
-        this.createDateTime = createDateTime;
-    }
-
     public String getCreator() {
         return creator;
     }
 
     public void setCreator(String creator) {
         this.creator = creator;
-    }
-
-    @Override
-    public String getRemark() {
-        return remark;
-    }
-
-    @Override
-    public void setRemark(String remark) {
-        this.remark = remark;
     }
 
     public String getSigner() {

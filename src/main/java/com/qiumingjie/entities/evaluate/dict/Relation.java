@@ -1,5 +1,7 @@
 package com.qiumingjie.entities.evaluate.dict;
 
+import com.qiumingjie.entities.evaluate.table.BaseEntity;
+
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import java.io.Serializable;
@@ -11,45 +13,26 @@ import java.util.Date;
  * @description 每一个评估单关联的项目
  */
 @Entity
-public class Relation implements Serializable {
+public class Relation extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @EmbeddedId
     private RelationKeys id;
 
-    private Date createDateTime;
-
-
-    public Date getCreateDateTime() {
-        return createDateTime;
+    public Relation(String formId, String itemId,Date createDateTime) {
+        this.setId(new RelationKeys(formId, itemId));
+//        this.setCreateDateTime(createDateTime);
     }
 
-    public void setCreateDateTime(Date createDateTime) {
-        this.createDateTime = createDateTime;
+    public Relation() {
     }
 
     public RelationKeys getId() {
         return id;
     }
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
     public void setId(RelationKeys id) {
         this.id = id;
-    }
-
-    public Relation(RelationKeys id) {
-        this.id = id;
-    }
-
-    public Relation(String formId, String itemId,Date createDateTime) {
-        this.setId(new RelationKeys(formId, itemId));
-        this.setCreateDateTime(createDateTime);
-    }
-
-    public Relation() {
     }
 }

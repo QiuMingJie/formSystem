@@ -4,7 +4,6 @@ import com.qiumingjie.dao.dict.FormDictRepository;
 import com.qiumingjie.dao.dict.ItemDictRepository;
 import com.qiumingjie.dao.dict.RelationRepository;
 import com.qiumingjie.dto.FormDictDto;
-import com.qiumingjie.dto.FormDto;
 import com.qiumingjie.entities.evaluate.dict.FormDict;
 import com.qiumingjie.entities.evaluate.dict.ItemDict;
 import com.qiumingjie.entities.evaluate.dict.Relation;
@@ -85,11 +84,11 @@ public class FormAddDictService {
     }
 
     public JsonHandler getFormById(String formId) {
-        FormDto formDto = new FormDto();
+        FormDictDto formDictDto = new FormDictDto();
         Optional<FormDict> formDict = formDictRepository.findById(formId);
         if (formDict.isPresent()) {
-            if (CopyUtils.convertExtend(formDto, formDict) instanceof FormDto) {
-                formDto= (FormDto)CopyUtils.convertExtend(formDto, formDict.get());
+            if (CopyUtils.convertExtend(formDictDto, formDict) instanceof FormDictDto) {
+                formDictDto= (FormDictDto)CopyUtils.convertExtend(formDictDto, formDict.get());
             }else {
                 JsonHandler.fail("父类子类转化异常");
             }
@@ -97,8 +96,8 @@ public class FormAddDictService {
         List<String> itemIdList=new ArrayList<>();
         List<Relation> allRelation = relationRepository.findAllById_FormId(formId);
         allRelation.forEach(x->itemIdList.add(x.getId().getItemId()));
-        formDto.setItemDictList(itemDictRepository.findAllById(itemIdList));
-        return JsonHandler.succeed(formDto);
+        formDictDto.setItemDictList(itemDictRepository.findAllById(itemIdList));
+        return JsonHandler.succeed(formDictDto);
     }
 
 }

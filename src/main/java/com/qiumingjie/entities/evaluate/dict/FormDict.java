@@ -1,11 +1,12 @@
 package com.qiumingjie.entities.evaluate.dict;
 
+import com.qiumingjie.entities.evaluate.table.BaseEntity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author QiuMingJie
@@ -15,7 +16,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "FORM_DICT")
-public class FormDict implements Serializable {
+public class FormDict extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,28 +30,8 @@ public class FormDict implements Serializable {
     @Column(name = "FORM_TYPE")
     private String formType;
 
-    @Column(name = "USE_FLAG")
-    private Boolean useFlag;
-
-    @Column(name = "DELETE_FLAG")
-    private Boolean deleteFlag;
-
-    @Column(name = "CREATE_DATE_TIME")
-    private Date createDateTime;
-
-
     public static long getSerialVersionUID() {
         return serialVersionUID;
-    }
-
-    private String remark;
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
     }
 
     public String getFormId() {
@@ -75,29 +56,5 @@ public class FormDict implements Serializable {
 
     public void setFormType(String formType) {
         this.formType = formType;
-    }
-
-    public Boolean getUseFlag() {
-        return useFlag;
-    }
-
-    public void setUseFlag(Boolean useFlag) {
-        this.useFlag = useFlag;
-    }
-
-    public Boolean getDeleteFlag() {
-        return deleteFlag;
-    }
-
-    public void setDeleteFlag(Boolean deleteFlag) {
-        this.deleteFlag = deleteFlag;
-    }
-
-    public Date getCreateDateTime() {
-        return createDateTime;
-    }
-
-    public void setCreateDateTime(Date createDateTime) {
-        this.createDateTime = createDateTime;
     }
 }

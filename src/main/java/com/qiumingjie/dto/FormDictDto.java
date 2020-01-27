@@ -6,7 +6,6 @@ import com.qiumingjie.entities.evaluate.dict.Relation;
 import com.qiumingjie.utils.CommonUtils;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,11 +23,11 @@ public class FormDictDto extends FormDict {
      * 初始化对应表，保存createTime
      */
     public void initRelation() {
-        this.setCreateDateTime(new Date());
+//        this.setCreateDateTime(new Date());
         if (CommonUtils.notEmpty(itemDictList)) {
             for (ItemDict itemDict : itemDictList) {
-                itemDict.setCreateDateTime(new Date());
-                relationList.add(new Relation(this.getFormId(), itemDict.getItemId(),new Date()));
+//                itemDict.setCreateDateTime(new Date());
+                relationList.add(new Relation(this.getFormId(), itemDict.getItemId(),null));
             }
         }
     }

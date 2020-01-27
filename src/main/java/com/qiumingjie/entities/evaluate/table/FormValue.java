@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "FORM_VALUE")
-public class FormValue implements Serializable {
+public class FormValue extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,16 +27,6 @@ public class FormValue implements Serializable {
 
     @Column
     private String value;
-
-    @Column(name = "CREATE_DATE_TIME")
-    private String createDateTime;
-
-    @Column(name = "delete_flag")
-    private Boolean deleteFlag;
-
-    @Column(name = "MODIFY_DATE_TIME")
-    private String modifyDateTime;
-
 
     public RelationKeys getId() {
         return id;
@@ -54,27 +44,4 @@ public class FormValue implements Serializable {
         this.value = value;
     }
 
-    public String getCreateDateTime() {
-        return createDateTime;
-    }
-
-    public void setCreateDateTime(String createDateTime) {
-        this.createDateTime = createDateTime;
-    }
-
-    public Boolean getDeleteFlag() {
-        return deleteFlag;
-    }
-
-    public void setDeleteFlag(Boolean deleteFlag) {
-        this.deleteFlag = deleteFlag;
-    }
-
-    public String getModifyDateTime() {
-        return modifyDateTime;
-    }
-
-    public void setModifyDateTime(String modifyDateTime) {
-        this.modifyDateTime = modifyDateTime;
-    }
 }

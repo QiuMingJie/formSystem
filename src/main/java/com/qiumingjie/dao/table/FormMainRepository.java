@@ -10,5 +10,10 @@ import org.springframework.stereotype.Repository;
  * @description
  */
 @Repository
-public interface FormMainRepository extends JpaRepository<FormMain,String> {
+public interface FormMainRepository extends JpaRepository<FormMain, String> {
+
+    FormMain findFormMainByFormIdOrderByFormIdDesc(String formId);
+
+
+
 }

@@ -1,13 +1,15 @@
 package com.qiumingjie.entities.evaluate.table;
 
+import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
 /**
  * @author QiuMingJie
  * @date 2020-01-21 17:44
- * @description 表格模板表
+ * @description 表格模板表，
  */
-public class FormTemplate implements Serializable {
+@MappedSuperclass
+public class FormTemplate extends BaseEntity implements Serializable {
 
     /**
      * 患者部分
@@ -20,7 +22,9 @@ public class FormTemplate implements Serializable {
 
     private String age;
 
-    //入院时间
+    /**
+     *    入院时间
+     */
     private String inHospitalDateTime;
 
     private String deptName;
@@ -31,8 +35,6 @@ public class FormTemplate implements Serializable {
 
     private String operaDateTime;
 
-    private String remark;
-
     /**
      * 护士签名部分
      */
@@ -42,7 +44,7 @@ public class FormTemplate implements Serializable {
 
     private String nurseName3;
 
-    private String signFlage;
+    private String signFlag;
 
     private String sign3DateTime;
 
@@ -122,14 +124,6 @@ public class FormTemplate implements Serializable {
         this.operaDateTime = operaDateTime;
     }
 
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
     public String getNurseName1() {
         return nurseName1;
     }
@@ -154,12 +148,13 @@ public class FormTemplate implements Serializable {
         this.nurseName3 = nurseName3;
     }
 
-    public String getSignFlage() {
-        return signFlage;
+
+    public String getSignFlag() {
+        return signFlag;
     }
 
-    public void setSignFlage(String signFlage) {
-        this.signFlage = signFlage;
+    public void setSignFlag(String signFlag) {
+        this.signFlag = signFlag;
     }
 
     public String getSign3DateTime() {

@@ -27,7 +27,7 @@ public class FormDictDto extends FormDict {
         if (CommonUtils.notEmpty(itemDictList)) {
             for (ItemDict itemDict : itemDictList) {
 //                itemDict.setCreateDateTime(new Date());
-                relationList.add(new Relation(this.getFormId(), itemDict.getItemId(),null));
+                relationList.add(new Relation(this.getFormDictId(), itemDict.getItemId(),null));
             }
         }
     }

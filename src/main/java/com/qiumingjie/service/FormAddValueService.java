@@ -6,12 +6,17 @@ import com.qiumingjie.dao.dict.RelationRepository;
 import com.qiumingjie.dao.table.FormMainRepository;
 import com.qiumingjie.dao.table.FormValueRepository;
 import com.qiumingjie.dto.FormDataDto;
+import com.qiumingjie.entities.evaluate.dict.FormDict;
 import com.qiumingjie.entities.evaluate.table.FormMain;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.utils.CommonUtils;
+import com.qiumingjie.utils.CopyUtils;
+import com.qiumingjie.utils.FormUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * @author QiuMingJie
@@ -36,16 +41,32 @@ public class FormAddValueService {
     @Resource
     private RelationRepository relationRepository;
 
+    @Resource
+    private FormDictService formDictService;
 
-    public JsonHandler addFrom(FormDataDto formDataDto) {
-        String templateFromId = formDataDto.getTemplateFormId();
-//        formDataDto.setCreateDateTime(new Date());
-        //暂时不知道怎么获取创建者
-        formDataDto.setCreator("!!");
-        FormMain formMainByFormIdOrderByFormIdDesc = formMainRepository.findFormMainByFormIdOrderByFormIdDesc(formDataDto.getFormId());
-        if (CommonUtils.empty(formMainByFormIdOrderByFormIdDesc) || formMainByFormIdOrderByFormIdDesc.getFormId() == null) {
-
+    @Transactional(rollbackFor = RuntimeException.class)
+    public JsonHandler saveOrUpdateForm(FormDataDto formDataDto) {
+        if (CommonUtils.empty(formDataDto.getFormId())) {
+            //不存在formId则是新建操作！
+            if (CommonUtils.empty(formDataDto.getTemplateFormId())) {
+                return JsonHandler.fail("新建表单失败：获取模板表单id失败");
+            }
+            Optional<FormDict> formDict=formDictService.existFormDict(formDataDto.getTemplateFormId());
+            if (!formDict.isPresent()) {
+                return JsonHandler.fail("新建表单失败：表单模板不存在");
+            }
+            //暂时不知道怎么获取创建者
+            formDataDto.setCreator("？？");
+            FormMain formMainByFormIdOrderByFormIdDesc = formMainRepository.findFormMainBytemplateIdLike(formDataDto.getFormId());
+            if (CommonUtils.empty(formMainByFormIdOrderByFormIdDesc) || formMainByFormIdOrderByFormIdDesc.getFormId() == null) {
+                formDataDto.setFormId(FormUtil.caculFormEntityId(formDataDto.getTemplateFormId()));
+            }else {
+                formDataDto.setFormId(FormUtil.caculFormEntityId(formMainByFormIdOrderByFormIdDesc.getFormId()));
+            }
         }
-        return null;
+        FormMain formMain = CopyUtils.convertExtend(formDataDto, new FormMain());
+        formMainRepository.save(formMain);
+        formValueRepository.saveAll(formDataDto.getFormValues());
+        return JsonHandler.succeed("保存成功");
     }
 }

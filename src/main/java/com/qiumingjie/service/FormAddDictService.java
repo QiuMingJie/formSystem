@@ -10,7 +10,7 @@ import com.qiumingjie.entities.evaluate.dict.Relation;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.utils.CommonUtils;
 import com.qiumingjie.utils.CopyUtils;
-import com.qiumingjie.utils.Norm;
+import com.qiumingjie.utils.FormUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,19 +51,19 @@ public class FormAddDictService {
         StringBuilder soutResult = new StringBuilder();
         Optional<FormDict> formDict = formDictRepository.findById(formId);
         if (formDict.isPresent()) {
-            soutResult.append("删除字典表:").append(formDict.get().getFormId()).append(formDict.get().getFormName());
+            soutResult.append("删除字典表:").append(formDict.get().getFormDictId()).append(formDict.get().getFormName());
             formDictRepository.deleteById(formId);
         } else {
             soutResult.append("字典表不存在").append(formId);
         }
-        soutResult.append(Norm.soutBank);
+        soutResult.append(FormUtil.soutBank);
         //删除关系表
         List<Relation> relationList = relationRepository.findAllById_FormId(formId);
         if (CommonUtils.notEmpty(relationList)) {
             for (Relation relation : relationList) {
                 soutResult.append("删除对应关系表:").append(relation.getId().getFormId()).append("->").append(relation.getId().getItemId());
                 relationRepository.delete(relation);
-                soutResult.append(Norm.soutBank);
+                soutResult.append(FormUtil.soutBank);
                 //是否删除项目
                 if (deleteItem) {
                     Optional<ItemDict> itemDict = itemDictRepository.findById(relation.getId().getItemId());
@@ -73,12 +73,12 @@ public class FormAddDictService {
                     } else {
                         soutResult.append("不存在项目字典").append(relation.getId().getItemId());
                     }
-                    soutResult.append(Norm.soutBank);
+                    soutResult.append(FormUtil.soutBank);
                 }
             }
         } else {
             soutResult.append("关联关系不存在");
-            soutResult.append(Norm.soutBank);
+            soutResult.append(FormUtil.soutBank);
         }
         return JsonHandler.succeed(soutResult);
     }

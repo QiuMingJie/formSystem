@@ -24,8 +24,18 @@ public class ItemDict extends BaseEntity implements Serializable {
     @Column(name = "CONTENT")
     private String content;
 
+    private String units;
+
+    /**
+     * 用于程度比较，程度越严重，值越大
+     */
+    private Integer value_level;
+
     /**
      * 项目类型
+     * 评估类型:I
+     * 措施类型:M
+     * 公共类型:C
      */
     @Column(name = "TYPE")
     private String type;
@@ -36,6 +46,14 @@ public class ItemDict extends BaseEntity implements Serializable {
 
     public void setItemId(String itemId) {
         this.itemId = itemId;
+    }
+
+    public String getUnits() {
+        return units;
+    }
+
+    public void setUnits(String units) {
+        this.units = units;
     }
 
     public String getContent() {

@@ -15,11 +15,10 @@ import java.util.Optional;
 @Service
 public class FormDictService {
     @Resource
-    FormDictRepository formDictRepository;
+    private FormDictRepository formDictRepository;
 
-    public Boolean existFormDict(String templateFormId) {
-        Optional<FormDict> formDict = formDictRepository.findById(templateFormId);
-        return formDict.isPresent();
+    public Optional<FormDict> existFormDict(String templateFormId) {
+       return formDictRepository.findById(templateFormId);
     }
 }
 

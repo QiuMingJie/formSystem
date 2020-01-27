@@ -22,7 +22,7 @@ public class FormDict extends BaseEntity implements Serializable {
 
     @Id
     @Column(name = "FORM_ID")
-    private String formId;
+    private String formDictId;
 
     @Column(name = "FORM_NAME")
     private String formName;
@@ -34,12 +34,12 @@ public class FormDict extends BaseEntity implements Serializable {
         return serialVersionUID;
     }
 
-    public String getFormId() {
-        return formId;
+    public String getFormDictId() {
+        return formDictId;
     }
 
-    public void setFormId(String formId) {
-        this.formId = formId;
+    public void setFormDictId(String formDictId) {
+        this.formDictId = formDictId;
     }
 
     public String getFormName() {

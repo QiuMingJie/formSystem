@@ -576,8 +576,8 @@ public class CopyUtils {
     public static <T, K extends T> T convertExtend(K son, T father) {
         //返回标识，默认为true，返回子类，假如父类为空则返回父类
         Boolean returnSon = true;
-        Field[] fatherDeclaredFields = father.getClass().getDeclaredFields();
-        Field[] sonDeclaredFields = son.getClass().getSuperclass().getDeclaredFields();
+        Field[] fatherDeclaredFields = getAllFields(father);
+        Field[] sonDeclaredFields =getAllFields(son);
         for (Field fatherDeclaredField : fatherDeclaredFields) {
             if (fatherDeclaredField.getName().equals("serialVersionUID")) {
                 continue;
@@ -603,6 +603,24 @@ public class CopyUtils {
             return father;
         }
     }
+
+    /**
+     * 获取所有的field
+     * @param o
+     * @return
+     */
+    public static Field[] getAllFields(Object o){
+        Class c= o.getClass();
+        List<Field> fieldList = new ArrayList<>();
+        while (c!= null){
+            fieldList.addAll(new ArrayList<>(Arrays.asList(c.getDeclaredFields())));
+            c= c.getSuperclass();
+        }
+        Field[] fields = new Field[fieldList.size()];
+        fieldList.toArray(fields);
+        return fields;
+    }
+
 
 
 }

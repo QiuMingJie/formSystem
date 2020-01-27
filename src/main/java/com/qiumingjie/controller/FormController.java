@@ -2,6 +2,7 @@ package com.qiumingjie.controller;
 
 import com.qiumingjie.dto.FormDataDto;
 import com.qiumingjie.dto.FormDictDto;
+import com.qiumingjie.entities.evaluate.dict.FormDict;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.service.FormAddDictService;
 import com.qiumingjie.service.FormAddValueService;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
 
 /**
  * @author QiuMingJie
@@ -63,15 +66,10 @@ public class FormController {
         return formAddDictService.getFormById(formId);
     }
 
-    @RequestMapping(value = "/addForm", method = RequestMethod.POST)
-    public JsonHandler addForm(FormDataDto formDataDto) {
-        if (CommonUtils.empty(formDataDto.getTemplateFormId())) {
-            return JsonHandler.fail("获取模板表单id失败");
-        }
-        if (!formDictService.existFormDict(formDataDto.getTemplateFormId())) {
-            return JsonHandler.fail("获取表单模板失败");
-        }
-        return formAddValueService.addFrom(formDataDto);
+    @RequestMapping(value = "/saveOrUpdateForm", method = RequestMethod.POST)
+    public JsonHandler saveOrUpdateForm(FormDataDto formDataDto) {
+
+        return formAddValueService.saveOrUpdateForm(formDataDto);
     }
 
 

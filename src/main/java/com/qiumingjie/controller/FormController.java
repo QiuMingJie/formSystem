@@ -2,19 +2,15 @@ package com.qiumingjie.controller;
 
 import com.qiumingjie.dto.FormDataDto;
 import com.qiumingjie.dto.FormDictDto;
-import com.qiumingjie.entities.evaluate.dict.FormDict;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.service.FormAddDictService;
 import com.qiumingjie.service.FormAddValueService;
 import com.qiumingjie.service.FormDictService;
-import com.qiumingjie.utils.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 /**
  * @author QiuMingJie
@@ -68,9 +64,20 @@ public class FormController {
 
     @RequestMapping(value = "/saveOrUpdateForm", method = RequestMethod.POST)
     public JsonHandler saveOrUpdateForm(FormDataDto formDataDto) {
-
         return formAddValueService.saveOrUpdateForm(formDataDto);
     }
+
+    @RequestMapping(value = "/getForm", method = RequestMethod.GET)
+    public JsonHandler getForm(String  formId) {
+        return formAddValueService.getForm(formId);
+    }
+
+    @RequestMapping(value = "/deleteForm", method = RequestMethod.GET)
+    public JsonHandler deleteForm(String  formId) {
+        return formAddValueService.deleteForm(formId);
+    }
+
+
 
 
 

@@ -20,8 +20,8 @@ public class Relation extends BaseEntity implements Serializable {
     @EmbeddedId
     private RelationKeys id;
 
-    public Relation(String formId, String itemId,Date createDateTime) {
-        this.setId(new RelationKeys(formId, itemId));
+    public Relation(String formDictId, String itemId,Date createDateTime) {
+        this.setId(new RelationKeys(formDictId, itemId));
 //        this.setCreateDateTime(createDateTime);
     }
 

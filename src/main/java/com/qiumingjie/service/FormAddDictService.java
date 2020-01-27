@@ -40,7 +40,7 @@ public class FormAddDictService {
     @Transactional(rollbackFor = RuntimeException.class)
     public JsonHandler addFormDict(FormDictDto formDictDto) {
         formDictDto.initRelation();
-        formDictRepository.save(CopyUtils.convertExtend(formDictDto, new FormDict()));
+        formDictRepository.save(CopyUtils.transfer(formDictDto, new FormDict()));
         itemDictRepository.saveAll(formDictDto.getItemDictList());
         relationRepository.saveAll(formDictDto.getRelationList());
         return JsonHandler.succeed(formDictDto);
@@ -58,10 +58,10 @@ public class FormAddDictService {
         }
         soutResult.append(FormUtil.soutBank);
         //删除关系表
-        List<Relation> relationList = relationRepository.findAllById_FormId(formId);
+        List<Relation> relationList = relationRepository.findAllById_FormDictId(formId);
         if (CommonUtils.notEmpty(relationList)) {
             for (Relation relation : relationList) {
-                soutResult.append("删除对应关系表:").append(relation.getId().getFormId()).append("->").append(relation.getId().getItemId());
+                soutResult.append("删除对应关系表:").append(relation.getId().getFormDictId()).append("->").append(relation.getId().getItemId());
                 relationRepository.delete(relation);
                 soutResult.append(FormUtil.soutBank);
                 //是否删除项目
@@ -87,14 +87,10 @@ public class FormAddDictService {
         FormDictDto formDictDto = new FormDictDto();
         Optional<FormDict> formDict = formDictRepository.findById(formId);
         if (formDict.isPresent()) {
-            if (CopyUtils.convertExtend(formDictDto, formDict) instanceof FormDictDto) {
-                formDictDto= (FormDictDto)CopyUtils.convertExtend(formDictDto, formDict.get());
-            }else {
-                JsonHandler.fail("父类子类转化异常");
-            }
+                formDictDto=CopyUtils.transfer(formDict.get(),formDictDto);
         }
         List<String> itemIdList=new ArrayList<>();
-        List<Relation> allRelation = relationRepository.findAllById_FormId(formId);
+        List<Relation> allRelation = relationRepository.findAllById_FormDictId(formId);
         allRelation.forEach(x->itemIdList.add(x.getId().getItemId()));
         formDictDto.setItemDictList(itemDictRepository.findAllById(itemIdList));
         return JsonHandler.succeed(formDictDto);

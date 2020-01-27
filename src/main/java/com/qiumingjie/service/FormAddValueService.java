@@ -7,6 +7,8 @@ import com.qiumingjie.dao.table.FormMainRepository;
 import com.qiumingjie.dao.table.FormValueRepository;
 import com.qiumingjie.dto.FormDataDto;
 import com.qiumingjie.entities.evaluate.dict.FormDict;
+import com.qiumingjie.entities.evaluate.dict.Relation;
+import com.qiumingjie.entities.evaluate.dict.RelationKeys;
 import com.qiumingjie.entities.evaluate.table.FormMain;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.utils.CommonUtils;
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -64,9 +68,39 @@ public class FormAddValueService {
                 formDataDto.setFormId(FormUtil.caculFormEntityId(formMainByFormIdOrderByFormIdDesc.getFormId()));
             }
         }
-        FormMain formMain = CopyUtils.convertExtend(formDataDto, new FormMain());
+        FormMain formMain = CopyUtils.transfer(formDataDto, new FormMain());
         formMainRepository.save(formMain);
         formValueRepository.saveAll(formDataDto.getFormValues());
         return JsonHandler.succeed("保存成功");
+    }
+
+
+    public JsonHandler getForm(String formId) {
+        Optional<FormMain> formMain = formMainRepository.findById(formId);
+        FormDataDto formDataDto = CopyUtils.transfer( formMain,new FormDataDto());
+        Optional<FormDict> formDict = formDictRepository.findById(FormUtil.getFormDictId(formId));
+        if (formDict.isPresent()) {
+            formDataDto.setFormName(formDict.get().getFormName());
+            formDataDto.setType(formDict.get().getFormType());
+        }else {
+            return JsonHandler.fail("获取模板表失败");
+        }
+        List<Relation> relationList = relationRepository.findAllById_FormDictId(formDict.get().getFormDictId());
+        List<String> itemIdList=new ArrayList<>();
+//        relationList.forEach(x -> itemIdList.add(x.getId().getItemId()));
+//        List<ItemDict> itemDictList = itemDictRepository.findAllById(itemIdList);
+        List<RelationKeys> relationKeys = new ArrayList<>();
+        relationList.forEach(x -> relationKeys.add(new RelationKeys(formId,x.getId().getItemId())));
+        formDataDto.setFormValues(formValueRepository.findAllById(relationKeys));
+        return JsonHandler.succeed(formDataDto);
+    }
+
+    public JsonHandler deleteForm(String formId) {
+        formMainRepository.deleteById(formId);
+        List<Relation> relationList = relationRepository.findAllById_FormDictId(FormUtil.getFormDictId(formId));
+        List<RelationKeys> relationKeys = new ArrayList<>();
+        relationList.forEach(x -> relationKeys.add(new RelationKeys(formId, x.getId().getItemId())));
+        relationRepository.deleteByIdList(relationKeys);
+        return JsonHandler.succeed();
     }
 }

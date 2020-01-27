@@ -1,5 +1,7 @@
 package com.qiumingjie.entities.evaluate.table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -24,6 +26,28 @@ public class FormMain extends FormTemplate implements Serializable {
     private String signer;
 
     private String recordDateTime;
+
+    @JsonIgnore
+    private String formName;
+
+    @JsonIgnore
+    private String type;
+
+    public String getFormName() {
+        return formName;
+    }
+
+    public void setFormName(String formName) {
+        this.formName = formName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getFormId() {
         return formId;

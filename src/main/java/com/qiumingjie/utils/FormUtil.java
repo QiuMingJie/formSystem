@@ -21,7 +21,7 @@ public class FormUtil {
         if (currentId.length() < 10) {
             return currentId + "_0001";
         }
-        String templateId = currentId.substring(0, 10);
+        String templateId = getFormDictId(currentId);
         String index = currentId.substring(10, 14);
         Integer i = Integer.parseInt(index)+1;
         return templateId + fillInteger(i);
@@ -33,6 +33,15 @@ public class FormUtil {
             s = "0" + s;
         }
         return s;
+    }
+
+    /**
+     * 根据formId剪切得到formDictId
+     * @param formId 实体id E0001_001_0001
+     * @return 字典id E0001_001
+     */
+    public static String getFormDictId(String formId) {
+        return formId.substring(0,10);
     }
 
 }

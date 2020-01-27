@@ -563,64 +563,54 @@ public class CopyUtils {
 
 
     /**
-     * 父类子类相互转换
-     *
-     * @param son
-     * @param father
+     * 两个类相互转换的方法，从源类到去类，遍历源类的每一个成员，根据名字匹配，将源类的成员复制到去类中，假如去类不为空则跳过
+     * @param fromObject 源类
+     * @param toObject 去类
      * @param <T>
      * @param <K>
-     * @return
+     * @return 去类
      * @throws ParseException
      * @throws IllegalAccessException
      */
-    public static <T, K extends T> T convertExtend(K son, T father) {
-        //返回标识，默认为true，返回子类，假如父类为空则返回父类
-        Boolean returnSon = true;
-        Field[] fatherDeclaredFields = getAllFields(father);
-        Field[] sonDeclaredFields =getAllFields(son);
-        for (Field fatherDeclaredField : fatherDeclaredFields) {
-            if (fatherDeclaredField.getName().equals("serialVersionUID")) {
+    public static <T, K> T transfer(K fromObject, T toObject) {
+        Field[] toObjectDeclaredFields = getAllFields(toObject);
+        Field[] fromObjectDeclaredFields = getAllFields(fromObject);
+        for (Field fromObjectDeclaredField : fromObjectDeclaredFields) {
+            if (fromObjectDeclaredField.getName().equals("serialVersionUID")) {
                 continue;
             }
-            for (Field sonDeclaredField : sonDeclaredFields) {
-                if (fatherDeclaredField.getName().equals(sonDeclaredField.getName())) {
-                    if (ClassUtils.getValue(son, sonDeclaredField.getName())==null&&ClassUtils.getValue(father, fatherDeclaredField.getName())==null) {
+            for (Field toObjectDeclaredField : toObjectDeclaredFields) {
+                if (fromObjectDeclaredField.getName().equals(toObjectDeclaredField.getName())) {
+                    //假如去类有值，不进行覆盖
+                    if (ClassUtils.getValue(toObject, toObjectDeclaredField.getName()) != null) {
                         continue;
                     }
-                    if (ClassUtils.getValue(son, sonDeclaredField.getName()) == null) {
-                        ClassUtils.setValue(son, sonDeclaredField.getName(), ClassUtils.getValue(father, fatherDeclaredField.getName()), (Class)fatherDeclaredField.getGenericType());
-                    }
-                    if (ClassUtils.getValue(father, fatherDeclaredField.getName())==null){
-                        ClassUtils.setValue(father, fatherDeclaredField.getName(), ClassUtils.getValue(son, sonDeclaredField.getName()), (Class)sonDeclaredField.getGenericType());
-                        returnSon = false;
+                    if (ClassUtils.getValue(fromObject, toObjectDeclaredField.getName()) != null) {
+                        ClassUtils.setValue(toObject, fromObjectDeclaredField.getName(), ClassUtils.getValue(fromObject, toObjectDeclaredField.getName()), (Class) toObjectDeclaredField.getGenericType());
                     }
                 }
             }
         }
-        if (returnSon) {
-            return son;
-        }else {
-            return father;
-        }
+        return toObject;
     }
 
     /**
      * 获取所有的field
+     *
      * @param o
      * @return
      */
-    public static Field[] getAllFields(Object o){
-        Class c= o.getClass();
+    public static Field[] getAllFields(Object o) {
+        Class c = o.getClass();
         List<Field> fieldList = new ArrayList<>();
-        while (c!= null){
+        while (c != null) {
             fieldList.addAll(new ArrayList<>(Arrays.asList(c.getDeclaredFields())));
-            c= c.getSuperclass();
+            c = c.getSuperclass();
         }
         Field[] fields = new Field[fieldList.size()];
         fieldList.toArray(fields);
         return fields;
     }
-
 
 
 }

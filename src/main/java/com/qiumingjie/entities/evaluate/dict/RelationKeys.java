@@ -11,24 +11,24 @@ import java.io.Serializable;
 @Embeddable
 public class RelationKeys implements Serializable {
 
-    public RelationKeys(String formId, String itemId) {
-        this.formId = formId;
+    public RelationKeys(String formDictId, String itemId) {
+        this.formDictId = formDictId;
         this.itemId = itemId;
     }
 
     public RelationKeys() {
     }
 
-    private String formId;
+    private String formDictId;
 
     private String itemId;
 
-    public String getFormId() {
-        return formId;
+    public String getFormDictId() {
+        return formDictId;
     }
 
-    public void setFormId(String formId) {
-        this.formId = formId;
+    public void setFormDictId(String formDictId) {
+        this.formDictId = formDictId;
     }
 
     public String getItemId() {

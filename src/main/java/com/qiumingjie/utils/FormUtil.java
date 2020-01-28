@@ -14,8 +14,9 @@ public class FormUtil {
 
     /**
      * 计算下一个实体的id
-     * @param currentId 当前实体id
-     * @return 下一个实体id
+     *
+     * @param currentId 当前实体id E0001_001_0001
+     * @return 下一个实体id E0001_001_0002
      */
     public static String caculFormEntityId(String currentId) {
         if (currentId.length() < 10) {
@@ -23,10 +24,16 @@ public class FormUtil {
         }
         String templateId = getFormDictId(currentId);
         String index = currentId.substring(10, 14);
-        Integer i = Integer.parseInt(index)+1;
+        Integer i = Integer.parseInt(index) + 1;
         return templateId + fillInteger(i);
     }
 
+    /**
+     * 填补数字前面的0到四位数
+     *
+     * @param i 1
+     * @return 0001
+     */
     private static String fillInteger(Integer i) {
         String s = String.valueOf(i);
         while (s.length() < 4) {
@@ -37,11 +44,40 @@ public class FormUtil {
 
     /**
      * 根据formId剪切得到formDictId
+     *
      * @param formId 实体id E0001_001_0001
      * @return 字典id E0001_001
      */
     public static String getFormDictId(String formId) {
-        return formId.substring(0,10);
+        return formId.substring(0, 10);
     }
 
+    /**
+     * 获取itemId的头部前缀
+     *
+     * @param formIdOrFormDictId 实体id E0001_001_0001 或字典id E0001_001
+     * @param type               类型评估：I 措施:M 公共：C 拓展：K，为空时直接用I
+     * @return I0001
+     */
+    public static String getItemDictHead(String formIdOrFormDictId, String type) {
+        if (formIdOrFormDictId.length() < 5) {
+            Validate.error("获取itemId长度出错，长度不足");
+        }
+        if (CommonUtils.empty(type)) {
+            type = "I";
+        }
+        return type + formIdOrFormDictId.substring(1, 5);
+    }
+
+    /**
+     * 计算itemId
+     *
+     * @param formIdOrFormDictId 实体id E0001_001_0001 或字典id E0001_001
+     * @param type               类型评估：I 措施:M 公共：C 拓展：K，为空时直接用I
+     * @param nextNum            下一位数2
+     * @return I00010002
+     */
+    public static String caculItemDictId(String formIdOrFormDictId, String type, Integer nextNum) {
+        return getItemDictHead(formIdOrFormDictId, type)+fillInteger(nextNum);
+    }
 }

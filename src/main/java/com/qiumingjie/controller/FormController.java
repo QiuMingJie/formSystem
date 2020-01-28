@@ -24,7 +24,6 @@ public class FormController {
     @Autowired
     FormDictService formDictService;
 
-
     @Autowired
     private FormAddDictService formAddDictService;
 
@@ -42,7 +41,7 @@ public class FormController {
     }
 
     /**
-     * 删除表
+     * 删除字典表
      * @param formId 表单id
      * @param deleteItem 是否删除项目，true/false
      * @return 运行过程
@@ -53,7 +52,7 @@ public class FormController {
     }
 
     /**
-     * 获取表单
+     * 获取字典表单信息
      * @param formId 表单id
      * @return 表单的基本信息
      */
@@ -62,16 +61,31 @@ public class FormController {
         return formAddDictService.getFormById(formId);
     }
 
+    /**
+     * 保存表单实体
+     * @param formDataDto
+     * @return
+     */
     @RequestMapping(value = "/saveOrUpdateForm", method = RequestMethod.POST)
     public JsonHandler saveOrUpdateForm(FormDataDto formDataDto) {
         return formAddValueService.saveOrUpdateForm(formDataDto);
     }
 
+    /**
+     * 获取表单实体信息
+     * @param formId
+     * @return
+     */
     @RequestMapping(value = "/getForm", method = RequestMethod.GET)
     public JsonHandler getForm(String  formId) {
         return formAddValueService.getForm(formId);
     }
 
+    /**
+     * 删除表单实体
+     * @param formId
+     * @return
+     */
     @RequestMapping(value = "/deleteForm", method = RequestMethod.GET)
     public JsonHandler deleteForm(String  formId) {
         return formAddValueService.deleteForm(formId);

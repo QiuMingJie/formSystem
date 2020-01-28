@@ -13,11 +13,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FormMainRepository extends JpaRepository<FormMain, String> {
 
-    FormMain findFormMainByFormIdOrderByFormIdDesc(String formId);
+//    FormMain findFormMainByFormIdOrderByFormIdDesc(String formId);
 
-    @Query("select FormMain from FormMain a where a.formId like ?1% order by a.formId desc ")
+    @Query("select a from FormMain a where a.formId like ?1% order by  a.formId desc ")
     FormMain findFormMainBytemplateIdLike(String templateId);
-
 
 
 }

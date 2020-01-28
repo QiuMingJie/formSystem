@@ -81,12 +81,10 @@ public class Validate {
 		return this;
 	}
 
-
-
-	public ValidateException error(String message) {
+	public static ValidateException error(String message) {
 		throw new ValidateException(message);
 	}
-	
+
 	public void error(Exception e){
 		if(e instanceof RuntimeException){
 			throw (RuntimeException)e;

@@ -37,6 +37,13 @@ import org.springframework.stereotype.Repository;
  * IgnoreCase       findByFirstnameIgnoreCase                               … where UPPER(x.firstame) = UPPER(?1)
  * <p>
  * 参数是根据顺序
+ * 上面类中的几个注解，说明如下
+ *
+ * @Data 属于lombok注解，与jpa无关，自动生成getter/setter/equals/hashcode/tostring等方法
+ * @Entity, @Table jpa注解，表示这个类与db的表关联，具体匹配的是表 money
+ * @Id @GeneratedValue 作用与自增主键
+ * @Column表明这个属性与表中的某列对应
+ * @CreateDate根据当前时间来生成默认的时间戳
  */
 @Repository
 public interface FormDictRepository extends JpaRepository<FormDict, String> {

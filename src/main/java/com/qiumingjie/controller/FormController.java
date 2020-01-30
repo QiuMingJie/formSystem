@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FormController {
 
     @Autowired
-    FormDictService formDictService;
+    private FormDictService formDictService;
 
     @Autowired
     private FormAddDictService formAddDictService;

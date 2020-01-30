@@ -29,7 +29,7 @@ public class ItemDict extends BaseEntity implements Serializable {
     /**
      * 用于程度比较，程度越严重，值越大
      */
-    private Integer value_level;
+    private Integer valueLevel;
 
     /**
      * 项目类型
@@ -37,7 +37,7 @@ public class ItemDict extends BaseEntity implements Serializable {
      * 措施类型:M
      * 公共类型:C
      */
-    @Column(name = "TYPE")
+    @Column(name = "TYPE",columnDefinition = "I",nullable = false)
     private String type;
 
     public String getItemId() {
@@ -70,5 +70,13 @@ public class ItemDict extends BaseEntity implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Integer getValueLevel() {
+        return valueLevel;
+    }
+
+    public void setValueLevel(Integer valueLevel) {
+        this.valueLevel = valueLevel;
     }
 }

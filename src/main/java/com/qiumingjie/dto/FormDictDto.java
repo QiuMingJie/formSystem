@@ -20,13 +20,11 @@ public class FormDictDto extends FormDict {
     private List<Relation> relationList = new ArrayList<>();
 
     /**
-     * 初始化对应表，保存createTime
+     * 初始化对应表
      */
     public void initRelation() {
-//        this.setCreateDateTime(new Date());
         if (CommonUtils.notEmpty(itemDictList)) {
             for (ItemDict itemDict : itemDictList) {
-//                itemDict.setCreateDateTime(new Date());
                 relationList.add(new Relation(this.getFormDictId(), itemDict.getItemId(),null));
             }
         }

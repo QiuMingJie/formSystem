@@ -80,4 +80,8 @@ public class FormUtil {
     public static String caculItemDictId(String formIdOrFormDictId, String type, Integer nextNum) {
         return getItemDictHead(formIdOrFormDictId, type)+fillInteger(nextNum);
     }
+
+    public static String caculItemDictId(String itemIdHead, Integer nextNum) {
+        return itemIdHead+fillInteger(nextNum);
+    }
 }

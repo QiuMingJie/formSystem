@@ -15,9 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author QiuMingJie
@@ -36,15 +34,31 @@ public class FormAddDictService {
     @Resource
     private RelationRepository relationRepository;
 
+    private List<Map> itemHeadToNextItemInt;
 
     @Transactional(rollbackFor = RuntimeException.class)
     public JsonHandler addFormDict(FormDictDto formDictDto) {
+        itemHeadToNextItemInt = itemDictRepository.findItemHeadAndNextInt();
+        for (ItemDict itemDict : formDictDto.getItemDictList()) {
+            if (CommonUtils.empty(itemDict.getType())) {
+                itemDict.setType("I");
+            }
+            String itemDictHead = FormUtil.getItemDictHead(formDictDto.getFormDictId(), itemDict.getType());
+            Integer nextIntFromListMap = getNextIntFromListMap(itemDictHead);
+            ItemDict exist = itemDictRepository.findFirstByItemIdStartingWithAndContentContainsAndDeleteFlagIsNullAndUseFlagIsNullAndRemarkIsAndUnitsIsAndValueLevelIs(itemDictHead, itemDict.getContent(),itemDict.getRemark(),itemDict.getUnits(),itemDict.getValueLevel());
+            if (CommonUtils.notEmpty(exist)) {
+                itemDict.setItemId(exist.getItemId());
+            } else {
+                itemDict.setItemId(FormUtil.caculItemDictId(itemDictHead, nextIntFromListMap));
+            }
+        }
         formDictDto.initRelation();
         formDictRepository.save(CopyUtils.transfer(formDictDto, new FormDict()));
         itemDictRepository.saveAll(formDictDto.getItemDictList());
         relationRepository.saveAll(formDictDto.getRelationList());
         return JsonHandler.succeed(formDictDto);
     }
+
 
     @Transactional(rollbackFor = RuntimeException.class)
     public JsonHandler deleteFormDict(String formId, Boolean deleteItem) {
@@ -66,12 +80,18 @@ public class FormAddDictService {
                 soutResult.append(FormUtil.soutBank);
                 //是否删除项目
                 if (deleteItem) {
-                    Optional<ItemDict> itemDict = itemDictRepository.findById(relation.getId().getItemId());
-                    if (itemDict.isPresent()) {
-                        soutResult.append("删除项目字典表:").append(itemDict.get().getItemId()).append(itemDict.get().getContent());
-                        itemDictRepository.deleteById(relation.getId().getItemId());
-                    } else {
-                        soutResult.append("不存在项目字典").append(relation.getId().getItemId());
+                    //安全删除，先判断是否有多个引用，有的话不删
+                    List<Relation> relations = relationRepository.findAllById_ItemId(relation.getId().getItemId());
+                    if (relations.size() == 0) {
+                        Optional<ItemDict> itemDict = itemDictRepository.findById(relation.getId().getItemId());
+                        if (itemDict.isPresent()) {
+                            soutResult.append("删除项目字典表:").append(itemDict.get().getItemId()).append(itemDict.get().getContent());
+                            itemDictRepository.deleteById(relation.getId().getItemId());
+                        } else {
+                            soutResult.append("不存在项目字典").append(relation.getId().getItemId());
+                        }
+                    }else {
+                        soutResult.append("多个引用项目字典不删除").append(relation.getId().getItemId());
                     }
                     soutResult.append(FormUtil.soutBank);
                 }
@@ -87,13 +107,35 @@ public class FormAddDictService {
         FormDictDto formDictDto = new FormDictDto();
         Optional<FormDict> formDict = formDictRepository.findById(formId);
         if (formDict.isPresent()) {
-                formDictDto=CopyUtils.transfer(formDict.get(),formDictDto);
+            formDictDto = CopyUtils.transfer(formDict.get(), formDictDto);
         }
-        List<String> itemIdList=new ArrayList<>();
+        List<String> itemIdList = new ArrayList<>();
         List<Relation> allRelation = relationRepository.findAllById_FormDictId(formId);
-        allRelation.forEach(x->itemIdList.add(x.getId().getItemId()));
+        allRelation.forEach(x -> itemIdList.add(x.getId().getItemId()));
         formDictDto.setItemDictList(itemDictRepository.findAllById(itemIdList));
         return JsonHandler.succeed(formDictDto);
     }
 
+
+    /**
+     * 感觉头部遍历list获得下一个数字，之后将headToNextInt自动加1
+     * <p>
+     * itemHeadToNextItemInt itemIdHead->I0001,itemIdNextInt -> 2 || itemIdHead->M0001,itemIdNextInt -> 3
+     *
+     * @param itemDictHead I0001
+     * @return 2
+     */
+    private Integer getNextIntFromListMap(String itemDictHead) {
+        for (Map map : itemHeadToNextItemInt) {
+            if (String.valueOf(map.get("itemIdHead")).equals(itemDictHead)) {
+                map.put("itemIdNextInt", (Integer) map.get("itemIdNextInt") + 1);
+                return (Integer) map.get("itemIdNextInt") - 1;
+            }
+        }
+        Map newMap = new HashMap();
+        newMap.put("itemIdHead", itemDictHead);
+        newMap.put("itemIdNextInt", 2);
+        itemHeadToNextItemInt.add(newMap);
+        return 1;
+    }
 }

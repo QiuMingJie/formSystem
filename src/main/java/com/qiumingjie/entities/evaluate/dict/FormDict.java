@@ -21,7 +21,7 @@ public class FormDict extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "FORM_ID")
+    @Column(name = "FORM_DICT_ID")
     private String formDictId;
 
     @Column(name = "FORM_NAME")

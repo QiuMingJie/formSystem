@@ -23,6 +23,7 @@ public interface RelationRepository extends JpaRepository<Relation, RelationKeys
      */
     List<Relation> findAllById_FormDictId(String formDictId);
 
+    List<Relation> findAllById_ItemId(String itemId);
     /**
      *    注意更新和删除是需要加事务的， 并且要加上 @Modify的注解
      *    @Modifying注解

@@ -19,17 +19,35 @@ public class FormUtil {
      * @return 下一个实体id E0001_001_0002
      */
     public static String caculFormEntityId(String currentId) {
-        if (currentId.length() < 10) {
+        if (currentId.length() <= 10) {
             return currentId + "_0001";
         }
         String templateId = getFormDictId(currentId);
-        String index = currentId.substring(10, 14);
-        Integer i = Integer.parseInt(index) + 1;
+        String index = currentId.substring(11, 15);
+        Integer i =splitZero(index) + 1;
         return templateId + fillInteger(i);
     }
 
     /**
-     * 填补数字前面的0到四位数
+     * 切前面的0，然后返回一个int
+     * @param str 0001
+     * @return 1
+     */
+    private static Integer splitZero(String str) {
+        int len = str.length();
+        int index = 0;
+        char[] strs = str.toCharArray();
+        for (int i = 0; i < len; i++) {
+            if ('0' != strs[i]) {
+                index = i;
+                break;
+            }
+        }
+        return Integer.parseInt(str.substring(index, len));
+    }
+
+    /**
+     * 填补数字前面的0到四位数和_
      *
      * @param i 1
      * @return 0001
@@ -39,7 +57,7 @@ public class FormUtil {
         while (s.length() < 4) {
             s = "0" + s;
         }
-        return s;
+        return "_"+s;
     }
 
     /**

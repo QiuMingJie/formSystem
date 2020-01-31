@@ -2,6 +2,8 @@ package com.qiumingjie.dto;
 
 import com.qiumingjie.entities.evaluate.table.FormMain;
 import com.qiumingjie.entities.evaluate.table.FormValue;
+import com.qiumingjie.utils.CommonUtils;
+import com.qiumingjie.utils.Validate;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -33,5 +35,14 @@ public class FormDataDto extends FormMain implements Serializable {
 
     public void setFormValues(List<FormValue> formValues) {
         this.formValues = formValues;
+    }
+
+    public void initFormValueFormId() {
+        if (CommonUtils.empty(this.getFormId())) {
+            Validate.error("表单实体id对应项目id失败");
+        }
+        if (CommonUtils.notEmpty(formValues)) {
+            formValues.forEach(x->x.getId().setFormDictId(this.getFormId()));
+        }
     }
 }

@@ -67,7 +67,7 @@ public class FormController {
      * @return
      */
     @RequestMapping(value = "/saveOrUpdateForm", method = RequestMethod.POST)
-    public JsonHandler saveOrUpdateForm(FormDataDto formDataDto) {
+    public JsonHandler saveOrUpdateForm(@RequestBody FormDataDto formDataDto) {
         return formAddValueService.saveOrUpdateForm(formDataDto);
     }
 

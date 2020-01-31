@@ -22,8 +22,17 @@ public class FormTemplate extends BaseEntity implements Serializable {
 
     private String age;
 
+    private String weight;
+
+
+    private String patientInfoExpand1;
+
+    private String patientInfoExpand2;
+
+    private String patientInfoExpand3;
+
     /**
-     *    入院时间
+     * 入院时间
      */
     private String inHospitalDateTime;
 
@@ -51,6 +60,38 @@ public class FormTemplate extends BaseEntity implements Serializable {
     private String sign1DateTime;
 
     private String sign2DateTime;
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    public String getPatientInfoExpand1() {
+        return patientInfoExpand1;
+    }
+
+    public void setPatientInfoExpand1(String patientInfoExpand1) {
+        this.patientInfoExpand1 = patientInfoExpand1;
+    }
+
+    public String getPatientInfoExpand2() {
+        return patientInfoExpand2;
+    }
+
+    public void setPatientInfoExpand2(String patientInfoExpand2) {
+        this.patientInfoExpand2 = patientInfoExpand2;
+    }
+
+    public String getPatientInfoExpand3() {
+        return patientInfoExpand3;
+    }
+
+    public void setPatientInfoExpand3(String patientInfoExpand3) {
+        this.patientInfoExpand3 = patientInfoExpand3;
+    }
 
     public String getPatientId() {
         return patientId;

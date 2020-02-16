@@ -103,6 +103,9 @@ public class FormAddDictService {
         return JsonHandler.succeed(soutResult);
     }
 
+    public String gettest() {
+        return "11";
+    }
     public JsonHandler getFormById(String formId) {
         FormDictDto formDictDto = new FormDictDto();
         Optional<FormDict> formDict = formDictRepository.findById(formId);

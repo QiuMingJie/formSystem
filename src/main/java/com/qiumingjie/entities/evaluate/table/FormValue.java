@@ -1,11 +1,9 @@
 package com.qiumingjie.entities.evaluate.table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.qiumingjie.entities.evaluate.dict.RelationKeys;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -24,6 +22,10 @@ public class FormValue extends BaseEntity implements Serializable {
      */
     @EmbeddedId
     private RelationKeys id;
+
+    @JsonIgnore
+    @Transient
+       private String itemId;
 
     @Column
     private String value;
@@ -44,4 +46,12 @@ public class FormValue extends BaseEntity implements Serializable {
         this.value = value;
     }
 
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.getId().setItemId(itemId);
+        this.itemId = itemId;
+    }
 }

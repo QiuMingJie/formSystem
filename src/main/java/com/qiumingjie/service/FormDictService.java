@@ -5,6 +5,7 @@ import com.qiumingjie.entities.evaluate.dict.FormDict;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -19,6 +20,10 @@ public class FormDictService {
 
     public Optional<FormDict> existFormDict(String templateFormId) {
        return formDictRepository.findById(templateFormId);
+    }
+
+    public List<FormDict> getAllForm() {
+        return formDictRepository.findAll();
     }
 }
 

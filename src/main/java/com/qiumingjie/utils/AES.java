@@ -51,6 +51,13 @@ public class AES {
         }
     }
 
+    /**
+     * 加密
+     * @param data
+     * @param key
+     * @return
+     * @throws Exception
+     */
     public static String encryptToBase64(String data, String key) throws Exception {
         try {
             byte[] valueByte = encrypt(data.getBytes("UTF-8"), key.getBytes("UTF-8"));
@@ -60,6 +67,13 @@ public class AES {
         }
     }
 
+    /**
+     * 解密
+     * @param data
+     * @param key
+     * @return
+     * @throws Exception
+     */
     public static String decryptFromBase64(String data, String key) throws Exception {
         try {
             byte[] originalData = Base64.decode(data.getBytes());
@@ -68,6 +82,12 @@ public class AES {
         } catch (UnsupportedEncodingException var4) {
             throw new Exception("decrypt fail!", var4);
         }
+    }
+
+    public static void main(String[] args) throws Exception {
+        System.out.println(encryptToBase64("12", "1234567812345678"));
+        System.out.println(decryptFromBase64("R1Xs8Xcj0ioSykk9O2KaHw==", "1234567812345678"));
+
     }
 
     public static String encryptWithKeyBase64(String data, String key) throws Exception {

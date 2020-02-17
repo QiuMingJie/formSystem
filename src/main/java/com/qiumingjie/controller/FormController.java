@@ -7,10 +7,7 @@ import com.qiumingjie.service.FormAddDictService;
 import com.qiumingjie.service.FormAddValueService;
 import com.qiumingjie.service.FormDictService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author QiuMingJie
@@ -91,6 +88,10 @@ public class FormController {
         return formAddValueService.deleteForm(formId);
     }
 
+    @RequestMapping(value = "/getAllFromDict", method = RequestMethod.GET)
+    public JsonHandler getAllFormDict() {
+        return JsonHandler.succeed(formDictService.getAllForm());
+    }
 
 
 

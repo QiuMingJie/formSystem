@@ -1,7 +1,6 @@
 package com.qiumingjie.utils;
 
-
-import com.sun.org.apache.xml.internal.security.utils.Base64;
+import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -61,7 +60,7 @@ public class AES {
     public static String encryptToBase64(String data, String key) throws Exception {
         try {
             byte[] valueByte = encrypt(data.getBytes("UTF-8"), key.getBytes("UTF-8"));
-            return new String(Base64.encode(valueByte));
+            return new String(Base64.encodeBase64String  (valueByte));
         } catch (UnsupportedEncodingException var3) {
             throw new Exception("encrypt fail!", var3);
         }
@@ -76,7 +75,7 @@ public class AES {
      */
     public static String decryptFromBase64(String data, String key) throws Exception {
         try {
-            byte[] originalData = Base64.decode(data.getBytes());
+            byte[] originalData = Base64.decodeBase64(data.getBytes());
             byte[] valueByte = decrypt(originalData, key.getBytes("UTF-8"));
             return new String(valueByte, "UTF-8");
         } catch (UnsupportedEncodingException var4) {
@@ -92,8 +91,8 @@ public class AES {
 
     public static String encryptWithKeyBase64(String data, String key) throws Exception {
         try {
-            byte[] valueByte = encrypt(data.getBytes("UTF-8"), Base64.decode(key.getBytes()));
-            return new String(Base64.encode(valueByte));
+            byte[] valueByte = encrypt(data.getBytes("UTF-8"), Base64.decodeBase64(key.getBytes()));
+            return new String(Base64.encodeBase64String  (valueByte));
         } catch (UnsupportedEncodingException var3) {
             throw new Exception("encrypt fail!", var3);
         }
@@ -101,8 +100,8 @@ public class AES {
 
     public static String decryptWithKeyBase64(String data, String key) throws Exception {
         try {
-            byte[] originalData = Base64.decode(data.getBytes());
-            byte[] valueByte = decrypt(originalData, Base64.decode(key.getBytes()));
+            byte[] originalData = Base64.decodeBase64  (data.getBytes());
+            byte[] valueByte = decrypt(originalData, Base64.decodeBase64  (key.getBytes()));
             return new String(valueByte, "UTF-8");
         } catch (UnsupportedEncodingException var4) {
             throw new Exception("decrypt fail!", var4);
@@ -124,8 +123,6 @@ public class AES {
         return key.getEncoded();
     }
 
-    public static String genarateRandomKeyWithBase64() throws Exception {
-        return new String(Base64.encode(genarateRandomKey()));
-    }
+
 }
 

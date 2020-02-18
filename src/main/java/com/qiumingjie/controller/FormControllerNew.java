@@ -1,9 +1,12 @@
 package com.qiumingjie.controller;
 
+import com.qiumingjie.dao.dict.FormDictRepository;
+import com.qiumingjie.dao.table.FormValuesRepository;
 import com.qiumingjie.entities.evaluate.table.FormValues;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.service.FormValuesService;
 import com.qiumingjie.utils.CommonUtils;
+import com.qiumingjie.utils.FormUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +27,12 @@ public class FormControllerNew {
     @Autowired
     FormValuesService formValuesService;
 
+    @Autowired
+    FormValuesRepository formValuesRepository;
+
+    @Autowired
+    FormDictRepository formDictRepository;
+
     /**
      * 暴力存表发获取表单接口
      * @param id
@@ -40,6 +49,10 @@ public class FormControllerNew {
         if (CommonUtils.empty(formValues.getTemplateFormId())&&CommonUtils.empty(formValues.getFormId())) {
             return JsonHandler.fail("模板表不存在或获取表失败");
         }
+        if (CommonUtils.empty(formValues.getTemplateFormId())) {
+            formValues.setTemplateFormId(FormUtil.getFormDictId(formValues.getFormId()));
+        }
+        formValues.setTemplateName(formDictRepository.findById(formValues.getTemplateFormId()).get().getFormName());
         return JsonHandler.succeed(formValuesService.saveOrUpdateNew(formValues));
     }
 

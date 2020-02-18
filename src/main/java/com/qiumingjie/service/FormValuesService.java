@@ -60,7 +60,8 @@ public class FormValuesService {
         }
         FormMain formMain = CopyUtils.transfer(formValues, new FormMain());
         formMainRepository.save(formMain);
-        return JsonHandler.succeed(formValuesRepository.save(formValues));
+        formValuesRepository.saveAndFlush(formValues);
+        return JsonHandler.succeed(formValuesRepository.findById(formValues.getFormId()).get());
     }
 
     public void deleteForm(String id) {

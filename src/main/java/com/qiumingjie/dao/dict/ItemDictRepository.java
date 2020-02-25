@@ -14,7 +14,7 @@ import java.util.Map;
  * @description
  */
 @Repository
-public interface ItemDictRepository extends JpaRepository<ItemDict, String> {
+public interface    ItemDictRepository extends JpaRepository<ItemDict, String> {
 
     List<ItemDict> findByItemId(String itemId);
 

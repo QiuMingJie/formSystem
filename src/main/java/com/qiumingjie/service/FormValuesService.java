@@ -51,11 +51,11 @@ public class FormValuesService {
             }
             //暂时不知道怎么获取创建者
 //            formValues.setCreator("？？");
-            FormMain formMainByFormIdOrderByFormIdDesc =formMainRepository.findFormMainBytemplateIdLike(formValues.getFormId()).get(0);
-            if (CommonUtils.empty(formMainByFormIdOrderByFormIdDesc) || formMainByFormIdOrderByFormIdDesc.getFormId() == null) {
+            List<FormMain> formMainBytemplateIdLike = formMainRepository.findFormMainBytemplateIdLike(formValues.getTemplateFormId());
+            if (CommonUtils.empty(formMainBytemplateIdLike) || formMainBytemplateIdLike.size() == 0) {
                 formValues.setFormId(FormUtil.caculFormEntityId(formValues.getTemplateFormId()));
             }else {
-                formValues.setFormId(FormUtil.caculFormEntityId(formMainByFormIdOrderByFormIdDesc.getFormId()));
+                formValues.setFormId(FormUtil.caculFormEntityId(formMainBytemplateIdLike.get(0).getFormId()));
             }
         }
         FormMain formMain = CopyUtils.transfer(formValues, new FormMain());

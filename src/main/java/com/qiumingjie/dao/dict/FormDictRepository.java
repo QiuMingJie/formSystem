@@ -35,6 +35,7 @@ import org.springframework.stereotype.Repository;
  * True             findByActiveTrue()                                      … where x.active = true
  * False            findByActiveFalse()                                     … where x.active = false
  * IgnoreCase       findByFirstnameIgnoreCase                               … where UPPER(x.firstame) = UPPER(?1)
+ * Pageable pageable   分页
  * <p>
  * 参数是根据顺序
  * 上面类中的几个注解，说明如下

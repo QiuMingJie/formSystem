@@ -87,7 +87,7 @@ public class SimpleJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> {
         for (PropertyDescriptor propertyDescriptor : pds) {
             String propertyName = propertyDescriptor.getName();
             Object propertyValue = srcBean.getPropertyValue(propertyName);
-            if (StringUtils.isEmpty(propertyValue)) {
+            if (propertyValue==null) {
                 srcBean.setPropertyValue(propertyName, null);
                 properties.add(propertyName);
             }

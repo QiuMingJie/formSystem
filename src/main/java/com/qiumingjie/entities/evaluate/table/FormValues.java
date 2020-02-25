@@ -1,6 +1,5 @@
 package com.qiumingjie.entities.evaluate.table;
 
-import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Column;
@@ -30,7 +29,7 @@ public class FormValues extends FormTemplate {
 
     private String recordDateTime;
 
-    @Column(length = 8000)
+    @Column(length = 8000,columnDefinition = "varchar(8000)")
     private String value;
 
     public String getCreator() {

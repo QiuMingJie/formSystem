@@ -1,17 +1,16 @@
 package com.qiumingjie.controller;
 
+import com.qiumingjie.dao.InfoRepository;
 import com.qiumingjie.dao.dict.FormDictRepository;
 import com.qiumingjie.dao.table.FormValuesRepository;
+import com.qiumingjie.entities.Info;
 import com.qiumingjie.entities.evaluate.table.FormValues;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.service.FormValuesService;
 import com.qiumingjie.utils.CommonUtils;
 import com.qiumingjie.utils.FormUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -32,6 +31,9 @@ public class FormControllerNew {
 
     @Autowired
     FormDictRepository formDictRepository;
+
+    @Autowired
+    InfoRepository infoRepository;
 
     /**
      * 暴力存表发获取表单接口
@@ -68,6 +70,13 @@ public class FormControllerNew {
     @RequestMapping(value = "/getAllFormNew", method = RequestMethod.GET)
     public JsonHandler getFormNew() {
         return JsonHandler.succeed(formValuesService.getAllForm());
+    }
+
+
+    @RequestMapping(value = "/getInfo", method = RequestMethod.GET)
+    public JsonHandler getInfo(@RequestParam("info") String info) {
+        Optional<Info> byId = infoRepository.findById(info.trim());
+        return byId.map(JsonHandler::succeed).orElseGet(() -> JsonHandler.fail("基本信息不存在"));
     }
 }
 

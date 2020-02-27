@@ -32,6 +32,16 @@ public class FormValues extends FormTemplate {
     @Column(length = 8000,columnDefinition = "varchar(8000)")
     private String value;
 
+    private String info;
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
     public String getCreator() {
         return creator;
     }

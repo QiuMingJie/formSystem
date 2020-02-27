@@ -11,38 +11,6 @@ import java.io.Serializable;
 @MappedSuperclass
 public class FormTemplate extends BaseEntity implements Serializable {
 
-    /**
-     * 患者部分
-     */
-    private String patientId;
-
-    private String name;
-
-    private String sex;
-
-    private String age;
-
-    private String weight;
-
-
-    private String patientInfoExpand1;
-
-    private String patientInfoExpand2;
-
-    private String patientInfoExpand3;
-
-    /**
-     * 入院时间
-     */
-    private String inHospitalDateTime;
-
-    private String deptName;
-
-    private String bedNo;
-
-    private String visitId;
-
-    private String operaDateTime;
 
     /**
      * 护士签名部分
@@ -61,109 +29,7 @@ public class FormTemplate extends BaseEntity implements Serializable {
 
     private String sign2DateTime;
 
-    public String getWeight() {
-        return weight;
-    }
 
-    public void setWeight(String weight) {
-        this.weight = weight;
-    }
-
-    public String getPatientInfoExpand1() {
-        return patientInfoExpand1;
-    }
-
-    public void setPatientInfoExpand1(String patientInfoExpand1) {
-        this.patientInfoExpand1 = patientInfoExpand1;
-    }
-
-    public String getPatientInfoExpand2() {
-        return patientInfoExpand2;
-    }
-
-    public void setPatientInfoExpand2(String patientInfoExpand2) {
-        this.patientInfoExpand2 = patientInfoExpand2;
-    }
-
-    public String getPatientInfoExpand3() {
-        return patientInfoExpand3;
-    }
-
-    public void setPatientInfoExpand3(String patientInfoExpand3) {
-        this.patientInfoExpand3 = patientInfoExpand3;
-    }
-
-    public String getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(String patientId) {
-        this.patientId = patientId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public String getAge() {
-        return age;
-    }
-
-    public void setAge(String age) {
-        this.age = age;
-    }
-
-    public String getInHospitalDateTime() {
-        return inHospitalDateTime;
-    }
-
-    public void setInHospitalDateTime(String inHospitalDateTime) {
-        this.inHospitalDateTime = inHospitalDateTime;
-    }
-
-    public String getDeptName() {
-        return deptName;
-    }
-
-    public void setDeptName(String deptName) {
-        this.deptName = deptName;
-    }
-
-    public String getBedNo() {
-        return bedNo;
-    }
-
-    public void setBedNo(String bedNo) {
-        this.bedNo = bedNo;
-    }
-
-    public String getVisitId() {
-        return visitId;
-    }
-
-    public void setVisitId(String visitId) {
-        this.visitId = visitId;
-    }
-
-    public String getOperaDateTime() {
-        return operaDateTime;
-    }
-
-    public void setOperaDateTime(String operaDateTime) {
-        this.operaDateTime = operaDateTime;
-    }
 
     public String getNurseName1() {
         return nurseName1;

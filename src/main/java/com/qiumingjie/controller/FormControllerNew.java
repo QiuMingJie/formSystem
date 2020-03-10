@@ -68,9 +68,15 @@ public class FormControllerNew {
     }
 
     @RequestMapping(value = "/getAllFormNew", method = RequestMethod.GET)
-    public JsonHandler getFormNew() {
-        return JsonHandler.succeed(formValuesService.getAllForm());
+    public JsonHandler getAllFormNew(String patientId) {
+        return JsonHandler.succeed(formValuesRepository.findAllByPatientId(patientId));
     }
+
+    @RequestMapping(value = "/getFormByPatientIdAndOpsQueueNew", method = RequestMethod.GET)
+    public JsonHandler getAllFormNew(String patientId,String opsQueue) {
+        return JsonHandler.succeed(formValuesRepository.findAllByPatientIdAndOpsQueue(patientId,opsQueue));
+    }
+
 
 
     @RequestMapping(value = "/getInfo", method = RequestMethod.GET)

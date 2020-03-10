@@ -29,7 +29,7 @@ public class InvokeController {
     @Autowired
     private OpsQueueRepository opsQueueRepository;
 
-    @RequestMapping(value = "/savePatientInfo", method = RequestMethod.POST)
+    @RequestMapping(value = "/saveOrUpdatePatientInfo", method = RequestMethod.POST)
     public JsonHandler savePatientInfo(PatientInfo patientInfo) {
         if (CommonUtils.empty(patientInfo.getPatientId())) {
             return JsonHandler.fail("id不可以为空");
@@ -47,7 +47,7 @@ public class InvokeController {
         return JsonHandler.fail("数据不存在");
     }
 
-    @RequestMapping(value = "/saveOpsQueue", method = RequestMethod.POST)
+    @RequestMapping(value = "/saveOrUpdateOpsQueue", method = RequestMethod.POST)
     public JsonHandler saveOpsQueue(OpsQueue opsQueue) {
         return JsonHandler.succeed(opsQueueRepository.save(opsQueue));
 //        return new JsonHandler("200", "http://122.51.171.14:8080/formweb/#/Index?patientInfo=" +.getId().toString(), patientInfo);
@@ -55,7 +55,7 @@ public class InvokeController {
 
     @RequestMapping(value = "/getOpsQueue", method = RequestMethod.GET)
     public JsonHandler getOpsQueue(String id) {
-        Optional<PatientInfo> byId = patientInfoRepository.findById(id);
+        Optional<OpsQueue> byId = opsQueueRepository.findById(id);
         if (byId.isPresent()) {
             return JsonHandler.succeed(byId.get());
         }

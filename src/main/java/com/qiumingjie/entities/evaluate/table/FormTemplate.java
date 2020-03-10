@@ -11,6 +11,15 @@ import java.io.Serializable;
 @MappedSuperclass
 public class FormTemplate extends BaseEntity implements Serializable {
 
+    /**
+     * 患者部分
+     */
+    private String patientId;
+
+    /**
+     * 手术部分
+     */
+    private String opsQueue;
 
     /**
      * 护士签名部分
@@ -30,6 +39,21 @@ public class FormTemplate extends BaseEntity implements Serializable {
     private String sign2DateTime;
 
 
+    public String getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+    }
+
+    public String getOpsQueue() {
+        return opsQueue;
+    }
+
+    public void setOpsQueue(String opsQueue) {
+        this.opsQueue = opsQueue;
+    }
 
     public String getNurseName1() {
         return nurseName1;

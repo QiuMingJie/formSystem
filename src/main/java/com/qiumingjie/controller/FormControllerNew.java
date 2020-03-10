@@ -1,9 +1,9 @@
 package com.qiumingjie.controller;
 
-import com.qiumingjie.dao.InfoRepository;
+import com.qiumingjie.dao.PatientInfoRepository;
 import com.qiumingjie.dao.dict.FormDictRepository;
 import com.qiumingjie.dao.table.FormValuesRepository;
-import com.qiumingjie.entities.Info;
+import com.qiumingjie.entities.PatientInfo;
 import com.qiumingjie.entities.evaluate.table.FormValues;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.service.FormValuesService;
@@ -33,7 +33,7 @@ public class FormControllerNew {
     FormDictRepository formDictRepository;
 
     @Autowired
-    InfoRepository infoRepository;
+    PatientInfoRepository patientInfoRepository;
 
     /**
      * 暴力存表发获取表单接口
@@ -75,7 +75,7 @@ public class FormControllerNew {
 
     @RequestMapping(value = "/getInfo", method = RequestMethod.GET)
     public JsonHandler getInfo(@RequestParam("info") String info) {
-        Optional<Info> byId = infoRepository.findById(info.trim());
+        Optional<PatientInfo> byId = patientInfoRepository.findById(info.trim());
         return byId.map(JsonHandler::succeed).orElseGet(() -> JsonHandler.fail("基本信息不存在"));
     }
 }

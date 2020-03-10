@@ -1,6 +1,6 @@
 package com.qiumingjie.dao;
 
-import com.qiumingjie.entities.Info;
+import com.qiumingjie.entities.PatientInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  * @description 传输数据表
  */
 @Repository
-public interface InfoRepository extends JpaRepository<Info,String> {
+public interface PatientInfoRepository extends JpaRepository<PatientInfo,String> {
 }

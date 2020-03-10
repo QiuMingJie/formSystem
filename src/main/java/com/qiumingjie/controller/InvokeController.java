@@ -1,12 +1,17 @@
 package com.qiumingjie.controller;
 
-import com.qiumingjie.dao.InfoRepository;
-import com.qiumingjie.entities.Info;
+import com.qiumingjie.dao.OpsQueueRepository;
+import com.qiumingjie.dao.PatientInfoRepository;
+import com.qiumingjie.entities.OpsQueue;
+import com.qiumingjie.entities.PatientInfo;
 import com.qiumingjie.handler.JsonHandler;
+import com.qiumingjie.utils.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
 
 /**
  * @author QiuMingJie
@@ -18,16 +23,43 @@ import org.springframework.web.bind.annotation.RestController;
 public class InvokeController {
 
     @Autowired
-    private InfoRepository infoRepository;
+    private PatientInfoRepository patientInfoRepository;
 
-    @RequestMapping(value = "/form", method = RequestMethod.POST)
-    public JsonHandler invokeForm(Info info) {
-        return new JsonHandler("200", "http://122.51.171.14:8080/formweb/#/Index?info=" + infoRepository.save(info).getId().toString(), info);
+
+    @Autowired
+    private OpsQueueRepository opsQueueRepository;
+
+    @RequestMapping(value = "/savePatientInfo", method = RequestMethod.POST)
+    public JsonHandler savePatientInfo(PatientInfo patientInfo) {
+        if (CommonUtils.empty(patientInfo.getPatientId())) {
+            return JsonHandler.fail("id不可以为空");
+        }
+        return JsonHandler.succeed(patientInfoRepository.save(patientInfo));
+//        return new JsonHandler("200", "http://122.51.171.14:8080/formweb/#/Index?patientInfo=" +.getId().toString(), patientInfo);
     }
 
-    @RequestMapping(value = "/getInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "/getPatientInfo", method = RequestMethod.GET)
     public JsonHandler getInfo(String id) {
-        return JsonHandler.succeed(infoRepository.findById(id).get());
+        Optional<PatientInfo> byId = patientInfoRepository.findById(id);
+        if (byId.isPresent()) {
+            return JsonHandler.succeed(byId.get());
+        }
+        return JsonHandler.fail("数据不存在");
+    }
+
+    @RequestMapping(value = "/saveOpsQueue", method = RequestMethod.POST)
+    public JsonHandler saveOpsQueue(OpsQueue opsQueue) {
+        return JsonHandler.succeed(opsQueueRepository.save(opsQueue));
+//        return new JsonHandler("200", "http://122.51.171.14:8080/formweb/#/Index?patientInfo=" +.getId().toString(), patientInfo);
+    }
+
+    @RequestMapping(value = "/getOpsQueue", method = RequestMethod.GET)
+    public JsonHandler getOpsQueue(String id) {
+        Optional<PatientInfo> byId = patientInfoRepository.findById(id);
+        if (byId.isPresent()) {
+            return JsonHandler.succeed(byId.get());
+        }
+        return JsonHandler.fail("数据不存在");
     }
 
 }

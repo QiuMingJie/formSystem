@@ -21,6 +21,10 @@ public class PatientInfo extends BaseEntity implements Serializable {
     @Id
     private String  patientId;
 
+    private String systemUserId;
+
+    private String systemUserName;
+
     private String name;
 
     private String sex;
@@ -127,6 +131,22 @@ public class PatientInfo extends BaseEntity implements Serializable {
 
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    public String getSystemUserId() {
+        return systemUserId;
+    }
+
+    public void setSystemUserId(String systemUserId) {
+        this.systemUserId = systemUserId;
+    }
+
+    public String getSystemUserName() {
+        return systemUserName;
+    }
+
+    public void setSystemUserName(String systemUserName) {
+        this.systemUserName = systemUserName;
     }
 
     public String getAge() {

@@ -88,6 +88,9 @@ public class FormControllerNew {
      */
     @RequestMapping(value = "/getAllFormNew", method = RequestMethod.GET)
     public JsonHandler getAllFormNew(String patientId) {
+        if (CommonUtils.empty(patientId)) {
+            return JsonHandler.fail("患者基本信息不可以为空");
+        }
         return JsonHandler.succeed(formValuesRepository.findAllByPatientId(patientId));
     }
 
@@ -99,7 +102,10 @@ public class FormControllerNew {
      * @return
      */
     @RequestMapping(value = "/getFormByPatientIdAndOpsQueueNew", method = RequestMethod.GET)
-    public JsonHandler getAllFormNew(String patientId, String opsQueue) {
+    public JsonHandler getAllFormNew( String patientId, String opsQueue) {
+        if (CommonUtils.empty(patientId)||CommonUtils.empty(opsQueue)) {
+            return JsonHandler.fail("患者id或者手术id不可以为空");
+        }
         return JsonHandler.succeed(formValuesRepository.findAllByPatientIdAndOpsQueue(patientId, opsQueue));
     }
 
@@ -107,6 +113,9 @@ public class FormControllerNew {
 
     @RequestMapping(value = "/getInfo", method = RequestMethod.GET)
     public JsonHandler getInfo(@RequestParam("info") String info) {
+        if (CommonUtils.empty(info)) {
+            return JsonHandler.fail("info不可以为空");
+        }
         Optional<PatientInfo> byId = patientInfoRepository.findById(info.trim());
         return byId.map(JsonHandler::succeed).orElseGet(() -> JsonHandler.fail("基本信息不存在"));
     }

@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -124,7 +126,22 @@ public class FormControllerNew {
         if (CommonUtils.empty(patientId)) {
             return JsonHandler.fail("患者基本信息不可以为空");
         }
-        return JsonHandler.succeed(formValuesRepository.findAllByPatientId(patientId));
+        List<FormValuesDto> result=new ArrayList<>();
+        List<FormValues> formValuesList = formValuesRepository.findAllByPatientId(patientId);
+        for (FormValues formValues : formValuesList) {
+            FormValuesDto formValuesDto=new FormValuesDto();
+            BeanUtils.copyProperties(formValues,formValuesDto);
+            result.add(formValuesDto);
+        }
+        for (FormValuesDto formValues : result) {
+            if (CommonUtils.notEmpty(formValues.getOperationId())) {
+                opsQueueRepository.findById(formValues.getOperationId()).ifPresent(formValues::setOperation);
+                if (CommonUtils.notEmpty(formValues.getOperation().getPatientId())) {
+                    patientInfoRepository.findById(formValues.getOperation().getPatientId()).ifPresent(formValues::setPatientInfo);
+                }
+            }
+        }
+        return JsonHandler.succeed(result);
     }
 
     /**

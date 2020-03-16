@@ -7,6 +7,7 @@ import com.qiumingjie.entities.PatientInfo;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.utils.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,7 +49,7 @@ public class InvokeController {
     }
 
     @RequestMapping(value = "/saveOrUpdateOpsQueue", method = RequestMethod.POST)
-    public JsonHandler saveOpsQueue(OpsQueue opsQueue) {
+    public JsonHandler saveOpsQueue(@Validated OpsQueue opsQueue) {
         return JsonHandler.succeed(opsQueueRepository.save(opsQueue));
 //        return new JsonHandler("200", "http://122.51.171.14:8080/formweb/#/Index?patientInfo=" +.getId().toString(), patientInfo);
     }

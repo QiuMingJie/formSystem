@@ -16,10 +16,6 @@ public class FormTemplate extends BaseEntity implements Serializable {
      */
     private String patientId;
 
-    /**
-     * 手术部分
-     */
-    private String opsQueue;
 
     /**
      * 护士签名部分
@@ -47,13 +43,6 @@ public class FormTemplate extends BaseEntity implements Serializable {
         this.patientId = patientId;
     }
 
-    public String getOpsQueue() {
-        return opsQueue;
-    }
-
-    public void setOpsQueue(String opsQueue) {
-        this.opsQueue = opsQueue;
-    }
 
     public String getNurseName1() {
         return nurseName1;

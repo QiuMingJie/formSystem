@@ -3,6 +3,7 @@ package com.qiumingjie.entities;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * @author QiuMingJie
@@ -16,12 +17,9 @@ public class OpsQueue {
     @Id
     private String operationId;
 
+    @NotEmpty(message = "patientId不可以为空")
     private String patientId;
-
-
-
     private String outpatientId;
-
     private String inpatientId ;
     private String patientDept ;
     private String patientWard ;

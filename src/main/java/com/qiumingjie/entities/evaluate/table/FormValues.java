@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 /**
  * @author QiuMingJie
@@ -18,6 +19,9 @@ import javax.persistence.Table;
 public class FormValues extends FormTemplate {
     @Id
     private String formId;
+
+    @NotEmpty(message = "operationId不可以为空")
+    private String operationId;
 
     private String templateFormId;
 
@@ -33,6 +37,14 @@ public class FormValues extends FormTemplate {
     private String value;
 
     private String info;
+
+    public String getOperationId() {
+        return operationId;
+    }
+
+    public void setOperationId(String operationId) {
+        this.operationId = operationId;
+    }
 
     public String getInfo() {
         return info;

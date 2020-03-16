@@ -15,8 +15,8 @@ import java.util.List;
 public interface FormValuesRepository extends JpaRepository<FormValues, String> {
     public List<FormValues> findAllByPatientId(String patientId);
 
-    public List<FormValues> findAllByOpsQueue(String obsQueueId);
+    public List<FormValues> findAllByOperationId(String operationId);
 
-    public List<FormValues> findAllByPatientIdAndOpsQueue(String patientId,String obsQueue);
+    public List<FormValues> findAllByPatientIdAndOperationId(String patientId,String operationId);
 
 }

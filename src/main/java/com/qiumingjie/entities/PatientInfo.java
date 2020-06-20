@@ -19,7 +19,7 @@ public class PatientInfo extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    private String  patientId;
+    private String patientId;
 
     private String systemUserId;
 

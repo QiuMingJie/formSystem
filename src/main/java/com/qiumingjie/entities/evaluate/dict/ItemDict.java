@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @description 项目字典表
  */
 @Entity
-@Table(name ="ITEM_DICT")
+@Table(name = "ITEM_DICT")
 public class ItemDict extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,7 +39,7 @@ public class ItemDict extends BaseEntity implements Serializable {
      * 措施类型:M
      * 公共类型:C
      */
-    @Column(name = "TYPE",columnDefinition = "varchar(255) default 'I'",nullable = false)
+    @Column(name = "TYPE", columnDefinition = "varchar(255) default 'I'", nullable = false)
     private String type;
 
     public String getItemId() {

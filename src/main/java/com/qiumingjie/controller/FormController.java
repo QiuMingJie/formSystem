@@ -29,37 +29,41 @@ public class FormController {
 
     /**
      * 新增字典表的方法
+     *
      * @param formDictDto 字典表基本信息
      * @return
      */
     @RequestMapping("/addFormDict")
     public JsonHandler addFormDict(@RequestBody FormDictDto formDictDto) {
-       return   formAddDictService.addFormDict(formDictDto);
+        return formAddDictService.addFormDict(formDictDto);
     }
 
     /**
      * 删除字典表
-     * @param formId 表单id
+     *
+     * @param formId     表单id
      * @param deleteItem 是否删除项目，true/false
      * @return 运行过程
      */
-    @RequestMapping(value = "/deleteFormDict",method = RequestMethod.GET)
-    public JsonHandler deleteFormDict(String formId,Boolean deleteItem) {
-        return formAddDictService.deleteFormDict(formId,deleteItem);
+    @RequestMapping(value = "/deleteFormDict", method = RequestMethod.GET)
+    public JsonHandler deleteFormDict(String formId, Boolean deleteItem) {
+        return formAddDictService.deleteFormDict(formId, deleteItem);
     }
 
     /**
      * 获取字典表单信息
+     *
      * @param formId 表单id
      * @return 表单的基本信息
      */
-    @RequestMapping(value = "/getFormDict",method = RequestMethod.GET)
+    @RequestMapping(value = "/getFormDict", method = RequestMethod.GET)
     public JsonHandler getFormById(String formId) {
         return formAddDictService.getFormById(formId);
     }
 
     /**
      * 保存表单实体
+     *
      * @param formDataDto
      * @return
      */
@@ -70,21 +74,23 @@ public class FormController {
 
     /**
      * 获取表单实体信息
+     *
      * @param formId
      * @return
      */
     @RequestMapping(value = "/getForm", method = RequestMethod.GET)
-    public JsonHandler getForm(String  formId) {
+    public JsonHandler getForm(String formId) {
         return formAddValueService.getForm(formId);
     }
 
     /**
      * 删除表单实体
+     *
      * @param formId
      * @return
      */
     @RequestMapping(value = "/deleteForm", method = RequestMethod.GET)
-    public JsonHandler deleteForm(String  formId) {
+    public JsonHandler deleteForm(String formId) {
         return formAddValueService.deleteForm(formId);
     }
 
@@ -92,8 +98,6 @@ public class FormController {
     public JsonHandler getAllFormDict() {
         return JsonHandler.succeed(formDictService.getAllForm());
     }
-
-
 
 
 }

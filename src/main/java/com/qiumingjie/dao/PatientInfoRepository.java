@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  * @description 传输数据表
  */
 @Repository
-public interface PatientInfoRepository extends JpaRepository<PatientInfo,String> {
+public interface PatientInfoRepository extends JpaRepository<PatientInfo, String> {
 }

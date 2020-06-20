@@ -59,7 +59,7 @@ public class FormControllerNew {
             if (CommonUtils.empty(byId.get().getOperationId())) {
                 return JsonHandler.fail("获取手术id失败，请联系管理员");
             }
-            FormValuesDto formValuesDto=new FormValuesDto();
+            FormValuesDto formValuesDto = new FormValuesDto();
             BeanUtils.copyProperties(byId.get(), formValuesDto);
             Optional<OpsQueue> operation = opsQueueRepository.findById(byId.get().getOperationId());
             if (operation.isPresent()) {
@@ -72,7 +72,7 @@ public class FormControllerNew {
             }
             return JsonHandler.succeed(formValuesDto);
 
-        }else {
+        } else {
             return JsonHandler.fail("表单不存在");
         }
     }
@@ -93,7 +93,7 @@ public class FormControllerNew {
         }
         if (!opsQueueRepository.findById(formValues.getOperationId()).isPresent()) {
             return JsonHandler.fail("手术基本信息不存在");
-        }else {
+        } else {
             formValues.setPatientId(opsQueueRepository.findById(formValues.getOperationId()).get().getPatientId());
         }
         formValues.setTemplateName(formDictRepository.findById(formValues.getTemplateFormId()).get().getFormName());
@@ -126,11 +126,11 @@ public class FormControllerNew {
         if (CommonUtils.empty(patientId)) {
             return JsonHandler.fail("患者基本信息不可以为空");
         }
-        List<FormValuesDto> result=new ArrayList<>();
+        List<FormValuesDto> result = new ArrayList<>();
         List<FormValues> formValuesList = formValuesRepository.findAllByPatientId(patientId);
         for (FormValues formValues : formValuesList) {
-            FormValuesDto formValuesDto=new FormValuesDto();
-            BeanUtils.copyProperties(formValues,formValuesDto);
+            FormValuesDto formValuesDto = new FormValuesDto();
+            BeanUtils.copyProperties(formValues, formValuesDto);
             result.add(formValuesDto);
         }
         for (FormValuesDto formValues : result) {
@@ -152,13 +152,12 @@ public class FormControllerNew {
      * @return
      */
     @RequestMapping(value = "/getFormByPatientIdAndOpsQueueNew", method = RequestMethod.GET)
-    public JsonHandler getAllFormNew( String patientId, String operationId) {
-        if (CommonUtils.empty(patientId)||CommonUtils.empty(operationId)) {
+    public JsonHandler getAllFormNew(String patientId, String operationId) {
+        if (CommonUtils.empty(patientId) || CommonUtils.empty(operationId)) {
             return JsonHandler.fail("患者id或者手术id不可以为空");
         }
         return JsonHandler.succeed(formValuesRepository.findAllByPatientIdAndOperationId(patientId, operationId));
     }
-
 
 
     @RequestMapping(value = "/getInfo", method = RequestMethod.GET)
@@ -166,12 +165,12 @@ public class FormControllerNew {
         if (CommonUtils.empty(operationId)) {
             return JsonHandler.fail("手术信息不可以为空");
         }
-        PatientAndOperationInfoDto patientAndOperationInfoDto=new PatientAndOperationInfoDto();
+        PatientAndOperationInfoDto patientAndOperationInfoDto = new PatientAndOperationInfoDto();
         Optional<OpsQueue> operation = opsQueueRepository.findById(operationId.trim());
         if (operation.isPresent()) {
             patientAndOperationInfoDto.setOperationInfo(operation.get());
             if (CommonUtils.notEmpty(operation.get().getPatientId())) {
-                patientInfoRepository.findById(operation.get().getPatientId()).ifPresent(patientInfo -> BeanUtils.copyProperties(patientInfo,patientAndOperationInfoDto));
+                patientInfoRepository.findById(operation.get().getPatientId()).ifPresent(patientInfo -> BeanUtils.copyProperties(patientInfo, patientAndOperationInfoDto));
             }
         }
         return JsonHandler.succeed(patientAndOperationInfoDto);

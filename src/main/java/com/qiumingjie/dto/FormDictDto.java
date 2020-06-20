@@ -25,7 +25,7 @@ public class FormDictDto extends FormDict {
     public void initRelation() {
         if (CommonUtils.notEmpty(itemDictList)) {
             for (ItemDict itemDict : itemDictList) {
-                relationList.add(new Relation(this.getFormDictId(), itemDict.getItemId(),null));
+                relationList.add(new Relation(this.getFormDictId(), itemDict.getItemId(), null));
             }
         }
     }

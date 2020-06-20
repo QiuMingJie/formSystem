@@ -17,23 +17,26 @@ public class ExceptHandler {
     public JsonHandler handleValidateException(ValidateException e) {
         return JsonHandler.fail(e.getMessage());
     }
+
     /**
      * 方法参数无效异常
+     *
      * @param e
      * @return
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public JsonHandler handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
+    public JsonHandler handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         return JsonHandler.fail(e.getBindingResult().getFieldError().getDefaultMessage());
     }
 
     /**
      * 方法参数无效异常
+     *
      * @param e
      * @return
      */
     @ExceptionHandler(BindException.class)
-    public JsonHandler handleBindException(BindException e){
+    public JsonHandler handleBindException(BindException e) {
         return JsonHandler.fail(e.getBindingResult().getFieldError().getDefaultMessage());
     }
 }

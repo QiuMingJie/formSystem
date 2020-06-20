@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @description
  */
 @Repository
-public interface FormValueRepository extends JpaRepository<FormValue,RelationKeys> {
+public interface FormValueRepository extends JpaRepository<FormValue, RelationKeys> {
 }

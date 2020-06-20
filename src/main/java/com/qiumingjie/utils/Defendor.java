@@ -1,7 +1,6 @@
 package com.qiumingjie.utils;
 
 
-
 public class Defendor {
     public Defendor() {
     }

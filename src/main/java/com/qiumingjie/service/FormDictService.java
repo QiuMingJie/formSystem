@@ -19,7 +19,7 @@ public class FormDictService {
     private FormDictRepository formDictRepository;
 
     public Optional<FormDict> existFormDict(String templateFormId) {
-       return formDictRepository.findById(templateFormId);
+        return formDictRepository.findById(templateFormId);
     }
 
     public List<FormDict> getAllForm() {

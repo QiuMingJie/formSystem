@@ -33,7 +33,7 @@ public class FormValues extends FormTemplate {
 
     private String recordDateTime;
 
-    @Column(length = 8000,columnDefinition = "varchar(8000)")
+    @Column(length = 8000, columnDefinition = "varchar(80000)")
     private String value;
 
     private String info;

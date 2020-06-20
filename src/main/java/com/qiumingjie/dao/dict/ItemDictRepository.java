@@ -14,7 +14,7 @@ import java.util.Map;
  * @description
  */
 @Repository
-public interface    ItemDictRepository extends JpaRepository<ItemDict, String> {
+public interface ItemDictRepository extends JpaRepository<ItemDict, String> {
 
     List<ItemDict> findByItemId(String itemId);
 
@@ -26,6 +26,6 @@ public interface    ItemDictRepository extends JpaRepository<ItemDict, String> {
     @Query("select new map( substring(a.itemId,1,5) as itemIdHead ,(max( substring(a.itemId,6,9) )+1 ) as itemIdNextInt)from ItemDict a  group by substring(a.itemId,1,5) ")
     List<Map> findItemHeadAndNextInt();
 
-    ItemDict findFirstByItemIdStartingWithAndContentContainsAndDeleteFlagIsNullAndUseFlagIsNullAndRemarkIsAndUnitsIsAndValueLevelIs(String itemIdHead,String contentLike,String remark,String unit,Integer valuesLevel);
+    ItemDict findFirstByItemIdStartingWithAndContentContainsAndDeleteFlagIsNullAndUseFlagIsNullAndRemarkIsAndUnitsIsAndValueLevelIs(String itemIdHead, String contentLike, String remark, String unit, Integer valuesLevel);
 
 }

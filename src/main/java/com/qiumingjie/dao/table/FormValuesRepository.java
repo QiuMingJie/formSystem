@@ -17,6 +17,6 @@ public interface FormValuesRepository extends JpaRepository<FormValues, String> 
 
     public List<FormValues> findAllByOperationId(String operationId);
 
-    public List<FormValues> findAllByPatientIdAndOperationId(String patientId,String operationId);
+    public List<FormValues> findAllByPatientIdAndOperationId(String patientId, String operationId);
 
 }

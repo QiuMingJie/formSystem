@@ -55,16 +55,16 @@ public class FormAddValueService {
             if (CommonUtils.empty(formDataDto.getTemplateFormId())) {
                 return JsonHandler.fail("新建表单失败：获取模板表单id失败");
             }
-            Optional<FormDict> formDict=formDictService.existFormDict(formDataDto.getTemplateFormId());
+            Optional<FormDict> formDict = formDictService.existFormDict(formDataDto.getTemplateFormId());
             if (!formDict.isPresent()) {
                 return JsonHandler.fail("新建表单失败：表单模板不存在");
             }
             //暂时不知道怎么获取创建者
 //            formDataDto.setCreator("？？");
-            FormMain formMainByFormIdOrderByFormIdDesc =formMainRepository.findFormMainBytemplateIdLike(formDataDto.getFormId()).get(0);
+            FormMain formMainByFormIdOrderByFormIdDesc = formMainRepository.findFormMainBytemplateIdLike(formDataDto.getFormId()).get(0);
             if (CommonUtils.empty(formMainByFormIdOrderByFormIdDesc) || formMainByFormIdOrderByFormIdDesc.getFormId() == null) {
                 formDataDto.setFormId(FormUtil.caculFormEntityId(formDataDto.getTemplateFormId()));
-            }else {
+            } else {
                 formDataDto.setFormId(FormUtil.caculFormEntityId(formMainByFormIdOrderByFormIdDesc.getFormId()));
             }
         }
@@ -80,23 +80,23 @@ public class FormAddValueService {
         Optional<FormMain> formMain = formMainRepository.findById(formId);
         FormDataDto formDataDto;
         if (formMain.isPresent()) {
-            formDataDto = CopyUtils.transfer( formMain.get(),new FormDataDto());
-        }else {
+            formDataDto = CopyUtils.transfer(formMain.get(), new FormDataDto());
+        } else {
             return JsonHandler.fail("表单不存在");
         }
         Optional<FormDict> formDict = formDictRepository.findById(FormUtil.getFormDictId(formId));
         if (formDict.isPresent()) {
             formDataDto.setFormName(formDict.get().getFormName());
             formDataDto.setType(formDict.get().getFormType());
-        }else {
+        } else {
             return JsonHandler.fail("获取模板表失败");
         }
         List<Relation> relationList = relationRepository.findAllById_FormDictId(formDict.get().getFormDictId());
-        List<String> itemIdList=new ArrayList<>();
+        List<String> itemIdList = new ArrayList<>();
 //        relationList.forEach(x -> itemIdList.add(x.getId().getItemId()));
 //        List<ItemDict> itemDictList = itemDictRepository.findAllById(itemIdList);
         List<RelationKeys> relationKeys = new ArrayList<>();
-        relationList.forEach(x -> relationKeys.add(new RelationKeys(formId,x.getId().getItemId())));
+        relationList.forEach(x -> relationKeys.add(new RelationKeys(formId, x.getId().getItemId())));
         formDataDto.setFormValues(formValueRepository.findAllById(relationKeys));
         return JsonHandler.succeed(formDataDto);
     }

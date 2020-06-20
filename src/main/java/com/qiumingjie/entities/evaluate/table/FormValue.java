@@ -25,7 +25,7 @@ public class FormValue extends BaseEntity implements Serializable {
 
     @JsonIgnore
     @Transient
-       private String itemId;
+    private String itemId;
 
     @Column
     private String value;

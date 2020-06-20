@@ -39,7 +39,6 @@ import org.springframework.stereotype.Repository;
  * <p>
  * 参数是根据顺序
  * 上面类中的几个注解，说明如下
- *
  * @Data 属于lombok注解，与jpa无关，自动生成getter/setter/equals/hashcode/tostring等方法
  * @Entity, @Table jpa注解，表示这个类与db的表关联，具体匹配的是表 money
  * @Id @GeneratedValue 作用与自增主键

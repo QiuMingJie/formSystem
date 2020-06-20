@@ -45,7 +45,7 @@ public class FormAddDictService {
             }
             String itemDictHead = FormUtil.getItemDictHead(formDictDto.getFormDictId(), itemDict.getType());
             Integer nextIntFromListMap = getNextIntFromListMap(itemDictHead);
-            ItemDict exist = itemDictRepository.findFirstByItemIdStartingWithAndContentContainsAndDeleteFlagIsNullAndUseFlagIsNullAndRemarkIsAndUnitsIsAndValueLevelIs(itemDictHead, itemDict.getContent(),itemDict.getRemark(),itemDict.getUnits(),itemDict.getValueLevel());
+            ItemDict exist = itemDictRepository.findFirstByItemIdStartingWithAndContentContainsAndDeleteFlagIsNullAndUseFlagIsNullAndRemarkIsAndUnitsIsAndValueLevelIs(itemDictHead, itemDict.getContent(), itemDict.getRemark(), itemDict.getUnits(), itemDict.getValueLevel());
             if (CommonUtils.notEmpty(exist)) {
                 itemDict.setItemId(exist.getItemId());
             } else {
@@ -90,7 +90,7 @@ public class FormAddDictService {
                         } else {
                             soutResult.append("不存在项目字典").append(relation.getId().getItemId());
                         }
-                    }else {
+                    } else {
                         soutResult.append("多个引用项目字典不删除").append(relation.getId().getItemId());
                     }
                     soutResult.append(FormUtil.soutBank);
@@ -106,6 +106,7 @@ public class FormAddDictService {
     public String gettest() {
         return "11";
     }
+
     public JsonHandler getFormById(String formId) {
         FormDictDto formDictDto = new FormDictDto();
         Optional<FormDict> formDict = formDictRepository.findById(formId);

@@ -45,7 +45,7 @@ public class FormValuesService {
             if (CommonUtils.empty(formValues.getTemplateFormId())) {
                 return JsonHandler.fail("新建表单失败：获取模板表单id失败");
             }
-            Optional<FormDict> formDict=formDictService.existFormDict(formValues.getTemplateFormId());
+            Optional<FormDict> formDict = formDictService.existFormDict(formValues.getTemplateFormId());
             if (!formDict.isPresent()) {
                 return JsonHandler.fail("新建表单失败：表单模板不存在");
             }
@@ -54,7 +54,7 @@ public class FormValuesService {
             List<FormMain> formMainBytemplateIdLike = formMainRepository.findFormMainBytemplateIdLike(formValues.getTemplateFormId());
             if (CommonUtils.empty(formMainBytemplateIdLike) || formMainBytemplateIdLike.size() == 0) {
                 formValues.setFormId(FormUtil.caculFormEntityId(formValues.getTemplateFormId()));
-            }else {
+            } else {
                 formValues.setFormId(FormUtil.caculFormEntityId(formMainBytemplateIdLike.get(0).getFormId()));
             }
         }
@@ -65,7 +65,7 @@ public class FormValuesService {
     }
 
     public void deleteForm(String id) {
-         formValuesRepository.deleteById(id);
+        formValuesRepository.deleteById(id);
     }
 
 }

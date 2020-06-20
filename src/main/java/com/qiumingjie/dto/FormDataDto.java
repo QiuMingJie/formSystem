@@ -42,7 +42,7 @@ public class FormDataDto extends FormMain implements Serializable {
             Validate.error("表单实体id对应项目id失败");
         }
         if (CommonUtils.notEmpty(formValues)) {
-            formValues.forEach(x->x.getId().setFormDictId(this.getFormId()));
+            formValues.forEach(x -> x.getId().setFormDictId(this.getFormId()));
         }
     }
 }

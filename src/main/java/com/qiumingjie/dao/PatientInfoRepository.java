@@ -1,6 +1,6 @@
 package com.qiumingjie.dao;
 
-import com.qiumingjie.entities.PatientInfo;
+import com.qiumingjie.entities.info.PatientInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

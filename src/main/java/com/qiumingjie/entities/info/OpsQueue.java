@@ -1,4 +1,4 @@
-package com.qiumingjie.entities;
+package com.qiumingjie.entities.info;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

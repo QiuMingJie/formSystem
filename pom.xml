@@ -15,7 +15,24 @@
     <packaging>war</packaging>
 
     <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.8</version>
+            <scope>test</scope>
+        </dependency>
 
+        <!--        //电子签名-->
+        <dependency>
+            <groupId>com.dsvs</groupId>
+            <artifactId>sign</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dsvs</groupId>
+            <artifactId>signClient</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <dependency>
             <!-- 指定为Web应用，并启动一个内嵌的Servlet容器（默认是Tomcat）用于处理HTTP请求 -->
             <groupId>org.springframework.boot</groupId>

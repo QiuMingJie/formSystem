@@ -30,6 +30,13 @@ public class FormDict extends BaseEntity implements Serializable {
     @Column(name = "FORM_TYPE")
     private String formType;
 
+    /**
+     * 签名数量
+     */
+    private Integer signNum;
+
+    private String repositoryClassName;
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
@@ -56,5 +63,21 @@ public class FormDict extends BaseEntity implements Serializable {
 
     public void setFormType(String formType) {
         this.formType = formType;
+    }
+
+    public Integer getSignNum() {
+        return signNum;
+    }
+
+    public void setSignNum(Integer signNum) {
+        this.signNum = signNum;
+    }
+
+    public String getRepositoryClassName() {
+        return repositoryClassName;
+    }
+
+    public void setRepositoryClassName(String repositoryClassName) {
+        this.repositoryClassName = repositoryClassName;
     }
 }

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/form")
 public class FormController {
-
     @Autowired
     private FormDictService formDictService;
 

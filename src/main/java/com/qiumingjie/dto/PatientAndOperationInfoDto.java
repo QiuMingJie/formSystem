@@ -1,7 +1,7 @@
 package com.qiumingjie.dto;
 
-import com.qiumingjie.entities.OpsQueue;
-import com.qiumingjie.entities.PatientInfo;
+import com.qiumingjie.entities.info.OpsQueue;
+import com.qiumingjie.entities.info.PatientInfo;
 
 /**
  * @author QiuMingJie

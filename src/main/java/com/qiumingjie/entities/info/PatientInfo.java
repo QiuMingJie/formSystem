@@ -1,4 +1,4 @@
-package com.qiumingjie.entities;
+package com.qiumingjie.entities.info;
 
 import com.qiumingjie.entities.evaluate.table.BaseEntity;
 

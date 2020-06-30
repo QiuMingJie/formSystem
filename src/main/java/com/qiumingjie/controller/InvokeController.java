@@ -2,8 +2,8 @@ package com.qiumingjie.controller;
 
 import com.qiumingjie.dao.OpsQueueRepository;
 import com.qiumingjie.dao.PatientInfoRepository;
-import com.qiumingjie.entities.OpsQueue;
-import com.qiumingjie.entities.PatientInfo;
+import com.qiumingjie.entities.info.OpsQueue;
+import com.qiumingjie.entities.info.PatientInfo;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.utils.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,18 +2,21 @@ package com.qiumingjie.controller;
 
 import com.qiumingjie.dao.OpsQueueRepository;
 import com.qiumingjie.dao.PatientInfoRepository;
+import com.qiumingjie.dao.RepositoryContext;
 import com.qiumingjie.dao.dict.FormDictRepository;
-import com.qiumingjie.dao.table.FormValuesRepository;
-import com.qiumingjie.dto.FormValuesDto;
+import com.qiumingjie.dao.table.FormMainRepository;
+import com.qiumingjie.dto.FormTemplateDto;
 import com.qiumingjie.dto.PatientAndOperationInfoDto;
-import com.qiumingjie.entities.OpsQueue;
-import com.qiumingjie.entities.evaluate.table.FormValues;
+import com.qiumingjie.entities.evaluate.table.FormMain;
+import com.qiumingjie.entities.evaluate.table.FormTemplate;
+import com.qiumingjie.entities.info.OpsQueue;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.service.FormValuesService;
 import com.qiumingjie.utils.CommonUtils;
 import com.qiumingjie.utils.FormUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,9 +37,6 @@ public class FormControllerNew {
     FormValuesService formValuesService;
 
     @Autowired
-    FormValuesRepository formValuesRepository;
-
-    @Autowired
     FormDictRepository formDictRepository;
 
     @Autowired
@@ -46,6 +46,13 @@ public class FormControllerNew {
     OpsQueueRepository opsQueueRepository;
 
 
+    @Autowired
+    RepositoryContext repositoryContext;
+
+    @Autowired
+    FormMainRepository formMainRepository;
+
+
     /**
      * 根据表单id获取表单
      *
@@ -53,24 +60,27 @@ public class FormControllerNew {
      * @return
      */
     @RequestMapping(value = "/getFormNew", method = RequestMethod.GET)
-    public JsonHandler getFormNew(String id) {
-        Optional<FormValues> byId = formValuesService.getById(id);
+
+    public JsonHandler getFormNew(String id)  {
+        String formDictId = FormUtil.getFormDictId(id);
+        JpaRepository repository = repositoryContext.getRepository(formDictId);
+        Optional<FormTemplate> byId = repository.findById(id);
         if (byId.isPresent()) {
             if (CommonUtils.empty(byId.get().getOperationId())) {
                 return JsonHandler.fail("获取手术id失败，请联系管理员");
             }
-            FormValuesDto formValuesDto = new FormValuesDto();
-            BeanUtils.copyProperties(byId.get(), formValuesDto);
+            FormTemplateDto formTemplateDto = new FormTemplateDto();
+            BeanUtils.copyProperties(byId.get(), formTemplateDto);
             Optional<OpsQueue> operation = opsQueueRepository.findById(byId.get().getOperationId());
             if (operation.isPresent()) {
-                formValuesDto.setOperation(operation.get());
+                formTemplateDto.setOperation(operation.get());
                 if (CommonUtils.notEmpty(operation.get().getPatientId())) {
                     if (patientInfoRepository.findById(operation.get().getPatientId()).isPresent()) {
-                        formValuesDto.setPatientInfo(patientInfoRepository.findById(operation.get().getPatientId()).get());
+                        formTemplateDto.setPatientInfo(patientInfoRepository.findById(operation.get().getPatientId()).get());
                     }
                 }
             }
-            return JsonHandler.succeed(formValuesDto);
+            return JsonHandler.succeed(formTemplateDto);
 
         } else {
             return JsonHandler.fail("表单不存在");
@@ -84,17 +94,20 @@ public class FormControllerNew {
      * @return
      */
     @RequestMapping(value = "/saveOrUpdateFormNew", method = RequestMethod.POST)
-    public JsonHandler saveOrUpdateNew(@RequestBody @Validated FormValues formValues) {
-        if (CommonUtils.empty(formValues.getTemplateFormId()) && CommonUtils.empty(formValues.getFormId())) {
+    public JsonHandler saveOrUpdateNew(@RequestBody @Validated FormTemplate formValues) {
+        if (CommonUtils.empty(formValues.getFormId())) {
             return JsonHandler.fail("模板表不存在或获取表失败");
         }
         if (CommonUtils.empty(formValues.getTemplateFormId())) {
             formValues.setTemplateFormId(FormUtil.getFormDictId(formValues.getFormId()));
         }
-        if (!opsQueueRepository.findById(formValues.getOperationId()).isPresent()) {
-            return JsonHandler.fail("手术基本信息不存在");
-        } else {
-            formValues.setPatientId(opsQueueRepository.findById(formValues.getOperationId()).get().getPatientId());
+        String operationId = formValues.getOperationId();
+        if (CommonUtils.notEmpty(operationId)) {
+            if (!opsQueueRepository.findById(formValues.getOperationId()).isPresent()) {
+                return JsonHandler.fail("手术基本信息不存在");
+            } else {
+                formValues.setPatientId(opsQueueRepository.findById(formValues.getOperationId()).get().getPatientId());
+            }
         }
         formValues.setTemplateName(formDictRepository.findById(formValues.getTemplateFormId()).get().getFormName());
         return JsonHandler.succeed(formValuesService.saveOrUpdateNew(formValues));
@@ -107,7 +120,7 @@ public class FormControllerNew {
      * @return
      */
     @RequestMapping(value = "/deleteFormNew", method = RequestMethod.POST)
-    public JsonHandler deleteFormNew(@RequestBody FormValues formValues) {
+    public JsonHandler deleteFormNew(@RequestBody FormTemplate formValues) {
         if (CommonUtils.empty(formValues) || CommonUtils.empty(formValues.getFormId())) {
             return JsonHandler.fail("删除表单为空");
         }
@@ -126,14 +139,14 @@ public class FormControllerNew {
         if (CommonUtils.empty(patientId)) {
             return JsonHandler.fail("患者基本信息不可以为空");
         }
-        List<FormValuesDto> result = new ArrayList<>();
-        List<FormValues> formValuesList = formValuesRepository.findAllByPatientId(patientId);
-        for (FormValues formValues : formValuesList) {
-            FormValuesDto formValuesDto = new FormValuesDto();
-            BeanUtils.copyProperties(formValues, formValuesDto);
-            result.add(formValuesDto);
+        List<FormTemplateDto> result = new ArrayList<>();
+        List<FormMain> formValuesList = formMainRepository.findAllByPatientId(patientId);
+        for (FormTemplate formValues : formValuesList) {
+            FormTemplateDto formTemplateDto = new FormTemplateDto();
+            BeanUtils.copyProperties(formValues, formTemplateDto);
+            result.add(formTemplateDto);
         }
-        for (FormValuesDto formValues : result) {
+        for (FormTemplateDto formValues : result) {
             if (CommonUtils.notEmpty(formValues.getOperationId())) {
                 opsQueueRepository.findById(formValues.getOperationId()).ifPresent(formValues::setOperation);
                 if (CommonUtils.notEmpty(formValues.getOperation().getPatientId())) {
@@ -156,7 +169,7 @@ public class FormControllerNew {
         if (CommonUtils.empty(patientId) || CommonUtils.empty(operationId)) {
             return JsonHandler.fail("患者id或者手术id不可以为空");
         }
-        return JsonHandler.succeed(formValuesRepository.findAllByPatientIdAndOperationId(patientId, operationId));
+        return JsonHandler.succeed(formMainRepository.findAllByPatientIdAndOperationId(patientId, operationId));
     }
 
 

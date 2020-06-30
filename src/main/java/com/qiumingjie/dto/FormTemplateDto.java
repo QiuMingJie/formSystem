@@ -1,15 +1,15 @@
 package com.qiumingjie.dto;
 
-import com.qiumingjie.entities.OpsQueue;
-import com.qiumingjie.entities.PatientInfo;
-import com.qiumingjie.entities.evaluate.table.FormValues;
+import com.qiumingjie.entities.evaluate.table.FormTemplate;
+import com.qiumingjie.entities.info.OpsQueue;
+import com.qiumingjie.entities.info.PatientInfo;
 
 /**
  * @author QiuMingJie
  * @date 2020-03-16 16:08
  * @description
  */
-public class FormValuesDto extends FormValues {
+public class FormTemplateDto extends FormTemplate {
 
     private OpsQueue operation;
 

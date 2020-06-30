@@ -1,14 +1,15 @@
 package com.qiumingjie.service;
 
+import com.qiumingjie.dao.RepositoryContext;
 import com.qiumingjie.dao.table.FormMainRepository;
-import com.qiumingjie.dao.table.FormValuesRepository;
 import com.qiumingjie.entities.evaluate.dict.FormDict;
 import com.qiumingjie.entities.evaluate.table.FormMain;
-import com.qiumingjie.entities.evaluate.table.FormValues;
+import com.qiumingjie.entities.evaluate.table.FormTemplate;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.utils.CommonUtils;
 import com.qiumingjie.utils.CopyUtils;
 import com.qiumingjie.utils.FormUtil;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -23,7 +24,7 @@ import java.util.Optional;
 @Service
 public class FormValuesService {
     @Resource
-    private FormValuesRepository formValuesRepository;
+    private RepositoryContext repositoryContext;
 
     @Resource
     private FormDictService formDictService;
@@ -31,15 +32,9 @@ public class FormValuesService {
     @Resource
     private FormMainRepository formMainRepository;
 
-    public Optional<FormValues> getById(String id) {
-        return formValuesRepository.findById(id);
-    }
 
-    public List<FormValues> getAllForm() {
-        return formValuesRepository.findAll();
-    }
-
-    public JsonHandler saveOrUpdateNew(FormValues formValues) {
+    public JsonHandler saveOrUpdateNew(FormTemplate formValues) {
+        JpaRepository repository = repositoryContext.getRepository(formValues.getTemplateFormId());
         if (CommonUtils.empty(formValues.getFormId())) {
             //不存在formId则是新建操作！
             if (CommonUtils.empty(formValues.getTemplateFormId())) {
@@ -60,12 +55,13 @@ public class FormValuesService {
         }
         FormMain formMain = CopyUtils.transfer(formValues, new FormMain());
         formMainRepository.save(formMain);
-        formValuesRepository.saveAndFlush(formValues);
-        return JsonHandler.succeed(formValuesRepository.findById(formValues.getFormId()).get());
+        repository.saveAndFlush(formValues);
+        return JsonHandler.succeed(repository.findById(formValues.getFormId()).get());
     }
 
     public void deleteForm(String id) {
-        formValuesRepository.deleteById(id);
+        JpaRepository repository = repositoryContext.getRepository(FormUtil.getFormDictId(id));
+        repository.deleteById(id);
     }
 
 }

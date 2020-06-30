@@ -1,6 +1,9 @@
 package com.qiumingjie.entities.evaluate.table;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 /**
@@ -11,6 +14,26 @@ import java.io.Serializable;
 @MappedSuperclass
 public class FormTemplate extends BaseEntity implements Serializable {
 
+    @Id
+    private String formId;
+
+    @NotEmpty(message = "operationId不可以为空")
+    private String operationId;
+
+    private String templateFormId;
+
+    private String templateName;
+
+    private String creator;
+
+    private String signer;
+
+    private String recordDateTime;
+
+    @Column(length = 19000, columnDefinition = "varchar(19000)")
+    private String value;
+
+    private String info;
     /**
      * 患者部分
      */
@@ -18,22 +41,15 @@ public class FormTemplate extends BaseEntity implements Serializable {
 
 
     /**
-     * 护士签名部分
+     * 签名部分
      */
-    private String nurseName1;
+    private Boolean signFlag;
 
-    private String nurseName2;
 
-    private String nurseName3;
-
-    private String signFlag;
-
-    private String sign3DateTime;
-
-    private String sign1DateTime;
-
-    private String sign2DateTime;
-
+    /**
+     * 归档标志
+     */
+    private Boolean archiveFlag;
 
     public String getPatientId() {
         return patientId;
@@ -43,61 +59,91 @@ public class FormTemplate extends BaseEntity implements Serializable {
         this.patientId = patientId;
     }
 
-
-    public String getNurseName1() {
-        return nurseName1;
-    }
-
-    public void setNurseName1(String nurseName1) {
-        this.nurseName1 = nurseName1;
-    }
-
-    public String getNurseName2() {
-        return nurseName2;
-    }
-
-    public void setNurseName2(String nurseName2) {
-        this.nurseName2 = nurseName2;
-    }
-
-    public String getNurseName3() {
-        return nurseName3;
-    }
-
-    public void setNurseName3(String nurseName3) {
-        this.nurseName3 = nurseName3;
-    }
-
-
-    public String getSignFlag() {
+    public Boolean getSignFlag() {
         return signFlag;
     }
 
-    public void setSignFlag(String signFlag) {
+    public void setSignFlag(Boolean signFlag) {
         this.signFlag = signFlag;
     }
 
-    public String getSign3DateTime() {
-        return sign3DateTime;
+    public Boolean getArchiveFlag() {
+        return archiveFlag;
     }
 
-    public void setSign3DateTime(String sign3DateTime) {
-        this.sign3DateTime = sign3DateTime;
+    public void setArchiveFlag(Boolean archiveFlag) {
+        this.archiveFlag = archiveFlag;
     }
 
-    public String getSign1DateTime() {
-        return sign1DateTime;
+    public String getFormId() {
+        return formId;
     }
 
-    public void setSign1DateTime(String sign1DateTime) {
-        this.sign1DateTime = sign1DateTime;
+    public void setFormId(String formId) {
+        this.formId = formId;
     }
 
-    public String getSign2DateTime() {
-        return sign2DateTime;
+    public String getOperationId() {
+        return operationId;
     }
 
-    public void setSign2DateTime(String sign2DateTime) {
-        this.sign2DateTime = sign2DateTime;
+    public void setOperationId(String operationId) {
+        this.operationId = operationId;
+    }
+
+    public String getTemplateFormId() {
+        return templateFormId;
+    }
+
+    public void setTemplateFormId(String templateFormId) {
+        this.templateFormId = templateFormId;
+    }
+
+    public String getTemplateName() {
+        return templateName;
+    }
+
+    public void setTemplateName(String templateName) {
+        this.templateName = templateName;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public String getSigner() {
+        return signer;
+    }
+
+    public void setSigner(String signer) {
+        this.signer = signer;
+    }
+
+    public String getRecordDateTime() {
+        return recordDateTime;
+    }
+
+    public void setRecordDateTime(String recordDateTime) {
+        this.recordDateTime = recordDateTime;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 }

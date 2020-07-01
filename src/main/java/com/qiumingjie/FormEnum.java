@@ -1,6 +1,9 @@
 package com.qiumingjie;
 
+import com.qiumingjie.entities.evaluate.table.FormTemplate;
 import com.qiumingjie.entities.record.*;
+import com.qiumingjie.utils.CommonUtils;
+import com.qiumingjie.utils.Validate;
 
 /**
  * @author QiuMingJie
@@ -25,41 +28,48 @@ public enum FormEnum {
     E0003_0009("E0003_0009", "医保乙类、丙类诊疗项目、材料及贵重耗材申请审批表", " - 1", ConsumApprove.class);
 
 
-    FormEnum(String formDictId, String desc, String signNum, Class handler) {
-        this.formDictId = formDictId;
+    FormEnum(String templateFormId, String desc, String signNum, Class entityClazz) {
+        this.templateFormId = templateFormId;
         this.desc = desc;
-        this.handler = handler;
+        this.entityClazz = entityClazz;
         this.signNum = signNum;
     }
 
     public static FormEnum getEmuByCode(String formDictId) {
         FormEnum[] values = FormEnum.values();
         for (FormEnum value : values) {
-            if (value.formDictId.equals(formDictId)) {
+            if (value.templateFormId.equals(formDictId)) {
                 return value;
             }
         }
         return null;
     }
 
+    public static Class getEntityClazz(FormTemplate formTemplate) {
+        if (CommonUtils.empty(formTemplate.getTemplateFormId())) {
+            Validate.error("表单id为空，获取实体失败");
+        }
+        return getEmuByCode(formTemplate.getTemplateFormId()).getEntityClazz();
+    }
+
     /**
      * distCode
      */
-    private String formDictId;
+    private String templateFormId;
 
     private String desc;
 
-    private Class handler;
+    private Class entityClazz;
 
     private String signNum;
 
 
-    public String getFormDictId() {
-        return formDictId;
+    public String getTemplateFormId() {
+        return templateFormId;
     }
 
-    public void setFormDictId(String formDictId) {
-        this.formDictId = formDictId;
+    public void setTemplateFormId(String templateFormId) {
+        this.templateFormId = templateFormId;
     }
 
     public String getDesc() {
@@ -70,12 +80,12 @@ public enum FormEnum {
         this.desc = desc;
     }
 
-    public Class getHandler() {
-        return handler;
+    public Class getEntityClazz() {
+        return entityClazz;
     }
 
-    public void setHandler(Class handler) {
-        this.handler = handler;
+    public void setEntityClazz(Class entityClazz) {
+        this.entityClazz = entityClazz;
     }
 
     public String getSignNum() {

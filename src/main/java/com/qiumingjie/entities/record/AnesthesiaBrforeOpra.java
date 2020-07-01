@@ -1,8 +1,10 @@
 package com.qiumingjie.entities.record;
 
 import com.qiumingjie.entities.evaluate.table.FormTemplate;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * @author QiuMingJie
@@ -10,5 +12,7 @@ import javax.persistence.Entity;
  * @description
  */
 @Entity
+@DynamicUpdate
+@Table
 public class AnesthesiaBrforeOpra extends FormTemplate {
 }

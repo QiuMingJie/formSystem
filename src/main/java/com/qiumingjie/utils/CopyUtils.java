@@ -13,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.text.ParseException;
 import java.util.*;
 
@@ -593,6 +594,43 @@ public class CopyUtils {
             }
         }
         return toObject;
+    }
+
+    /**
+     * 表单实体转化
+     *
+     * @param fromObject
+     * @param entityClazz
+     * @param <T>
+     * @param <K>
+     * @return
+     */
+    public static <T, K> T formEntityTransfer(K fromObject, Class<T> entityClazz) throws IllegalAccessException, InstantiationException {
+        T toObject = null;
+            toObject = entityClazz.newInstance();
+        Field[] toObjectDeclaredFields = getAllFields(toObject);
+        Field[] fromObjectDeclaredFields = getAllFields(fromObject);
+        for (Field fromObjectDeclaredField : fromObjectDeclaredFields) {
+            if (fromObjectDeclaredField.getName().equals("serialVersionUID")) {
+                continue;
+            }
+            for (Field toObjectDeclaredField : toObjectDeclaredFields) {
+                if (fromObjectDeclaredField.getName().equals(toObjectDeclaredField.getName())) {
+                    //假如去类有值，不进行覆盖
+                    if (ClassUtils.getValue(toObject, toObjectDeclaredField.getName()) != null) {
+                        continue;
+                    }
+                    if (ClassUtils.getValue(fromObject, toObjectDeclaredField.getName()) != null) {
+                        ClassUtils.setValue(toObject, fromObjectDeclaredField.getName(), ClassUtils.getValue(fromObject, toObjectDeclaredField.getName()), (Class) toObjectDeclaredField.getGenericType());
+                    }
+                }
+            }
+        }
+        return toObject;
+    }
+
+    public static Class getTClazz(Class clazz) {
+        return  (Class) ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
     /**

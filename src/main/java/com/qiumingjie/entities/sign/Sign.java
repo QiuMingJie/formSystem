@@ -4,6 +4,7 @@ package com.qiumingjie.entities.sign;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * @author QiuMingJie
@@ -22,6 +23,17 @@ public class Sign {
     String doctorId;
 
     String doctorSignPhoto;
+
+    @Transient
+    String key;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public String getDoctorSignPhoto() {
         return doctorSignPhoto;

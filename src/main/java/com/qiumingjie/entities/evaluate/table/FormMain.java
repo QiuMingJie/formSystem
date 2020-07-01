@@ -23,15 +23,42 @@ public class FormMain extends FormTemplate implements Serializable {
 
     private String creator;
 
-    private String signer;
-
     private String recordDateTime;
+
+    private String formType;
+
+    /**
+     * 签名标志，为true则已经签名，不可以再改
+     */
+    private Boolean signFlag;
 
     @JsonIgnore
     private String formName;
 
     @JsonIgnore
     private String type;
+
+    @Override
+    public Boolean getSignFlag() {
+        return signFlag;
+    }
+
+    @Override
+    public void setSignFlag(Boolean signFlag) {
+        this.signFlag = signFlag;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getFormType() {
+        return formType;
+    }
+
+    public void setFormType(String formType) {
+        this.formType = formType;
+    }
 
     public String getFormName() {
         return formName;
@@ -63,14 +90,6 @@ public class FormMain extends FormTemplate implements Serializable {
 
     public void setCreator(String creator) {
         this.creator = creator;
-    }
-
-    public String getSigner() {
-        return signer;
-    }
-
-    public void setSigner(String signer) {
-        this.signer = signer;
     }
 
     public String getRecordDateTime() {

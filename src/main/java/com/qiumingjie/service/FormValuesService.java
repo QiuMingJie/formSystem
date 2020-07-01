@@ -1,14 +1,23 @@
 package com.qiumingjie.service;
 
+import com.qiumingjie.FormEnum;
+import com.qiumingjie.dao.OpsQueueRepository;
+import com.qiumingjie.dao.PatientInfoRepository;
 import com.qiumingjie.dao.RepositoryContext;
+import com.qiumingjie.dao.SignRepository;
 import com.qiumingjie.dao.table.FormMainRepository;
+import com.qiumingjie.dto.FormTemplateDto;
 import com.qiumingjie.entities.evaluate.dict.FormDict;
 import com.qiumingjie.entities.evaluate.table.FormMain;
 import com.qiumingjie.entities.evaluate.table.FormTemplate;
+import com.qiumingjie.entities.info.OpsQueue;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.utils.CommonUtils;
 import com.qiumingjie.utils.CopyUtils;
 import com.qiumingjie.utils.FormUtil;
+import com.qiumingjie.utils.Validate;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +41,17 @@ public class FormValuesService {
     @Resource
     private FormMainRepository formMainRepository;
 
+    @Autowired
+    private OpsQueueRepository opsQueueRepository;
 
-    public JsonHandler saveOrUpdateNew(FormTemplate formValues) {
+    @Autowired
+    private PatientInfoRepository patientInfoRepository;
+
+    @Autowired
+    private SignRepository signRepository;
+
+
+    public JsonHandler saveOrUpdateNew(FormTemplate formValues) throws Exception {
         JpaRepository repository = repositoryContext.getRepository(formValues.getTemplateFormId());
         if (CommonUtils.empty(formValues.getFormId())) {
             //不存在formId则是新建操作！
@@ -55,13 +73,47 @@ public class FormValuesService {
         }
         FormMain formMain = CopyUtils.transfer(formValues, new FormMain());
         formMainRepository.save(formMain);
-        repository.saveAndFlush(formValues);
-        return JsonHandler.succeed(repository.findById(formValues.getFormId()).get());
+        repository.saveAndFlush(CopyUtils.formEntityTransfer(formValues, FormEnum.getEntityClazz(formValues)));
+        return JsonHandler.succeed(getForm(formValues.getFormId()));
     }
 
     public void deleteForm(String id) {
-        JpaRepository repository = repositoryContext.getRepository(FormUtil.getFormDictId(id));
-        repository.deleteById(id);
+        if (CommonUtils.notEmpty(id)) {
+            JpaRepository repository = repositoryContext.getRepository(FormUtil.getFormDictId(id));
+            repository.deleteById(id);
+            formMainRepository.deleteById(id);
+            signRepository.deleteAllByFormId(id);
+        }
     }
+
+
+    public FormTemplateDto getForm(String formId) {
+        String formDictId = FormUtil.getFormDictId(formId);
+        JpaRepository repository = repositoryContext.getRepository(formDictId);
+        Optional<FormTemplate> byId = repository.findById(formId);
+        if (byId.isPresent()) {
+            if (CommonUtils.empty(byId.get().getPatientId())) {
+                Validate.error("获取病人id失败，请联系管理员");
+            }
+            FormTemplateDto formTemplateDto = new FormTemplateDto();
+            BeanUtils.copyProperties(byId.get(), formTemplateDto);
+            Optional<OpsQueue> operation = opsQueueRepository.findById(byId.get().getOperationId());
+            if (operation.isPresent()) {
+                formTemplateDto.setOperation(operation.get());
+                if (CommonUtils.notEmpty(operation.get().getPatientId())) {
+                    if (patientInfoRepository.findById(operation.get().getPatientId()).isPresent()) {
+                        formTemplateDto.setPatientInfo(patientInfoRepository.findById(operation.get().getPatientId()).get());
+                    }
+                }
+            }
+            formTemplateDto.setSignList(signRepository.findAllByFormId(formId));
+            return formTemplateDto;
+        } else {
+            return null;
+        }
+    }
+
+
+
 
 }

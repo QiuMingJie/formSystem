@@ -3,7 +3,6 @@ package com.qiumingjie.entities.evaluate.table;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 /**
@@ -17,7 +16,6 @@ public class FormTemplate extends BaseEntity implements Serializable {
     @Id
     private String formId;
 
-    @NotEmpty(message = "operationId不可以为空")
     private String operationId;
 
     private String templateFormId;
@@ -26,11 +24,10 @@ public class FormTemplate extends BaseEntity implements Serializable {
 
     private String creator;
 
-    private String signer;
 
     private String recordDateTime;
 
-    @Column(length = 19000, columnDefinition = "varchar(19000)")
+    @Column(length = 10000, columnDefinition = "varchar(10000)")
     private String value;
 
     private String info;
@@ -39,6 +36,8 @@ public class FormTemplate extends BaseEntity implements Serializable {
      */
     private String patientId;
 
+    @Column(length = 10000, columnDefinition = "varchar(800)")
+    private String afterSignValue;
 
     /**
      * 签名部分
@@ -50,6 +49,14 @@ public class FormTemplate extends BaseEntity implements Serializable {
      * 归档标志
      */
     private Boolean archiveFlag;
+
+    public String getAfterSignValue() {
+        return afterSignValue;
+    }
+
+    public void setAfterSignValue(String afterSignValue) {
+        this.afterSignValue = afterSignValue;
+    }
 
     public String getPatientId() {
         return patientId;
@@ -107,6 +114,7 @@ public class FormTemplate extends BaseEntity implements Serializable {
         this.templateName = templateName;
     }
 
+
     public String getCreator() {
         return creator;
     }
@@ -115,13 +123,7 @@ public class FormTemplate extends BaseEntity implements Serializable {
         this.creator = creator;
     }
 
-    public String getSigner() {
-        return signer;
-    }
 
-    public void setSigner(String signer) {
-        this.signer = signer;
-    }
 
     public String getRecordDateTime() {
         return recordDateTime;

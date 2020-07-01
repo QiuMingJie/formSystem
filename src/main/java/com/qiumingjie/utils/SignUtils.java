@@ -2,8 +2,6 @@ package com.qiumingjie.utils;
 
 import cn.org.bjca.client.exceptions.*;
 import cn.org.bjca.client.security.SecurityEngineDeal;
-import org.junit.Before;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,18 +17,25 @@ public class SignUtils {
     public static final Logger LOGGER = LoggerFactory.getLogger(SignUtils.class);
     private SecurityEngineDeal dsvs = null;
 
-    public SignUtils() throws ApplicationNotFoundException, InitException, SVSConnectException {
-        init();
+    private SignUtils() {
     }
 
-    @Before
-    public void init() throws ApplicationNotFoundException, InitException, SVSConnectException {
-        LOGGER.info("初始化");
-        //读取配置文件里面文件
-        SecurityEngineDeal.setProfilePath("C:\\BJCAROOT");
-        //公网测试服务器
-        dsvs = SecurityEngineDeal.getInstance("SVSDefault");
+    public static SignUtils init(String instanceString)   {
+        SignUtils signUtils = new SignUtils();
+        try {
+            instanceString = "SVSDefault";
+            LOGGER.info("初始化");
+            //读取配置文件里面文件
+            SecurityEngineDeal.setProfilePath("C:\\BJCAROOT");
+            //公网测试服务器
+            signUtils.dsvs = SecurityEngineDeal.getInstance(instanceString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return signUtils;
     }
+
+
 
     /**
      * 获取服务器证书
@@ -53,12 +58,19 @@ public class SignUtils {
      * @throws SVSConnectException
      * @throws ParameterTooLongException
      */
-    public void signData(String data) throws SVSConnectException, ParameterTooLongException {
-
-        String sss = dsvs.signData(data);
+    public String signData(String data)  {
+        String sss = null;
+        try {
+            sss = dsvs.signData(data);
+        } catch (SVSConnectException e) {
+            e.printStackTrace();
+        } catch (ParameterTooLongException e) {
+            e.printStackTrace();
+        }
         //sss = signData;
         LOGGER.info("原文:" + data);
         LOGGER.info("签名返回值:" + sss);
+        return sss;
     }
 
 
@@ -72,8 +84,7 @@ public class SignUtils {
      * 返回值：
      * true：验证成功。false：验证失败。
      */
-    @Test
-    public void verifySignedData(String data) throws ParameterTooLongException, UnkownException, ParameterInvalidException, SVSConnectException, UnsupportedEncodingException {
+    public void verifySignedData1(String data) throws ParameterTooLongException, UnkownException, ParameterInvalidException, SVSConnectException, UnsupportedEncodingException {
         //原文
         byte[] dataBytes = data.getBytes();
         //签名结果值
@@ -84,6 +95,10 @@ public class SignUtils {
         boolean verifyRes = dsvs.verifySignedData(cert, dataBytes, signedValueByte);
         System.out.println(verifyRes);
 
+    }
+
+    public Boolean verifySignedData(String cert,String data, String signedValue) throws ParameterTooLongException, UnkownException, ParameterInvalidException, SVSConnectException, UnsupportedEncodingException {
+        return dsvs.verifySignedData(cert, data, signedValue);
     }
 
 
@@ -97,10 +112,9 @@ public class SignUtils {
      *
      * @return
      */
-    @Test
-    public void validateCert() throws Exception {
+    public void validateCert(String base64EncodeCert) throws Exception {
 
-        String base64EncodeCert = "MIIDRzCCAu6gAwIBAgIKIgAAAAAAAAbwjTAKBggqgRzPVQGDdTBoMQswCQYDVQQGEwJDTjEQMA4GA1UECAwHR3Vhbmd4aTEQMA4GA1UEBwwHTmFubmluZzENMAsGA1UECgwER1hDQTENMAsGA1UECwwER1hDQTEXMBUGA1UEAwwOR3Vhbmd4aSBTTTIgQ0EwHhcNMjAwMzA1MTYwMDAwWhcNMjEwMzA2MTU1OTU5WjCBpDELMAkGA1UEBhMCQ04xDzANBgNVBAgMBuW5v+ilvzEPMA0GA1UEBwwG5Y2X5a6BMTAwLgYDVQQKDCflub/opb/mlbDlrZfor4HkuaborqTor4HkuK3lv4PmtYvor5XkuIAxMDAuBgNVBAMMJ+W5v+ilv+aVsOWtl+ivgeS5puiupOivgeS4reW/g+a1i+ivleS4gDEPMA0GA1UELQwGQTAzMDAxMFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAE7S93Y9d7YGc92ugW9tmJXMLvIZzo1/WUhJwc2yuVywt6LRpzzAK737SNMLIDzHkt4s/7xgJ8LF1/woRCOF4hIaOCAUEwggE9MB8GA1UdIwQYMBaAFKSwdSvAG1eiN3NHufr5gDWgIXj6MB0GA1UdDgQWBBSZrSp2y1NZXr38rHmh3a7S45fb7DALBgNVHQ8EBAMCA9gwgcEGA1UdHwSBuTCBtjCBhKCBgaB/pH0wezELMAkGA1UEBgwCQ04xEDAOBgNVBAgMB0d1YW5neGkxEDAOBgNVBAcMB05hbm5pbmcxDTALBgNVBAoMBEdYQ0ExDTALBgNVBAsMBEdYQ0ExFzAVBgNVBAMMDkd1YW5neGkgU00yIENBMREwDwYDVQQDEwhjYTExY3JsMzAtoCugKYYnaHR0cDovL3NtMi5neGNhLmNvbS5jbi9jcmwvY2ExMWNybDMuY3JsMB8GCGCGSAGG+EQCBBNKSkExMjM0NTY3ODkwMTIzNDU1MAkGA1UdEwQCMAAwCgYIKoEcz1UBg3UDRwAwRAIgG3OcDIkdosfq0kKlaFoTr1g+hcjm9N/rTmcxDVrhUgMCIFDSI08gQFGKcMi36VyaYklBu5m19nKbi38r7AkEU9e1";
+         base64EncodeCert = "MIIDRzCCAu6gAwIBAgIKIgAAAAAAAAbwjTAKBggqgRzPVQGDdTBoMQswCQYDVQQGEwJDTjEQMA4GA1UECAwHR3Vhbmd4aTEQMA4GA1UEBwwHTmFubmluZzENMAsGA1UECgwER1hDQTENMAsGA1UECwwER1hDQTEXMBUGA1UEAwwOR3Vhbmd4aSBTTTIgQ0EwHhcNMjAwMzA1MTYwMDAwWhcNMjEwMzA2MTU1OTU5WjCBpDELMAkGA1UEBhMCQ04xDzANBgNVBAgMBuW5v+ilvzEPMA0GA1UEBwwG5Y2X5a6BMTAwLgYDVQQKDCflub/opb/mlbDlrZfor4HkuaborqTor4HkuK3lv4PmtYvor5XkuIAxMDAuBgNVBAMMJ+W5v+ilv+aVsOWtl+ivgeS5puiupOivgeS4reW/g+a1i+ivleS4gDEPMA0GA1UELQwGQTAzMDAxMFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAE7S93Y9d7YGc92ugW9tmJXMLvIZzo1/WUhJwc2yuVywt6LRpzzAK737SNMLIDzHkt4s/7xgJ8LF1/woRCOF4hIaOCAUEwggE9MB8GA1UdIwQYMBaAFKSwdSvAG1eiN3NHufr5gDWgIXj6MB0GA1UdDgQWBBSZrSp2y1NZXr38rHmh3a7S45fb7DALBgNVHQ8EBAMCA9gwgcEGA1UdHwSBuTCBtjCBhKCBgaB/pH0wezELMAkGA1UEBgwCQ04xEDAOBgNVBAgMB0d1YW5neGkxEDAOBgNVBAcMB05hbm5pbmcxDTALBgNVBAoMBEdYQ0ExDTALBgNVBAsMBEdYQ0ExFzAVBgNVBAMMDkd1YW5neGkgU00yIENBMREwDwYDVQQDEwhjYTExY3JsMzAtoCugKYYnaHR0cDovL3NtMi5neGNhLmNvbS5jbi9jcmwvY2ExMWNybDMuY3JsMB8GCGCGSAGG+EQCBBNKSkExMjM0NTY3ODkwMTIzNDU1MAkGA1UdEwQCMAAwCgYIKoEcz1UBg3UDRwAwRAIgG3OcDIkdosfq0kKlaFoTr1g+hcjm9N/rTmcxDVrhUgMCIFDSI08gQFGKcMi36VyaYklBu5m19nKbi38r7AkEU9e1";
 
         int res = dsvs.validateCert(base64EncodeCert);
         LOGGER.info("验证结果：" + res);
@@ -112,6 +126,6 @@ public class SignUtils {
         SignUtils signUtils = new SignUtils();
         signUtils.signData("aaa");
         signUtils.getServerCertificate();
-        signUtils.validateCert();
+        signUtils.validateCert("");
     }
 }

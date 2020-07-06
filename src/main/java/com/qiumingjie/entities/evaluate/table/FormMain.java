@@ -28,6 +28,12 @@ public class FormMain extends FormTemplate implements Serializable {
     private String formType;
 
     /**
+     * 归档标志
+     */
+    private Boolean archiveFlag;
+
+
+    /**
      * 签名标志，为true则已经签名，不可以再改
      */
     private Boolean signFlag;
@@ -41,6 +47,16 @@ public class FormMain extends FormTemplate implements Serializable {
     @Override
     public Boolean getSignFlag() {
         return signFlag;
+    }
+
+    @Override
+    public Boolean getArchiveFlag() {
+        return archiveFlag;
+    }
+
+    @Override
+    public void setArchiveFlag(Boolean archiveFlag) {
+        this.archiveFlag = archiveFlag;
     }
 
     @Override

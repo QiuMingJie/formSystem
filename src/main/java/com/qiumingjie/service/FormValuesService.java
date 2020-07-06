@@ -53,6 +53,7 @@ public class FormValuesService {
 
     public JsonHandler saveOrUpdateNew(FormTemplate formValues) throws Exception {
         JpaRepository repository = repositoryContext.getRepository(formValues.getTemplateFormId());
+        FormMain formMain;
         if (CommonUtils.empty(formValues.getFormId())) {
             //不存在formId则是新建操作！
             if (CommonUtils.empty(formValues.getTemplateFormId())) {
@@ -70,8 +71,20 @@ public class FormValuesService {
             } else {
                 formValues.setFormId(FormUtil.caculFormEntityId(formMainBytemplateIdLike.get(0).getFormId()));
             }
+            //插入设置签名和归档标志为false
+            formValues.setArchiveFlag(false);
+            formValues.setSignFlag(false);
+             formMain = CopyUtils.transfer(formValues, new FormMain());
+        }else {
+            formMain = formMainRepository.findById(formValues.getFormId()).get();
+            if (formMain.getArchiveFlag()) {
+                return JsonHandler.fail("表单已经归档，请取消归档后再取消签名再修改");
+            }
+            if (formMain.getSignFlag()) {
+                return JsonHandler.fail("表单已经签名，请取消签名后再修改");
+            }
         }
-        FormMain formMain = CopyUtils.transfer(formValues, new FormMain());
+        //更新formMain表
         formMainRepository.save(formMain);
         repository.saveAndFlush(CopyUtils.formEntityTransfer(formValues, FormEnum.getEntityClazz(formValues)));
         return JsonHandler.succeed(getForm(formValues.getFormId()));

@@ -1,7 +1,7 @@
 package com.qiumingjie.service;
 
-import com.qiumingjie.dao.dict.FormDictRepository;
-import com.qiumingjie.entities.evaluate.dict.FormDict;
+import com.qiumingjie.dao.formSystem.dict.FormDictRepository;
+import com.qiumingjie.entities.formSystem.evaluate.dict.FormDict;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

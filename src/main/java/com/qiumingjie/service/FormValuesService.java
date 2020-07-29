@@ -1,16 +1,16 @@
 package com.qiumingjie.service;
 
 import com.qiumingjie.FormEnum;
-import com.qiumingjie.dao.OpsQueueRepository;
-import com.qiumingjie.dao.PatientInfoRepository;
-import com.qiumingjie.dao.RepositoryContext;
-import com.qiumingjie.dao.SignRepository;
-import com.qiumingjie.dao.table.FormMainRepository;
+import com.qiumingjie.dao.formSystem.OpsQueueRepository;
+import com.qiumingjie.dao.formSystem.PatientInfoRepository;
+import com.qiumingjie.dao.formSystem.RepositoryContext;
+import com.qiumingjie.dao.formSystem.SignRepository;
+import com.qiumingjie.dao.formSystem.table.FormMainRepository;
 import com.qiumingjie.dto.FormTemplateDto;
-import com.qiumingjie.entities.evaluate.dict.FormDict;
-import com.qiumingjie.entities.evaluate.table.FormMain;
-import com.qiumingjie.entities.evaluate.table.FormTemplate;
-import com.qiumingjie.entities.info.OpsQueue;
+import com.qiumingjie.entities.formSystem.evaluate.dict.FormDict;
+import com.qiumingjie.entities.formSystem.evaluate.table.FormMain;
+import com.qiumingjie.entities.formSystem.evaluate.table.FormTemplate;
+import com.qiumingjie.entities.formSystem.info.OpsQueue;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.utils.CommonUtils;
 import com.qiumingjie.utils.CopyUtils;
@@ -20,6 +20,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -50,7 +51,7 @@ public class FormValuesService {
     @Autowired
     private SignRepository signRepository;
 
-
+    @Transactional(rollbackFor = RuntimeException.class)
     public JsonHandler saveOrUpdateNew(FormTemplate formValues) throws Exception {
         JpaRepository repository = repositoryContext.getRepository(formValues.getTemplateFormId());
         FormMain formMain;
@@ -90,6 +91,7 @@ public class FormValuesService {
         return JsonHandler.succeed(getForm(formValues.getFormId()));
     }
 
+    @Transactional
     public void deleteForm(String id) {
         if (CommonUtils.notEmpty(id)) {
             JpaRepository repository = repositoryContext.getRepository(FormUtil.getFormDictId(id));

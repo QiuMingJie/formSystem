@@ -1,9 +1,9 @@
 package com.qiumingjie.dto;
 
-import com.qiumingjie.entities.evaluate.table.FormTemplate;
-import com.qiumingjie.entities.info.OpsQueue;
-import com.qiumingjie.entities.info.PatientInfo;
-import com.qiumingjie.entities.sign.Sign;
+import com.qiumingjie.entities.formSystem.Sign;
+import com.qiumingjie.entities.formSystem.evaluate.table.FormTemplate;
+import com.qiumingjie.entities.formSystem.info.OpsQueue;
+import com.qiumingjie.entities.formSystem.info.PatientInfo;
 
 import java.util.List;
 

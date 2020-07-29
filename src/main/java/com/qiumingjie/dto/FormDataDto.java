@@ -1,7 +1,7 @@
 package com.qiumingjie.dto;
 
-import com.qiumingjie.entities.evaluate.table.FormMain;
-import com.qiumingjie.entities.evaluate.table.FormValue;
+import com.qiumingjie.entities.formSystem.evaluate.table.FormMain;
+import com.qiumingjie.entities.formSystem.evaluate.table.FormValue;
 import com.qiumingjie.utils.CommonUtils;
 import com.qiumingjie.utils.Validate;
 

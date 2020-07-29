@@ -1,12 +1,12 @@
 package com.qiumingjie.service;
 
-import com.qiumingjie.dao.dict.FormDictRepository;
-import com.qiumingjie.dao.dict.ItemDictRepository;
-import com.qiumingjie.dao.dict.RelationRepository;
+import com.qiumingjie.dao.formSystem.dict.FormDictRepository;
+import com.qiumingjie.dao.formSystem.dict.ItemDictRepository;
+import com.qiumingjie.dao.formSystem.dict.RelationRepository;
 import com.qiumingjie.dto.FormDictDto;
-import com.qiumingjie.entities.evaluate.dict.FormDict;
-import com.qiumingjie.entities.evaluate.dict.ItemDict;
-import com.qiumingjie.entities.evaluate.dict.Relation;
+import com.qiumingjie.entities.formSystem.evaluate.dict.FormDict;
+import com.qiumingjie.entities.formSystem.evaluate.dict.ItemDict;
+import com.qiumingjie.entities.formSystem.evaluate.dict.Relation;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.utils.CommonUtils;
 import com.qiumingjie.utils.CopyUtils;

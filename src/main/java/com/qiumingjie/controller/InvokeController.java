@@ -1,9 +1,11 @@
 package com.qiumingjie.controller;
 
-import com.qiumingjie.dao.OpsQueueRepository;
-import com.qiumingjie.dao.PatientInfoRepository;
-import com.qiumingjie.entities.info.OpsQueue;
-import com.qiumingjie.entities.info.PatientInfo;
+import com.qiumingjie.dao.formSystem.DoctorInfoRepository;
+import com.qiumingjie.dao.formSystem.OpsQueueRepository;
+import com.qiumingjie.dao.formSystem.PatientInfoRepository;
+import com.qiumingjie.entities.formSystem.info.DoctorInfo;
+import com.qiumingjie.entities.formSystem.info.OpsQueue;
+import com.qiumingjie.entities.formSystem.info.PatientInfo;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.utils.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,14 @@ public class InvokeController {
     @Autowired
     private OpsQueueRepository opsQueueRepository;
 
+    @Autowired
+    private DoctorInfoRepository doctorInfoRepository;
+
+    /**
+     * 病人基本信息
+     * @param patientInfo
+     * @return
+     */
     @RequestMapping(value = "/saveOrUpdatePatientInfo", method = RequestMethod.POST)
     public JsonHandler savePatientInfo(PatientInfo patientInfo) {
         if (CommonUtils.empty(patientInfo.getPatientId())) {
@@ -48,6 +58,12 @@ public class InvokeController {
         return JsonHandler.fail("数据不存在");
     }
 
+    /**
+     * 手术基本信息
+     *
+     * @param opsQueue
+     * @return
+     */
     @RequestMapping(value = "/saveOrUpdateOpsQueue", method = RequestMethod.POST)
     public JsonHandler saveOpsQueue(@Validated OpsQueue opsQueue) {
         return JsonHandler.succeed(opsQueueRepository.save(opsQueue));
@@ -62,5 +78,27 @@ public class InvokeController {
         }
         return JsonHandler.fail("数据不存在");
     }
+
+
+    /**
+     * 医生基本信息
+     * @param doctorInfo
+     * @return
+     */
+    @RequestMapping(value = "/saveOrUpdateDoctorInfo", method = RequestMethod.POST)
+    public JsonHandler saveOrUpdateDoctorInfo(@Validated DoctorInfo doctorInfo) {
+        return JsonHandler.succeed(doctorInfoRepository.save(doctorInfo));
+//        return new JsonHandler("200", "http://122.51.171.14:8080/formweb/#/Index?patientInfo=" +.getId().toString(), patientInfo);
+    }
+
+    @RequestMapping(value = "/getDoctorInfo", method = RequestMethod.GET)
+    public JsonHandler getDoctorInfo(String id) {
+        Optional<DoctorInfo> byId = doctorInfoRepository.findById(id);
+        if (byId.isPresent()) {
+            return JsonHandler.succeed(byId.get());
+        }
+        return JsonHandler.fail("数据不存在");
+    }
+
 
 }

@@ -1,15 +1,15 @@
 package com.qiumingjie.service;
 
-import com.qiumingjie.dao.dict.FormDictRepository;
-import com.qiumingjie.dao.dict.ItemDictRepository;
-import com.qiumingjie.dao.dict.RelationRepository;
-import com.qiumingjie.dao.table.FormMainRepository;
-import com.qiumingjie.dao.table.FormValueRepository;
+import com.qiumingjie.dao.formSystem.dict.FormDictRepository;
+import com.qiumingjie.dao.formSystem.dict.ItemDictRepository;
+import com.qiumingjie.dao.formSystem.dict.RelationRepository;
+import com.qiumingjie.dao.formSystem.table.FormMainRepository;
+import com.qiumingjie.dao.formSystem.table.FormValueRepository;
 import com.qiumingjie.dto.FormDataDto;
-import com.qiumingjie.entities.evaluate.dict.FormDict;
-import com.qiumingjie.entities.evaluate.dict.Relation;
-import com.qiumingjie.entities.evaluate.dict.RelationKeys;
-import com.qiumingjie.entities.evaluate.table.FormMain;
+import com.qiumingjie.entities.formSystem.evaluate.dict.FormDict;
+import com.qiumingjie.entities.formSystem.evaluate.dict.Relation;
+import com.qiumingjie.entities.formSystem.evaluate.dict.RelationKeys;
+import com.qiumingjie.entities.formSystem.evaluate.table.FormMain;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.utils.CommonUtils;
 import com.qiumingjie.utils.CopyUtils;
@@ -101,6 +101,7 @@ public class FormAddValueService {
         return JsonHandler.succeed(formDataDto);
     }
 
+    @Transactional
     public JsonHandler deleteForm(String formId) {
         formMainRepository.deleteById(formId);
         List<Relation> relationList = relationRepository.findAllById_FormDictId(FormUtil.getFormDictId(formId));

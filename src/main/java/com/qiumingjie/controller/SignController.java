@@ -1,13 +1,13 @@
 package com.qiumingjie.controller;
 
-import com.qiumingjie.dao.DoctorRepository;
-import com.qiumingjie.dao.RepositoryContext;
-import com.qiumingjie.dao.SignRepository;
-import com.qiumingjie.dao.table.FormMainRepository;
-import com.qiumingjie.entities.evaluate.table.FormMain;
-import com.qiumingjie.entities.evaluate.table.FormTemplate;
-import com.qiumingjie.entities.info.DoctorInfo;
-import com.qiumingjie.entities.sign.Sign;
+import com.qiumingjie.dao.formSystem.DoctorInfoRepository;
+import com.qiumingjie.dao.formSystem.RepositoryContext;
+import com.qiumingjie.dao.formSystem.SignRepository;
+import com.qiumingjie.dao.formSystem.table.FormMainRepository;
+import com.qiumingjie.entities.formSystem.Sign;
+import com.qiumingjie.entities.formSystem.evaluate.table.FormMain;
+import com.qiumingjie.entities.formSystem.evaluate.table.FormTemplate;
+import com.qiumingjie.entities.formSystem.info.DoctorInfo;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.service.SignService;
 import com.qiumingjie.utils.CommonUtils;
@@ -38,7 +38,7 @@ public class SignController {
     private SignRepository signRepository;
 
     @Autowired
-    private DoctorRepository doctorRepository;
+    private DoctorInfoRepository doctorInfoRepository;
 
     @Autowired
     private FormMainRepository formMainRepository;
@@ -57,10 +57,10 @@ public class SignController {
         }
 
         DoctorInfo doctorInfo = new DoctorInfo();
-        if (!doctorRepository.findById(sign.getDoctorId()).isPresent()) {
+        if (!doctorInfoRepository.findById(sign.getDoctorId()).isPresent()) {
             return JsonHandler.fail("获取医生信息出错");
         } else {
-            doctorInfo = doctorRepository.findById(sign.getDoctorId()).get();
+            doctorInfo = doctorInfoRepository.findById(sign.getDoctorId()).get();
         }
         sign.setDoctorSignPhoto(doctorInfo.getDoctorSignPhoto());
         FormTemplate formTemplate;

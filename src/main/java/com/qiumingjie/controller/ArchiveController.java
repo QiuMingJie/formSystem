@@ -1,11 +1,18 @@
 package com.qiumingjie.controller;
 
-import com.qiumingjie.dao.table.FormMainRepository;
-import com.qiumingjie.entities.evaluate.table.FormMain;
-import com.qiumingjie.entities.sign.Sign;
+import com.qiumingjie.FormEnum;
+import com.qiumingjie.dao.formSystem.RepositoryContext;
+import com.qiumingjie.dao.formSystem.table.FormMainRepository;
+import com.qiumingjie.entities.formSystem.Sign;
+import com.qiumingjie.entities.formSystem.evaluate.table.FormMain;
+import com.qiumingjie.entities.formSystem.evaluate.table.FormTemplate;
 import com.qiumingjie.handler.JsonHandler;
+import com.qiumingjie.service.FormValuesService;
 import com.qiumingjie.utils.CommonUtils;
+import com.qiumingjie.utils.CopyUtils;
+import com.qiumingjie.utils.FormUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +32,14 @@ public class ArchiveController {
     @Autowired
     private FormMainRepository formMainRepository;
 
+    @Autowired
+    RepositoryContext repositoryContext;
+
+    @Autowired
+    FormValuesService formValuesService;
+
     @PostMapping("/archiveForm")
-    public JsonHandler archiveForm(@RequestBody Sign sign) {
+    public JsonHandler archiveForm(@RequestBody Sign sign) throws InstantiationException, IllegalAccessException {
         String formId = sign.getFormId();
         if (CommonUtils.empty(formId)) {
             return JsonHandler.fail("表单id为空，归档失败");
@@ -41,7 +54,15 @@ public class ArchiveController {
         }
         formMain.setArchiveFlag(true);
         formMainRepository.save(formMain);
-        return JsonHandler.succeed("归档成功");
+        JpaRepository repository = repositoryContext.getRepository(FormUtil.getFormDictId(sign.getFormId()));
+        Optional formTemplateOptional = repository.findById(sign.getFormId());
+        if (!formTemplateOptional.isPresent()) {
+            return JsonHandler.fail("表单信息不存在");
+        }
+        FormTemplate formTemplate = (FormTemplate)formTemplateOptional.get();
+        formTemplate.setArchiveFlag(true);
+        repository.save(CopyUtils.formEntityTransfer(formTemplate, FormEnum.getEntityClazz(formTemplate)));
+        return JsonHandler.succeed(formValuesService.getForm(sign.getFormId()));
     }
 
     @PostMapping("/cancelArchiveForm")

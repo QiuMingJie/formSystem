@@ -60,7 +60,7 @@ public class ArchiveController {
             return JsonHandler.fail("表单信息不存在");
         }
         FormTemplate formTemplate = (FormTemplate)formTemplateOptional.get();
-        formTemplate.setArchiveFlag(true);
+//        formTemplate.setArchiveFlag(true);
         repository.save(CopyUtils.formEntityTransfer(formTemplate, FormEnum.getEntityClazz(formTemplate)));
         return JsonHandler.succeed(formValuesService.getForm(sign.getFormId()));
     }

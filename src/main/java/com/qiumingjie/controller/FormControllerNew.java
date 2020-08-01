@@ -8,7 +8,6 @@ import com.qiumingjie.dao.formSystem.table.FormMainRepository;
 import com.qiumingjie.dto.FormTemplateDto;
 import com.qiumingjie.dto.PatientAndOperationInfoDto;
 import com.qiumingjie.entities.formSystem.evaluate.table.FormMain;
-import com.qiumingjie.entities.formSystem.evaluate.table.FormTemplate;
 import com.qiumingjie.entities.formSystem.info.OpsQueue;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.service.FormValuesService;
@@ -74,7 +73,7 @@ public class FormControllerNew {
      * @return
      */
     @RequestMapping(value = "/saveOrUpdateFormNew", method = RequestMethod.POST)
-    public JsonHandler saveOrUpdateNew(@RequestBody @Validated FormTemplate formValues) throws Exception {
+    public JsonHandler saveOrUpdateNew(@RequestBody @Validated FormTemplateDto formValues) throws Exception {
         if (CommonUtils.empty(formValues.getFormId())&&CommonUtils.empty(formValues.getTemplateFormId())) {
             return JsonHandler.fail("模板表不存在或获取表失败");
         }
@@ -100,7 +99,7 @@ public class FormControllerNew {
      * @return
      */
     @RequestMapping(value = "/deleteFormNew", method = RequestMethod.POST)
-    public JsonHandler deleteFormNew(@RequestBody FormTemplate formValues) {
+    public JsonHandler deleteFormNew(@RequestBody FormTemplateDto formValues) {
         if (CommonUtils.empty(formValues) || CommonUtils.empty(formValues.getFormId())) {
             return JsonHandler.fail("删除表单为空");
         }
@@ -121,9 +120,9 @@ public class FormControllerNew {
         }
         List<FormTemplateDto> result = new ArrayList<>();
         List<FormMain> formValuesList = formMainRepository.findAllByPatientId(patientId);
-        for (FormTemplate formValues : formValuesList) {
-            result.add(formValuesService.getForm(formValues.getFormId()));
-        }
+//        for (FormTemplate formValues : formValuesList) {
+//            result.add(formValuesService.getForm(formValues.getFormId()));
+//        }
         return JsonHandler.succeed(result);
     }
 

@@ -86,7 +86,7 @@ public class FormAddValueService {
         }
         Optional<FormDict> formDict = formDictRepository.findById(FormUtil.getFormDictId(formId));
         if (formDict.isPresent()) {
-            formDataDto.setFormName(formDict.get().getFormName());
+            formDataDto.setTemplateName(formDict.get().getFormName());
             formDataDto.setType(formDict.get().getFormType());
         } else {
             return JsonHandler.fail("获取模板表失败");

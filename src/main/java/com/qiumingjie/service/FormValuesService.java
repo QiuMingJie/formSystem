@@ -72,9 +72,6 @@ public class FormValuesService {
             } else {
                 formValues.setFormId(FormUtil.caculFormEntityId(formMainBytemplateIdLike.get(0).getFormId()));
             }
-            //插入设置签名和归档标志为false
-            formValues.setArchiveFlag(false);
-            formValues.setSignFlag(false);
              formMain = CopyUtils.transfer(formValues, new FormMain());
         }else {
             formMain = formMainRepository.findById(formValues.getFormId()).get();

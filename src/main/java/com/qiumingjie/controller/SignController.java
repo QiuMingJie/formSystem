@@ -12,7 +12,6 @@ import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.service.SignService;
 import com.qiumingjie.utils.CommonUtils;
 import com.qiumingjie.utils.FormUtil;
-import com.qiumingjie.utils.SignUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,7 +48,7 @@ public class SignController {
 
     @PostMapping("/signForm")
     public JsonHandler sign(@RequestBody Sign sign) throws IllegalAccessException, InstantiationException {
-        if (CommonUtils.empty(sign.getFormId()) || CommonUtils.empty(sign.getDoctorId())) {
+        if (CommonUtils.empty(sign.getFormId()) || CommonUtils.empty(sign.getSigner())) {
             return JsonHandler.fail("表单id和医生id不可为空，请联系管理员");
         }
         if (CommonUtils.empty(sign.getKey())) {
@@ -57,12 +56,12 @@ public class SignController {
         }
 
         DoctorInfo doctorInfo = new DoctorInfo();
-        if (!doctorInfoRepository.findById(sign.getDoctorId()).isPresent()) {
+        if (!doctorInfoRepository.findById(sign.getSigner()).isPresent()) {
             return JsonHandler.fail("获取医生信息出错");
         } else {
-            doctorInfo = doctorInfoRepository.findById(sign.getDoctorId()).get();
+            doctorInfo = doctorInfoRepository.findById(sign.getSigner()).get();
         }
-        sign.setDoctorSignPhoto(doctorInfo.getDoctorSignPhoto());
+        sign.setSignerPhotoPath(doctorInfo.getDoctorSignPhoto());
         FormTemplate formTemplate;
         FormMain formMain;
         Optional<FormMain> formMainOptional = formMainRepository.findById(sign.getFormId());
@@ -73,24 +72,24 @@ public class SignController {
             JpaRepository repository = repositoryContext.getRepository(FormUtil.getFormDictId(sign.getFormId()));
             formTemplate = (FormTemplate) repository.findById(sign.getFormId()).get();
         }
-        if (CommonUtils.notEmpty(formTemplate.getAfterSignValue())) {
-            return JsonHandler.fail("此表单已经签名");
-        }
-        formTemplate.setAfterSignValue(SignUtils.init("").signData(formTemplate.getValue()));
-        formTemplate.setSignFlag(true);
+//        if (CommonUtils.notEmpty(formTemplate.getAfterSignValue())) {
+//            return JsonHandler.fail("此表单已经签名");
+//        }
+//        formTemplate.setAfterSignValue(SignUtils.init("").signData(formTemplate.getValue()));
+//        formTemplate.setSignFlag(true);
         formMain.setSignFlag(true);
         return signService.sign(sign, formTemplate, formMain);
     }
 
     @PostMapping("/cancelSign")
     public JsonHandler cancelSign(@RequestBody Sign sign) throws IllegalAccessException, InstantiationException {
-        if (CommonUtils.empty(sign.getFormId()) || CommonUtils.empty(sign.getDoctorId())) {
+        if (CommonUtils.empty(sign.getFormId()) || CommonUtils.empty(sign.getSigner())) {
             return JsonHandler.fail("表单id和医生id不可为空，请联系管理员");
         }
         if (CommonUtils.empty(sign.getKey())) {
             return JsonHandler.fail("签名失败，获取医生证书失败");
         }
-        sign.setDoctorSignPhoto(null);
+        sign.setSignerPhotoPath(null);
         FormTemplate formTemplate;
         FormMain formMain;
         Optional<FormMain> formMainOptional = formMainRepository.findById(sign.getFormId());
@@ -101,8 +100,8 @@ public class SignController {
             JpaRepository repository = repositoryContext.getRepository(FormUtil.getFormDictId(sign.getFormId()));
             formTemplate = (FormTemplate) repository.findById(sign.getFormId()).get();
         }
-        formTemplate.setAfterSignValue("");
-        formTemplate.setSignFlag(false);
+//        formTemplate.setAfterSignValue("");
+//        formTemplate.setSignFlag(false);
         formMain.setSignFlag(false);
         return signService.sign(sign, formTemplate, formMain);
     }

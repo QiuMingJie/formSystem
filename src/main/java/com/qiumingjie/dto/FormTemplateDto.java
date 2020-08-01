@@ -4,6 +4,7 @@ import com.qiumingjie.entities.formSystem.Sign;
 import com.qiumingjie.entities.formSystem.evaluate.table.FormTemplate;
 import com.qiumingjie.entities.formSystem.info.OpsQueue;
 import com.qiumingjie.entities.formSystem.info.PatientInfo;
+import lombok.Data;
 
 import java.util.List;
 
@@ -12,7 +13,18 @@ import java.util.List;
  * @date 2020-03-16 16:08
  * @description
  */
+@Data
 public class FormTemplateDto extends FormTemplate {
+
+    /**
+     * 归档标志
+     */
+    private Boolean archiveFlag;
+
+    /**
+     * 签名标志，为true则已经签名，不可以再改
+     */
+    private Boolean signFlag;
 
     private OpsQueue operation;
 
@@ -20,27 +32,5 @@ public class FormTemplateDto extends FormTemplate {
 
     private List<Sign> signList;
 
-    public List<Sign> getSignList() {
-        return signList;
-    }
 
-    public void setSignList(List<Sign> signList) {
-        this.signList = signList;
-    }
-
-    public OpsQueue getOperation() {
-        return operation;
-    }
-
-    public void setOperation(OpsQueue operation) {
-        this.operation = operation;
-    }
-
-    public PatientInfo getPatientInfo() {
-        return patientInfo;
-    }
-
-    public void setPatientInfo(PatientInfo patientInfo) {
-        this.patientInfo = patientInfo;
-    }
 }

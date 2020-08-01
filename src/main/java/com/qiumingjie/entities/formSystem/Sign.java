@@ -1,10 +1,9 @@
 package com.qiumingjie.entities.formSystem;
 
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import lombok.Data;
+
+import javax.persistence.*;
 
 /**
  * @author QiuMingJie
@@ -13,6 +12,7 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "Sign")
+@Data
 public class Sign {
 
     @Id
@@ -20,52 +20,21 @@ public class Sign {
 
     String formId;
 
-    String doctorId;
+    String groupName;
 
-    String doctorSignPhoto;
+    String signer;
 
+    String signerPhotoPath;
 
+    @Column(columnDefinition = "varchar(max)")
+    private String afterSignValue;
+
+    /**
+     * 签名部分
+     */
+    private Boolean signFlag;
 
     @Transient
     String key;
 
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getDoctorSignPhoto() {
-        return doctorSignPhoto;
-    }
-
-    public void setDoctorSignPhoto(String doctorSignPhoto) {
-        this.doctorSignPhoto = doctorSignPhoto;
-    }
-
-    public String getSignId() {
-        return signId;
-    }
-
-    public void setSignId(String id) {
-        this.signId = id;
-    }
-
-    public String getFormId() {
-        return formId;
-    }
-
-    public void setFormId(String formId) {
-        this.formId = formId;
-    }
-
-    public String getDoctorId() {
-        return doctorId;
-    }
-
-    public void setDoctorId(String doctorId) {
-        this.doctorId = doctorId;
-    }
 }

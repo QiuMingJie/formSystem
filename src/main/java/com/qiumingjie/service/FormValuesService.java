@@ -51,6 +51,9 @@ public class FormValuesService {
     @Autowired
     private SignRepository signRepository;
 
+    @Autowired
+    private SignService signService;
+
     @Transactional(rollbackFor = RuntimeException.class)
     public JsonHandler saveOrUpdateNew(FormTemplate formValues) throws Exception {
         JpaRepository repository = repositoryContext.getRepository(formValues.getTemplateFormId());
@@ -63,6 +66,10 @@ public class FormValuesService {
             Optional<FormDict> formDict = formDictService.existFormDict(formValues.getTemplateFormId());
             if (!formDict.isPresent()) {
                 return JsonHandler.fail("新建表单失败：表单模板不存在");
+            }
+            //判断是否signId重复
+            if (signService.repeatSignId(formValues.getValue())) {
+                return JsonHandler.fail("新建表单失败：signId已经被其他表单使用");
             }
             //暂时不知道怎么获取创建者
 //            formValues.setCreator("？？");
@@ -87,6 +94,8 @@ public class FormValuesService {
         }
         //更新formMain表
         formMainRepository.save(formMain);
+        //更新签名表中
+        signService.saveOrUpdateSign(formMain.getFormId(),formValues.getValue());
         repository.saveAndFlush(CopyUtils.formEntityTransfer(formValues, FormEnum.getEntityClazz(formValues)));
         return JsonHandler.succeed(getForm(formValues.getFormId()));
     }
@@ -115,12 +124,15 @@ public class FormValuesService {
             }
             FormTemplateDto formTemplateDto = new FormTemplateDto();
             BeanUtils.copyProperties(formTemplate.get(), formTemplateDto);
-            Optional<OpsQueue> operation = opsQueueRepository.findById(formTemplate.get().getOperationId());
-            if (operation.isPresent()) {
-                formTemplateDto.setOperation(operation.get());
-                if (CommonUtils.notEmpty(operation.get().getPatientId())) {
-                    if (patientInfoRepository.findById(operation.get().getPatientId()).isPresent()) {
-                        formTemplateDto.setPatientInfo(patientInfoRepository.findById(operation.get().getPatientId()).get());
+            //判断有无手术信息，返回
+            if (CommonUtils.notEmpty(formTemplate.get().getOperationId())) {
+                Optional<OpsQueue> operation = opsQueueRepository.findById(formTemplate.get().getOperationId());
+                if (operation.isPresent()) {
+                    formTemplateDto.setOperation(operation.get());
+                    if (CommonUtils.notEmpty(operation.get().getPatientId())) {
+                        if (patientInfoRepository.findById(operation.get().getPatientId()).isPresent()) {
+                            formTemplateDto.setPatientInfo(patientInfoRepository.findById(operation.get().getPatientId()).get());
+                        }
                     }
                 }
             }

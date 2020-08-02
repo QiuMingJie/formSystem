@@ -2,6 +2,7 @@ package com.qiumingjie;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.qiumingjie.utils.SignUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -16,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 public class SpringbootApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
+        SignUtils.init();
         SpringApplication.run(SpringbootApplication.class, args);
     }
 

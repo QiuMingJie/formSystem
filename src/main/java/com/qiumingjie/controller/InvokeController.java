@@ -1,6 +1,6 @@
 package com.qiumingjie.controller;
 
-import com.qiumingjie.dao.formSystem.DoctorInfoRepository;
+import com.qiumingjie.dao.formSystem.UserInfoRepository;
 import com.qiumingjie.dao.formSystem.OpsQueueRepository;
 import com.qiumingjie.dao.formSystem.PatientInfoRepository;
 import com.qiumingjie.entities.formSystem.info.OpsQueue;
@@ -34,7 +34,7 @@ public class InvokeController {
     private OpsQueueRepository opsQueueRepository;
 
     @Autowired
-    private DoctorInfoRepository doctorInfoRepository;
+    private UserInfoRepository userInfoRepository;
 
     @ApiOperation("保存或者更新病人基本信息")
     @RequestMapping(value = "/saveOrUpdatePatientInfo", method = RequestMethod.POST)
@@ -77,14 +77,14 @@ public class InvokeController {
     @ApiOperation("更新或者保存医生基本信息")
     @RequestMapping(value = "/saveOrUpdateDoctorInfo", method = RequestMethod.POST)
     public JsonHandler saveOrUpdateDoctorInfo(@Validated UserInfo userInfo) {
-        return JsonHandler.succeed(doctorInfoRepository.save(userInfo));
+        return JsonHandler.succeed(userInfoRepository.save(userInfo));
 //        return new JsonHandler("200", "http://122.51.171.14:8080/formweb/#/Index?patientInfo=" +.getId().toString(), patientInfo);
     }
 
     @ApiOperation("获取医生基本信息")
     @RequestMapping(value = "/getDoctorInfo", method = RequestMethod.GET)
     public JsonHandler getDoctorInfo(String id) {
-        Optional<UserInfo> byId = doctorInfoRepository.findById(id);
+        Optional<UserInfo> byId = userInfoRepository.findById(id);
         if (byId.isPresent()) {
             return JsonHandler.succeed(byId.get());
         }

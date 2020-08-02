@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ExceptHandler {
     @ExceptionHandler(ValidateException.class)
     public JsonHandler handleValidateException(ValidateException e) {
+        e.printStackTrace();
         return JsonHandler.fail(e.getMessage());
     }
 
@@ -26,6 +27,7 @@ public class ExceptHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public JsonHandler handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        e.printStackTrace();
         return JsonHandler.fail(e.getBindingResult().getFieldError().getDefaultMessage());
     }
 
@@ -37,12 +39,14 @@ public class ExceptHandler {
      */
     @ExceptionHandler(BindException.class)
     public JsonHandler handleBindException(BindException e) {
+        e.printStackTrace();
         return JsonHandler.fail(e.getBindingResult().getFieldError().getDefaultMessage());
     }
 
 
     @ExceptionHandler(RuntimeException.class)
     public JsonHandler handleBindException(RuntimeException e) {
+        e.printStackTrace();
         return JsonHandler.fail(e.getMessage());
     }
 }

@@ -1,5 +1,6 @@
 package com.qiumingjie.config;
 
+import com.qiumingjie.springBootJpa.SimpleJpaRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -27,6 +28,7 @@ import javax.sql.DataSource;
 @EnableJpaRepositories(
         basePackages = "com.qiumingjie.dao.hospital",
         entityManagerFactoryRef = "secondEntityManagerFactoryBean",
+        repositoryBaseClass = SimpleJpaRepositoryImpl.class,
         transactionManagerRef = "secondTransactionManager")
 @EnableTransactionManagement
 public class JpaSecondConfiguration {

@@ -25,8 +25,7 @@ public class Sign {
     @ApiModelProperty(value = "表单ID",required = true,example = "E001_0001_0001")
     String formId;
 
-
-    byte[] signerPhotoPath;
+    private byte[] signerPhotoPath;
 
 
     @ApiModelProperty(value = "签名原文")
@@ -45,13 +44,14 @@ public class Sign {
     @Column(columnDefinition = "varchar(max)")
     private String afterSignValue;
 
-    @ApiModelProperty(value = "证书值",example = "2200000000000006C19A")
+    @ApiModelProperty(value = "证书值",example = "MIIC/zCCAqSgAwIBAgIKIgAAAAAAAAbBmjAKBggqgRzPVQGDdTBoMQswCQYDVQQGEwJDTjEQMA4GA1UECAwHR3Vhbmd4aTEQMA4GA1UEBwwHTmFubmluZzENMAsGA1UECgwER1hDQTENMAsGA1UECwwER1hDQTEXMBUGA1UEAwwOR3Vhbmd4aSBTTTIgQ0EwHhcNMjAwMjA3MTYwMDAwWhcNMjEwMjA4MTU1OTU5WjBjMQswCQYDVQQGDAJDTjEeMBwGA1UECgwV5qKn5bee5biC5Lq65rCR5Yy76ZmiMQ8wDQYDVQQIDAblub/opb8xEjAQBgNVBAMMCeWPtuW7uueciTEPMA0GA1UEBwwG5qKn5beeMFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEugZPyA8acpfA2e4H72UP3RIiLhuVMUBp5y9UG7cHV0u83KuN8CJl8ViPv5MWmUG23U0LwR+V7M64SGUQ0yVVfaOCATkwggE1MB8GA1UdIwQYMBaAFKSwdSvAG1eiN3NHufr5gDWgIXj6MB0GA1UdDgQWBBT28gc1XRu96yxZ3cXcX7FA7IJzXjALBgNVHQ8EBAMCA9gwgcEGA1UdHwSBuTCBtjCBhKCBgaB/pH0wezELMAkGA1UEBgwCQ04xEDAOBgNVBAgMB0d1YW5neGkxEDAOBgNVBAcMB05hbm5pbmcxDTALBgNVBAoMBEdYQ0ExDTALBgNVBAsMBEdYQ0ExFzAVBgNVBAMMDkd1YW5neGkgU00yIENBMREwDwYDVQQDEwhjYTExY3JsMzAtoCugKYYnaHR0cDovL3NtMi5neGNhLmNvbS5jbi9jcmwvY2ExMWNybDMuY3JsMCIGCGCGSAGG+EQCBBYMFFNGNDUyNDAyMTk5NzAzMTMzOTQ0MAoGCCqBHM9VAYN1A0kAMEYCIQDE9UCUtGoSkkSLLYPTD83+49BveT232bq+dSGLlLXirAIhAN4UkgaGZrJt7tJ4kTL4mVsGHMmnMUS/OYDSA6mcVjo3")
+    @Column(columnDefinition = " varchar(max)")
     private String certificate;
 
     @ApiModelProperty(value = "CA系统时间")
     private Long dateTime;
 
     @ApiModelProperty(value = "CA系统时间结果")
-    private String twiceValue;
+    private byte[] twiceValue;
 
 }

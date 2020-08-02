@@ -1,5 +1,6 @@
 package com.qiumingjie.config;
 
+import com.qiumingjie.springBootJpa.SimpleJpaRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -27,6 +28,7 @@ import javax.sql.DataSource;
 //3、事务管理
 @EnableJpaRepositories(
         basePackages = "com.qiumingjie.dao.formSystem",
+        repositoryBaseClass = SimpleJpaRepositoryImpl.class,
         entityManagerFactoryRef = "firstEntityManagerFactoryBean",
         transactionManagerRef = "firstTransactionManager")
 @EnableTransactionManagement

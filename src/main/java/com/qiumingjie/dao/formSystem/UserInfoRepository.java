@@ -10,5 +10,6 @@ import org.springframework.stereotype.Repository;
  * @description
  */
 @Repository
-public interface DoctorInfoRepository extends JpaRepository<UserInfo,String> {
+public interface UserInfoRepository extends JpaRepository<UserInfo, String> {
+    UserInfo findAllByUserNumber(String userNumber);
 }

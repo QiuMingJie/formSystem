@@ -27,7 +27,6 @@ public class FormTemplate extends BaseEntity implements Serializable {
 
     private String creator;
 
-
     private String recordDateTime;
 
     @Column(columnDefinition = "varchar(max)")

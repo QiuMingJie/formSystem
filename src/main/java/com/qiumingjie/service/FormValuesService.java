@@ -73,6 +73,9 @@ public class FormValuesService {
                 formValues.setFormId(FormUtil.caculFormEntityId(formMainBytemplateIdLike.get(0).getFormId()));
             }
              formMain = CopyUtils.transfer(formValues, new FormMain());
+            //一开始设置为未归档未签名
+            formMain.setArchiveFlag(false);
+            formMain.setSignFlag(false);
         }else {
             formMain = formMainRepository.findById(formValues.getFormId()).get();
             if (formMain.getArchiveFlag()) {
@@ -100,16 +103,19 @@ public class FormValuesService {
 
 
     public FormTemplateDto getForm(String formId) {
-        String formDictId = FormUtil.getFormDictId(formId);
-        JpaRepository repository = repositoryContext.getRepository(formDictId);
-        Optional<FormTemplate> byId = repository.findById(formId);
-        if (byId.isPresent()) {
-            if (CommonUtils.empty(byId.get().getPatientId())) {
+        Optional<FormMain> formMain = formMainRepository.findById(formId);
+        if (!formMain.isPresent()) {
+            Validate.error("主表中无表单记录，表单不存在");
+        }
+        JpaRepository repository = repositoryContext.getRepository(FormUtil.getFormDictId(formId));
+        Optional<FormTemplate> formTemplate = repository.findById(formId);
+        if (formTemplate.isPresent()) {
+            if (CommonUtils.empty(formTemplate.get().getPatientId())) {
                 Validate.error("获取病人id失败，请联系管理员");
             }
             FormTemplateDto formTemplateDto = new FormTemplateDto();
-            BeanUtils.copyProperties(byId.get(), formTemplateDto);
-            Optional<OpsQueue> operation = opsQueueRepository.findById(byId.get().getOperationId());
+            BeanUtils.copyProperties(formTemplate.get(), formTemplateDto);
+            Optional<OpsQueue> operation = opsQueueRepository.findById(formTemplate.get().getOperationId());
             if (operation.isPresent()) {
                 formTemplateDto.setOperation(operation.get());
                 if (CommonUtils.notEmpty(operation.get().getPatientId())) {
@@ -119,6 +125,8 @@ public class FormValuesService {
                 }
             }
             formTemplateDto.setSignList(signRepository.findAllByFormId(formId));
+            formTemplateDto.setArchiveFlag(formMain.get().getArchiveFlag());
+            formTemplateDto.setSignFlag(formMain.get().getSignFlag());
             return formTemplateDto;
         } else {
             return null;

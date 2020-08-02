@@ -43,7 +43,24 @@
             <artifactId>lombok</artifactId>
             <version>1.18.8</version>
         </dependency>
+        <!--swagger图形化接口-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.9.2</version>
+        </dependency>
 
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>swagger-bootstrap-ui</artifactId>
+            <version>1.8.7</version>
+        </dependency>
         <!--        //电子签名-->
         <dependency>
             <groupId>com.dsvs</groupId>
@@ -143,7 +160,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>18.0</version>
+            <version>25.1-jre</version>
         </dependency>
         <!-- http -->
         <dependency>

@@ -1,6 +1,6 @@
 package com.qiumingjie.dao.formSystem;
 
-import com.qiumingjie.entities.formSystem.info.DoctorInfo;
+import com.qiumingjie.entities.formSystem.info.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  * @description
  */
 @Repository
-public interface DoctorInfoRepository extends JpaRepository<DoctorInfo,String> {
+public interface DoctorInfoRepository extends JpaRepository<UserInfo,String> {
 }

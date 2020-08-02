@@ -22,7 +22,8 @@ public interface FormMainRepository extends JpaRepository<FormMain, String> {
 
     List<FormMain> findAllByPatientIdAndOperationId(String patientId,String operationId);
 
-    List<FormMain> findAllByPatientId(String patientId);
+    List<FormMain> findAllByPatientIdOrderByTemplateFormId(String patientId);
+
 
 
 }

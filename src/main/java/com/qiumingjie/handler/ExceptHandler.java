@@ -39,4 +39,10 @@ public class ExceptHandler {
     public JsonHandler handleBindException(BindException e) {
         return JsonHandler.fail(e.getBindingResult().getFieldError().getDefaultMessage());
     }
+
+
+    @ExceptionHandler(RuntimeException.class)
+    public JsonHandler handleBindException(RuntimeException e) {
+        return JsonHandler.fail(e.getMessage());
+    }
 }

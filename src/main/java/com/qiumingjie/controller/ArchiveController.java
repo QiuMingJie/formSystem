@@ -11,6 +11,9 @@ import com.qiumingjie.service.FormValuesService;
 import com.qiumingjie.utils.CommonUtils;
 import com.qiumingjie.utils.CopyUtils;
 import com.qiumingjie.utils.FormUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +30,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/archive")
+@Api(description = "归档和取消归档接口")
 public class ArchiveController {
 
     @Autowired
@@ -39,7 +43,10 @@ public class ArchiveController {
     FormValuesService formValuesService;
 
     @PostMapping("/archiveForm")
-    public JsonHandler archiveForm(@RequestBody Sign sign) throws InstantiationException, IllegalAccessException {
+    @ApiOperation("归档接口")
+    public JsonHandler archiveForm(
+            @ApiParam(value = "只需传formId字段")
+            @RequestBody Sign sign) throws InstantiationException, IllegalAccessException {
         String formId = sign.getFormId();
         if (CommonUtils.empty(formId)) {
             return JsonHandler.fail("表单id为空，归档失败");

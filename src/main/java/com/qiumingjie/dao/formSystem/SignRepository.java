@@ -17,4 +17,6 @@ public interface SignRepository extends JpaRepository<Sign,String> {
     List<Sign> findAllByFormId(String formId);
 
     void deleteAllByFormId(String formId);
+
+    List<Sign> findAllByFormIdAndGroupId(String formId, String groupId);
 }

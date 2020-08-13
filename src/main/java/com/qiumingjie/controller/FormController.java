@@ -7,6 +7,7 @@ import com.qiumingjie.dao.formSystem.dict.FormDictRepository;
 import com.qiumingjie.dao.formSystem.table.FormMainRepository;
 import com.qiumingjie.dto.FormTemplateDto;
 import com.qiumingjie.dto.PatientAndOperationInfoDto;
+import com.qiumingjie.entities.formSystem.evaluate.dict.FormDict;
 import com.qiumingjie.entities.formSystem.evaluate.table.FormMain;
 import com.qiumingjie.entities.formSystem.info.OpsQueue;
 import com.qiumingjie.handler.JsonHandler;
@@ -81,7 +82,12 @@ public class FormController {
                 formValues.setPatientId(opsQueueRepository.findById(formValues.getOperationId()).get().getPatientId());
             }
         }
-        formValues.setTemplateName(formDictRepository.findById(formValues.getTemplateFormId()).get().getFormName());
+        Optional<FormDict> byId = formDictRepository.findById(formValues.getTemplateFormId());
+        if (byId.isPresent()) {
+            formValues.setTemplateName(byId.get().getFormName());
+        } else {
+            return JsonHandler.fail("字典表不存在此表单");
+        }
         return JsonHandler.succeed(formValuesService.saveOrUpdateNew(formValues));
     }
 

@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 public class SpringbootApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
+        System.out.println("321312312");
         SignUtils.init();
         SpringApplication.run(SpringbootApplication.class, args);
     }

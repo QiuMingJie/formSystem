@@ -1,12 +1,11 @@
 package com.qiumingjie.dto;
 
-import com.qiumingjie.entities.formSystem.Sign;
 import com.qiumingjie.entities.formSystem.evaluate.table.FormTemplate;
 import com.qiumingjie.entities.formSystem.info.OpsQueue;
 import com.qiumingjie.entities.formSystem.info.PatientInfo;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author QiuMingJie
@@ -30,7 +29,13 @@ public class FormTemplateDto extends FormTemplate {
 
     private PatientInfo patientInfo;
 
-    private List<Sign> signList;
+//    private List<Sign> signList;
+
+    /**
+     * 新版表单签名，A->内容，B->内容
+     */
+    private Map<String ,SignDto> signList;
+
 
 
 }

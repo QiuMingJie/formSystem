@@ -57,7 +57,7 @@ public class ArchiveController {
         }
         FormMain formMain = byId.get();
         if (!formMain.getSignFlag()) {
-            return JsonHandler.fail("归档失败，表单未签名");
+            return JsonHandler.fail("归档失败，表单存在未签名信息");
         }
         formMain.setArchiveFlag(true);
         formMainRepository.save(formMain);

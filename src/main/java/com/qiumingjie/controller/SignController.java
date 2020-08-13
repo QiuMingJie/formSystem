@@ -4,8 +4,9 @@ import com.qiumingjie.dao.formSystem.RepositoryContext;
 import com.qiumingjie.dao.formSystem.SignRepository;
 import com.qiumingjie.dao.formSystem.UserInfoRepository;
 import com.qiumingjie.dao.formSystem.table.FormMainRepository;
+import com.qiumingjie.dto.FormTemplateDto;
+import com.qiumingjie.dto.SignDto;
 import com.qiumingjie.entities.formSystem.Sign;
-import com.qiumingjie.entities.formSystem.evaluate.table.FormTemplate;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.service.SignService;
 import com.qiumingjie.utils.CommonUtils;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,16 +48,9 @@ public class SignController {
 
     @ApiOperation("验证是否修改了表单中已经签名部分")
     @PostMapping("/checkValue")
-    public JsonHandler checkValue(@RequestBody FormTemplate formTemplate) throws IllegalAccessException, InstantiationException {
-        List<Sign> signs = signService.valueToList(formTemplate.getValue());
-        String name = "";
-        for (Sign sign : signs) {
-            name = name + (CommonUtils.empty (signService.changeValue(sign)) ? "" : (signService.changeValue(sign))) + (" ");
-        }
-        if (CommonUtils.empty(name)) {
-            return JsonHandler.succeed("未修改已签名的部分");
-        }
-        return JsonHandler.fail("已经修改了用户 " + name + "签名部分，保存则自动取消签名");
+    public JsonHandler checkValue(@RequestBody FormTemplateDto formValues) throws IllegalAccessException, InstantiationException {
+        List<SignDto> signDtoList = new ArrayList<>(formValues.getSignList().values());
+        return JsonHandler.succeed(signService.changeValue(signDtoList));
     }
 
     @ApiOperation("表单签名")

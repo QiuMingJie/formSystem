@@ -1,8 +1,12 @@
 package com.qiumingjie.dto;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.qiumingjie.entities.formSystem.Sign;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import java.util.*;
 
 /**
  * @author QiuMingJie
@@ -12,28 +16,37 @@ import lombok.Data;
 @Data
 public class SignDto {
 
-    @ApiModelProperty(value = "签名ID",required = true,example = "E001_0001_0001_01")
-    String signId;
 
-    @ApiModelProperty(value = "表单ID",required = true,example = "E001_0001_0001")
-    String formId;
+    @ApiModelProperty(value = "签名分组ID",required = true,example = "A,B,C")
+    String groupId;
 
-    byte[] signerPhotoPath;
+    @ApiModelProperty(value = "值",required = true,example = "{}")
+    Object value;
 
-    @ApiModelProperty(value = "签名原文")
-    private String signValue;
+    List<Map<String,String>> signerList;
 
     @ApiModelProperty(value = "签名标志")
     private Boolean signFlag;
 
-    @ApiModelProperty(value = "签名者序号，CA盾持有者",required = true,example = "SF452402199703133944")
-    String signer;
 
-    @ApiModelProperty(value = "签名者姓名")
-    String signerName;
+    @JsonIgnore
+    private String signValue;
 
-    @ApiModelProperty(value = "CA系统时间")
-    private Long dateTime;
+    public String getSignValue() {
+        return JSON.toJSONString(this.getValue());
+    }
 
+    public void setSignValue(String signValue) {
+        this.value = JSON.parse(signValue);
+    }
 
+    public void addSigner(Sign sign) {
+        if (this.signerList == null) {
+            this.signerList = new ArrayList<>();
+        }
+        Map<String, String> temp = new HashMap<>();
+        temp.put("signId", sign.getSignId());
+        temp.put("signerPhoto", Arrays.toString(sign.getSignerPhoto()));
+        this.signerList.add(temp);
+    }
 }

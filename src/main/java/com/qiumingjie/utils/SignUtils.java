@@ -8,8 +8,6 @@ import cn.org.bjca.client.security.SecurityEngineDeal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.UnsupportedEncodingException;
-
 /**
  * @author QiuMingJie
  * @date 2020-06-21 9:26
@@ -58,7 +56,7 @@ public class SignUtils {
     public static String signData(String data) {
         String sss = null;
         try {
-            sss = dsvs.signData(data);
+            sss = dsvs.signData(data.getBytes());
         } catch (SVSConnectException e) {
             e.printStackTrace();
         } catch (ParameterTooLongException e) {
@@ -81,7 +79,9 @@ public class SignUtils {
      * 返回值：
      * true：验证成功。false：验证失败。
      */
-    public static Boolean verifySignedData(String cert, String originalValue, String afterSignValue) throws ParameterTooLongException, UnkownException, ParameterInvalidException, SVSConnectException, UnsupportedEncodingException {
+    public static Boolean verifySignedData(String originalValue, String afterSignValue) throws ParameterTooLongException, SVSConnectException, ParameterInvalidException, UnkownException {
+        //证书，这里用的是服务器证书
+        String cert = dsvs.getServerCertificate();
 //        //原文
 //        byte[] dataBytes = originalValue.getBytes();
 //        //签名结果值
@@ -89,7 +89,7 @@ public class SignUtils {
 //        byte[] signedValueByte = dsvs.base64Decode(signedValue);
 //        //证书，这里用的是服务器证书
 //        String cert = dsvs.getServerCertificate();
-        boolean verifyRes = dsvs.verifySignedData(cert, originalValue, afterSignValue);
+        boolean verifyRes = dsvs.verifySignedData(cert, originalValue.getBytes(), dsvs.base64Decode(afterSignValue));
         System.out.println(verifyRes);
         return verifyRes;
     }

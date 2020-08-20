@@ -68,6 +68,8 @@ public class FormController {
     @ApiOperation("保存或者更新表单")
     @RequestMapping(value = "/saveOrUpdateFormNew", method = RequestMethod.POST)
     public JsonHandler saveOrUpdateNew(@RequestBody @Validated FormTemplateDto formValues) throws Exception {
+        log.info("111111111111");
+        System.out.println("1212");
         if (CommonUtils.empty(formValues.getFormId())&&CommonUtils.empty(formValues.getTemplateFormId())) {
             return JsonHandler.fail("模板表不存在或获取表失败");
         }

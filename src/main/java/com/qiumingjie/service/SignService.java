@@ -1,5 +1,6 @@
 package com.qiumingjie.service;
 
+import com.alibaba.fastjson.JSON;
 import com.qiumingjie.dao.formSystem.RepositoryContext;
 import com.qiumingjie.dao.formSystem.SignRepository;
 import com.qiumingjie.dao.formSystem.UserInfoRepository;
@@ -10,13 +11,14 @@ import com.qiumingjie.entities.formSystem.evaluate.table.FormMain;
 import com.qiumingjie.entities.formSystem.info.UserInfo;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.utils.SignUtils;
+import com.qiumingjie.utils.TimeStampSignUtils;
 import com.qiumingjie.utils.Validate;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author QiuMingJie
@@ -62,11 +64,25 @@ public class SignService {
         }
         String afterSignValue = SignUtils.signData(sign.getSignValue());
         try {
-            if (!SignUtils.verifySignedData(certificate,sign.getSignValue(),afterSignValue)) {
+
+            if (!SignUtils.verifySignedData(sign.getSignValue(), afterSignValue)) {
                 return JsonHandler.fail("表单签名失败，请稍后再试");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return JsonHandler.fail("表单签名失败，请稍后再试");
+        }
+        //时间戳结果
+        String timeStampString;
+        try {
+            timeStampString = TimeStampSignUtils.createTimeStamp(afterSignValue);
+            String verifyResult = TimeStampSignUtils.verifyTss(timeStampString, afterSignValue);
+            if (!"1".equals(verifyResult)) {
+                return JsonHandler.fail(verifyResult);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return JsonHandler.fail("时间戳签名失败，请稍后再试:" + e.getMessage());
         }
         sign.setSignFlag(true);
         sign.setSigner(signer);
@@ -75,7 +91,7 @@ public class SignService {
         sign.setSignerPhoto(userInfo.getUserSignPhoto());
         sign.setAfterSignValue(afterSignValue);
         sign.setDateTime(System.currentTimeMillis());
-        sign.setTwiceValue(SignUtils.base64Decode(sign.getSignValue() + sign.getAfterSignValue()));
+        sign.setTwiceValue(timeStampString);
         signRepository.save(sign);
         formMain.setSignFlag(checkSignAll(sign.getFormId()));
         formMainRepository.save(formMain);
@@ -89,13 +105,11 @@ public class SignService {
      * @return
      */
     public Boolean checkSignAll(String formId) {
-        List<Sign> allByFormId = signRepository.findAllByFormId(formId);
-        for (Sign sign : allByFormId) {
-            if (!sign.getSignFlag()) {
-                return false;
-            }
-        }
-        return true;
+        List<Sign> allSignList = signRepository.findAllByFormId(formId);
+        Map<String, Boolean> map = allSignList.stream().collect(Collectors.toMap(Sign::getGroupId, Sign::getSignFlag,(value1, value2 )->{
+            return value1||value2;
+        }));
+        return !map.containsValue(false);
     }
 
 
@@ -113,6 +127,7 @@ public class SignService {
                     sign.setSignValue(signDto.getSignValue());
                     sign.setGroupId(signDto.getGroupId());
                     sign.setSignFlag(false);
+                    sign.setFrontId(signDto.getSignerList().get(i).get("frontId"));
                     sign.setFormId(formId);
                     signList.add(sign);
                 }
@@ -123,7 +138,8 @@ public class SignService {
                 }
                 //如果值没有变，不理会
                 if (signDto.getSignValue().equals(signList1.get(0).getSignValue())) {
-                    continue;
+                    //刷新前端id
+//                    signList1.get(0).setFrontId(signDto.getSignerList().get(i).get("frontId"));
                 } else {
                     //值变了，取消次groupId下的全部签名
                     signList1.forEach(x -> {
@@ -144,8 +160,8 @@ public class SignService {
         signRepository.saveAll(signList);
     }
 
-    public Map<String ,SignDto> getSignMap(String formId) {
-        Map<String ,SignDto> result = new HashMap<>();
+    public Map<String, SignDto> getSignMap(String formId) {
+        Map<String, SignDto> result = new HashMap<>();
         List<Sign> signList = signRepository.findAllByFormId(formId);
         for (Sign sign : signList) {
             //如果已经存在，则更新或者新加，现在是一对多只要有一个人签名signFlag就是true
@@ -157,9 +173,10 @@ public class SignService {
                 signDto1.addSigner(sign);
             } else {
                 SignDto signDto = new SignDto();
-                BeanUtils.copyProperties(sign, signDto);
                 signDto.setSignValue(sign.getSignValue());
                 signDto.addSigner(sign);
+                signDto.setGroupId(sign.getGroupId());
+                signDto.setSignFlag(sign.getSignFlag());
                 result.put(sign.getGroupId(), signDto);
             }
         }
@@ -179,13 +196,13 @@ public class SignService {
                 Optional<Sign> byId = signRepository.findById(map.get("signId"));
                 if (byId.isPresent()) {
                     Sign sign = byId.get();
-                    if (!sign.getSignValue().equals(signDto.getSignValue()) && sign.getSignFlag()) {
+                    if (!JSON.parseObject(sign.getSignValue()).equals(JSON.parseObject(signDto.getSignValue()))&& sign.getSignFlag()) {
                         part.put("groupId", sign.getGroupId());
                         part.put("formId", sign.getFormId());
                         part.put("signer", sign.getSignerName());
                         result.add(part);
                     }
-                }else {
+                } else {
                     Validate.error("签名数据不存在，签名id" + map.get("signId"));
                 }
             }

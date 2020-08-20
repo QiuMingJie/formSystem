@@ -47,6 +47,8 @@ public class SignDto {
         Map<String, String> temp = new HashMap<>();
         temp.put("signId", sign.getSignId());
         temp.put("signerPhoto", Arrays.toString(sign.getSignerPhoto()));
+        temp.put("signFlag", sign.getSignFlag().toString());
+        temp.put("frontId", sign.getFrontId());
         this.signerList.add(temp);
     }
 }

@@ -31,6 +31,9 @@ public class Sign {
     @ApiModelProperty(value = "分组的id")
     private String groupId;
 
+    @ApiModelProperty(value = "前端id，给前端保存字段用")
+    private String frontId;
+
     @ApiModelProperty(value = "签名原文")
     @Column(columnDefinition = "varchar(max)")
     private String signValue;
@@ -56,9 +59,9 @@ public class Sign {
     @ApiModelProperty(value = "CA系统时间")
     private Long dateTime;
 
-    @ApiModelProperty(value = "CA系统时间结果")
-    @Column(columnDefinition = "     varbinary(max)")
-    private byte[] twiceValue;
+    @ApiModelProperty(value = "时间戳签名结果")
+    @Column(columnDefinition = "varchar(max)")
+    private String twiceValue;
 
     @Transient
     private Boolean twiceSign;

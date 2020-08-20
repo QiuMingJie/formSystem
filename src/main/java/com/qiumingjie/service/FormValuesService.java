@@ -85,12 +85,12 @@ public class FormValuesService {
             //签名部分
         }else {
             firstCreate = false;
+            if (!formMainRepository.findById(formValues.getFormId()).isPresent()) {
+                Validate.error("表单不存在");
+            }
             formMain = formMainRepository.findById(formValues.getFormId()).get();
             if (formMain.getArchiveFlag()) {
                 return JsonHandler.fail("表单已经归档，请取消归档后再取消签名再修改");
-            }
-            if (formMain.getSignFlag()) {
-                return JsonHandler.fail("表单已经签名，请取消签名后再修改");
             }
         }
         //更新formMain表

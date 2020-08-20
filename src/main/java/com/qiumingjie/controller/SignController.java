@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author QiuMingJie
@@ -69,31 +70,24 @@ public class SignController {
         return signService.sign(sign.getSignId(),sign.getSigner(),sign.getCertificate());
     }
 
-//    @ApiOperation("取消签名")
-//    @PostMapping("/cancelSign")
-//    public JsonHandler cancelSign(@RequestBody Sign sign) throws IllegalAccessException, InstantiationException {
-//        if (CommonUtils.empty(sign.getFormId()) || CommonUtils.empty(sign.getSigner())) {
-//            return JsonHandler.fail("表单id和医生id不可为空，请联系管理员");
-//        }
-//        if (CommonUtils.empty(sign.getKey())) {
-//            return JsonHandler.fail("签名失败，获取医生证书失败");
-//        }
-//        sign.setSignerPhotoPath(null);
-//        FormTemplate formTemplate;
-//        FormMain formMain;
-//        Optional<FormMain> formMainOptional = formMainRepository.findById(sign.getFormId());
-//        if (!formMainOptional.isPresent()) {
-//            return JsonHandler.fail("表单不存在");
-//        } else {
-//            formMain = formMainOptional.get();
-//            JpaRepository repository = repositoryContext.getRepository(FormUtil.getFormDictId(sign.getFormId()));
-//            formTemplate = (FormTemplate) repository.findById(sign.getFormId()).get();
-//        }
-////        formTemplate.setAfterSignValue("");
-////        formTemplate.setSignFlag(false);
-//        formMain.setSignFlag(false);
-//        return signService.sign(sign, formTemplate, formMain);
-//    }
+    @ApiOperation("取消签名")
+    @PostMapping("/cancelSign")
+    public JsonHandler cancelSign(@RequestBody Sign sign)  {
+        if (CommonUtils.empty(sign.getSignId())) {
+            return JsonHandler.fail("取消签名失败，signId为空");
+        }
+        Optional<Sign> signOptional = signRepository.findById(sign.getSignId());
+        Sign sign1;
+        if (!signOptional.isPresent()) {
+            return JsonHandler.fail("取消签名失败，signId不存在");
+        } else {
+            sign1 = signOptional.get();
+        }
+        sign1.setSignFlag(false);
+        sign1.setSignerPhoto(new byte[]{});
+        signRepository.save(sign1);
+        return JsonHandler.succeed("取消签名成功");
+    }
 
 
 }

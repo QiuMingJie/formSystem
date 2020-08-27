@@ -6,10 +6,8 @@ import com.qiumingjie.dao.formSystem.RepositoryContext;
 import com.qiumingjie.dao.formSystem.dict.FormDictRepository;
 import com.qiumingjie.dao.formSystem.table.FormMainRepository;
 import com.qiumingjie.dto.FormTemplateDto;
-import com.qiumingjie.dto.PatientAndOperationInfoDto;
 import com.qiumingjie.entities.formSystem.evaluate.dict.FormDict;
 import com.qiumingjie.entities.formSystem.evaluate.table.FormMain;
-import com.qiumingjie.entities.formSystem.info.OpsQueue;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.service.FormValuesService;
 import com.qiumingjie.utils.CommonUtils;
@@ -17,10 +15,12 @@ import com.qiumingjie.utils.FormUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,8 +68,6 @@ public class FormController {
     @ApiOperation("保存或者更新表单")
     @RequestMapping(value = "/saveOrUpdateFormNew", method = RequestMethod.POST)
     public JsonHandler saveOrUpdateNew(@RequestBody @Validated FormTemplateDto formValues) throws Exception {
-        log.info("111111111111");
-        System.out.println("1212");
         if (CommonUtils.empty(formValues.getFormId())&&CommonUtils.empty(formValues.getTemplateFormId())) {
             return JsonHandler.fail("模板表不存在或获取表失败");
         }
@@ -136,21 +134,7 @@ public class FormController {
     }
 
 
-    @RequestMapping(value = "/getInfo", method = RequestMethod.GET)
-    public JsonHandler getInfo(@RequestParam("operationId") String operationId) {
-        if (CommonUtils.empty(operationId)) {
-            return JsonHandler.fail("手术信息不可以为空");
-        }
-        PatientAndOperationInfoDto patientAndOperationInfoDto = new PatientAndOperationInfoDto();
-        Optional<OpsQueue> operation = opsQueueRepository.findById(operationId.trim());
-        if (operation.isPresent()) {
-            patientAndOperationInfoDto.setOperationInfo(operation.get());
-            if (CommonUtils.notEmpty(operation.get().getPatientId())) {
-                patientInfoRepository.findById(operation.get().getPatientId()).ifPresent(patientInfo -> BeanUtils.copyProperties(patientInfo, patientAndOperationInfoDto));
-            }
-        }
-        return JsonHandler.succeed(patientAndOperationInfoDto);
-    }
+
 }
 
 

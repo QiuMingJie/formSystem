@@ -105,9 +105,9 @@ public class SignService {
      * @return
      */
     public Boolean checkSignAll(String formId) {
-        List<Sign> allSignList = signRepository.findAllByFormId(formId);
+        List<Sign> allSignList = signRepository.findAllByFormIdOrderByFrontIdAsc(formId);
         Map<String, Boolean> map = allSignList.stream().collect(Collectors.toMap(Sign::getGroupId, Sign::getSignFlag,(value1, value2 )->{
-            return value1||value2;
+            return value1&&value2;
         }));
         return !map.containsValue(false);
     }
@@ -127,7 +127,7 @@ public class SignService {
                     sign.setSignValue(signDto.getSignValue());
                     sign.setGroupId(signDto.getGroupId());
                     sign.setSignFlag(false);
-                    sign.setFrontId(signDto.getSignerList().get(i).get("frontId"));
+                    sign.setFrontId(String.valueOf(signDto.getSignerList().get(i).get("frontId")));
                     sign.setFormId(formId);
                     signList.add(sign);
                 }
@@ -136,14 +136,10 @@ public class SignService {
                 if (signList1.size() == 0) {
                     Validate.error("签名不存在");
                 }
-                //如果值没有变，不理会
-                if (signDto.getSignValue().equals(signList1.get(0).getSignValue())) {
-                    //刷新前端id
-//                    signList1.get(0).setFrontId(signDto.getSignerList().get(i).get("frontId"));
-                } else {
+                if (twoJsonNoEqual(signDto.getSignValue(),signList1.get(0).getSignValue())) {
                     //值变了，取消次groupId下的全部签名
                     signList1.forEach(x -> {
-                        x.setSignerPhoto(new byte[]{});
+                        x.setSignerPhoto(null);
 //                        sign.setSigner("");
 //                        sign.setSignerName("");
 //                        sign.setAfterSignValue("");
@@ -162,7 +158,7 @@ public class SignService {
 
     public Map<String, SignDto> getSignMap(String formId) {
         Map<String, SignDto> result = new HashMap<>();
-        List<Sign> signList = signRepository.findAllByFormId(formId);
+        List<Sign> signList = signRepository.findAllByFormIdOrderByFrontIdAsc(formId);
         for (Sign sign : signList) {
             //如果已经存在，则更新或者新加，现在是一对多只要有一个人签名signFlag就是true
             if (result.get(sign.getGroupId()) != null) {
@@ -191,12 +187,12 @@ public class SignService {
     public List<Map<String, String>> changeValue(List<SignDto> signDtoList) {
         List<Map<String, String>> result = new ArrayList<>();
         for (SignDto signDto : signDtoList) {
-            for (Map<String, String> map : signDto.getSignerList()) {
+            for (Map<String, Object> map : signDto.getSignerList()) {
                 Map<String, String> part = new HashMap<>();
-                Optional<Sign> byId = signRepository.findById(map.get("signId"));
+                Optional<Sign> byId = signRepository.findById(String.valueOf(map.get("signId")));
                 if (byId.isPresent()) {
                     Sign sign = byId.get();
-                    if (!JSON.parseObject(sign.getSignValue()).equals(JSON.parseObject(signDto.getSignValue()))&& sign.getSignFlag()) {
+                    if (twoJsonNoEqual(sign.getSignValue(),signDto.getSignValue())&& sign.getSignFlag()) {
                         part.put("groupId", sign.getGroupId());
                         part.put("formId", sign.getFormId());
                         part.put("signer", sign.getSignerName());
@@ -210,5 +206,12 @@ public class SignService {
         return result;
     }
 
+    /**
+     * 判断两个json是否不相等
+     * @return
+     */
+    public Boolean twoJsonNoEqual(String json1,String json2) {
+        return  !JSON.parseObject(json1).equals(JSON.parseObject(json2));
+    }
 
 }

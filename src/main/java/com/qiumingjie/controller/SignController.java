@@ -7,10 +7,13 @@ import com.qiumingjie.dao.formSystem.table.FormMainRepository;
 import com.qiumingjie.dto.FormTemplateDto;
 import com.qiumingjie.dto.SignDto;
 import com.qiumingjie.entities.formSystem.Sign;
+import com.qiumingjie.entities.formSystem.evaluate.table.FormMain;
 import com.qiumingjie.handler.JsonHandler;
+import com.qiumingjie.service.FormValuesService;
 import com.qiumingjie.service.SignService;
 import com.qiumingjie.utils.CommonUtils;
 import com.qiumingjie.utils.SignUtils;
+import com.qiumingjie.utils.Validate;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,6 +48,10 @@ public class SignController {
 
     @Autowired
     RepositoryContext repositoryContext;
+
+    @Autowired
+    FormValuesService formValuesService;
+
 
 
     @ApiOperation("验证是否修改了表单中已经签名部分")
@@ -84,9 +91,17 @@ public class SignController {
             sign1 = signOptional.get();
         }
         sign1.setSignFlag(false);
-        sign1.setSignerPhoto(new byte[]{});
+        sign1.setSignerPhoto(null);
+        Optional<FormMain> formMain = formMainRepository.findById(sign1.getFormId());
+        if (!formMain.isPresent()) {
+            Validate.error("主表中无表单记录，表单不存在");
+        } else {
+            FormMain formMain1 = formMain.get();
+            formMain1.setSignFlag(false);
+            formMainRepository.save(formMain1);
+        }
         signRepository.save(sign1);
-        return JsonHandler.succeed("取消签名成功");
+        return JsonHandler.succeed(formValuesService.getForm(sign1.getFormId()));
     }
 
 

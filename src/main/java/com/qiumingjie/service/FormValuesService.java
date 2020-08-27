@@ -16,6 +16,7 @@ import com.qiumingjie.utils.CommonUtils;
 import com.qiumingjie.utils.CopyUtils;
 import com.qiumingjie.utils.FormUtil;
 import com.qiumingjie.utils.Validate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,6 +34,7 @@ import java.util.Optional;
  * @description
  */
 @Service
+@Slf4j
 public class FormValuesService {
     @Resource
     private RepositoryContext repositoryContext;

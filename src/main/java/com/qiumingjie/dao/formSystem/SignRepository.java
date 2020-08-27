@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface SignRepository extends JpaRepository<Sign,String> {
 
-    List<Sign> findAllByFormId(String formId);
+    List<Sign> findAllByFormIdOrderByFrontIdAsc(String formId);
 
     void deleteAllByFormId(String formId);
 

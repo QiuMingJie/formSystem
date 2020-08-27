@@ -23,7 +23,7 @@ public class SignDto {
     @ApiModelProperty(value = "值",required = true,example = "{}")
     Object value;
 
-    List<Map<String,String>> signerList;
+    List<Map<String,Object>> signerList;
 
     @ApiModelProperty(value = "签名标志")
     private Boolean signFlag;
@@ -44,10 +44,14 @@ public class SignDto {
         if (this.signerList == null) {
             this.signerList = new ArrayList<>();
         }
-        Map<String, String> temp = new HashMap<>();
+        Map<String, Object> temp = new HashMap<>();
         temp.put("signId", sign.getSignId());
-        temp.put("signerPhoto", Arrays.toString(sign.getSignerPhoto()));
-        temp.put("signFlag", sign.getSignFlag().toString());
+        if (sign.getSignerPhoto() != null&&sign.getSignerPhoto().length!=0) {
+            temp.put("signerPhoto", Arrays.toString(sign.getSignerPhoto()));
+        } else {
+            temp.put("signerPhoto", null);
+        }
+        temp.put("signFlag", sign.getSignFlag());
         temp.put("frontId", sign.getFrontId());
         this.signerList.add(temp);
     }

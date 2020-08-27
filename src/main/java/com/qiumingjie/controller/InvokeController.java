@@ -1,8 +1,9 @@
 package com.qiumingjie.controller;
 
-import com.qiumingjie.dao.formSystem.UserInfoRepository;
 import com.qiumingjie.dao.formSystem.OpsQueueRepository;
 import com.qiumingjie.dao.formSystem.PatientInfoRepository;
+import com.qiumingjie.dao.formSystem.UserInfoRepository;
+import com.qiumingjie.dto.PatientAndOperationAndUserInfoDto;
 import com.qiumingjie.entities.formSystem.info.OpsQueue;
 import com.qiumingjie.entities.formSystem.info.PatientInfo;
 import com.qiumingjie.entities.formSystem.info.UserInfo;
@@ -11,6 +12,7 @@ import com.qiumingjie.utils.CommonUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,6 +37,7 @@ public class InvokeController {
 
     @Autowired
     private UserInfoRepository userInfoRepository;
+
 
     @ApiOperation("保存或者更新病人基本信息")
     @RequestMapping(value = "/saveOrUpdatePatientInfo", method = RequestMethod.POST)
@@ -91,5 +94,19 @@ public class InvokeController {
         return JsonHandler.fail("数据不存在");
     }
 
-
+    @ApiOperation("获取所有病人信息，手术信息，用户信息")
+    @PostMapping(value = "getPatientAndOperationAndUserInfo")
+    public JsonHandler getPatientAndOperationAndUserInfo(String patientId, String operationId, String userId) {
+        if (CommonUtils.empty(patientId) || CommonUtils.empty(userId)) {
+            return JsonHandler.fail("病人id为空或用户id为空");
+        }
+        Optional<PatientInfo> patientInfoOptional = patientInfoRepository.findById(patientId);
+        Optional<OpsQueue> opsQueueOptional = opsQueueRepository.findById(operationId);
+        Optional<UserInfo> userInfoOptional = userInfoRepository.findById(userId);
+        PatientAndOperationAndUserInfoDto patientAndOperationAndUserInfoDto = new PatientAndOperationAndUserInfoDto();
+        patientInfoOptional.ifPresent(patientAndOperationAndUserInfoDto::setPatientInfo);
+        opsQueueOptional.ifPresent(patientAndOperationAndUserInfoDto::setOpsQueue);
+        userInfoOptional.ifPresent(patientAndOperationAndUserInfoDto::setUserInfo);
+        return JsonHandler.succeed(patientAndOperationAndUserInfoDto);
+    }
 }

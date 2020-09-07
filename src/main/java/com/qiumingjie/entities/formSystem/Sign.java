@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "Sign")
 @Data
-@ApiModel(value = "签名对象", description = "新增&更新文章对象说明")
+@ApiModel(value = "签名对象Sign表", description = "新增&更新文章对象说明")
 public class Sign {
 
     @Id

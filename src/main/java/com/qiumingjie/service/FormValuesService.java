@@ -1,8 +1,8 @@
 package com.qiumingjie.service;
 
 import com.qiumingjie.FormEnum;
-import com.qiumingjie.dao.formSystem.OpsQueueRepository;
-import com.qiumingjie.dao.formSystem.PatientInfoRepository;
+import com.qiumingjie.dao.formSystem.info.OpsQueueRepository;
+import com.qiumingjie.dao.formSystem.info.PatientInfoRepository;
 import com.qiumingjie.dao.formSystem.RepositoryContext;
 import com.qiumingjie.dao.formSystem.SignRepository;
 import com.qiumingjie.dao.formSystem.table.FormMainRepository;
@@ -72,8 +72,6 @@ public class FormValuesService {
             if (!formDict.isPresent()) {
                 return JsonHandler.fail("新建表单失败：表单模板不存在");
             }
-            //暂时不知道怎么获取创建者
-//            formValues.setCreator("？？");
             List<FormMain> formMainByTemplateIdLike = formMainRepository.findFormMainBytemplateIdLike(formValues.getTemplateFormId());
             if (CommonUtils.empty(formMainByTemplateIdLike) || formMainByTemplateIdLike.size() == 0) {
                 formValues.setFormId(FormUtil.caculFormEntityId(formValues.getTemplateFormId()));
@@ -115,21 +113,21 @@ public class FormValuesService {
 
 
     public FormTemplateDto getForm(String formId) {
-        Optional<FormMain> formMain = formMainRepository.findById(formId);
-        if (!formMain.isPresent()) {
+        Optional<FormMain> formMainOptional = formMainRepository.findById(formId);
+        if (!formMainOptional.isPresent()) {
             Validate.error("主表中无表单记录，表单不存在");
         }
         JpaRepository repository = repositoryContext.getRepository(FormUtil.getFormDictId(formId));
-        Optional<FormTemplate> formTemplate = repository.findById(formId);
-        if (formTemplate.isPresent()) {
-            if (CommonUtils.empty(formTemplate.get().getPatientId())) {
+        Optional<FormTemplate> formTemplateOptional = repository.findById(formId);
+        if (formTemplateOptional.isPresent()) {
+            if (CommonUtils.empty(formTemplateOptional.get().getPatientId())) {
                 Validate.error("获取病人id失败，请联系管理员");
             }
             FormTemplateDto formTemplateDto = new FormTemplateDto();
-            BeanUtils.copyProperties(formTemplate.get(), formTemplateDto);
+            BeanUtils.copyProperties(formTemplateOptional.get(), formTemplateDto);
             //判断有无手术信息，返回
-            if (CommonUtils.notEmpty(formTemplate.get().getOperationId())) {
-                Optional<OpsQueue> operation = opsQueueRepository.findById(formTemplate.get().getOperationId());
+            if (CommonUtils.notEmpty(formTemplateOptional.get().getOperationId())) {
+                Optional<OpsQueue> operation = opsQueueRepository.findById(formTemplateOptional.get().getOperationId());
                 if (operation.isPresent()) {
                     formTemplateDto.setOperation(operation.get());
                     if (CommonUtils.notEmpty(operation.get().getPatientId())) {
@@ -140,8 +138,8 @@ public class FormValuesService {
                 }
             }
             formTemplateDto.setSignList(signService.getSignMap(formId));
-            formTemplateDto.setArchiveFlag(formMain.get().getArchiveFlag());
-            formTemplateDto.setSignFlag(formMain.get().getSignFlag());
+            formTemplateDto.setArchiveFlag(formMainOptional.get().getArchiveFlag());
+            formTemplateDto.setSignFlag(formMainOptional.get().getSignFlag());
             return formTemplateDto;
         } else {
             return null;

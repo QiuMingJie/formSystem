@@ -2,7 +2,7 @@ package com.qiumingjie.controller;
 
 import com.qiumingjie.dao.formSystem.RepositoryContext;
 import com.qiumingjie.dao.formSystem.SignRepository;
-import com.qiumingjie.dao.formSystem.UserInfoRepository;
+import com.qiumingjie.dao.formSystem.info.UserInfoRepository;
 import com.qiumingjie.dao.formSystem.table.FormMainRepository;
 import com.qiumingjie.dto.FormTemplateDto;
 import com.qiumingjie.dto.SignDto;

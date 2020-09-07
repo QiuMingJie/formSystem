@@ -1,8 +1,8 @@
 package com.qiumingjie.controller;
 
-import com.qiumingjie.dao.formSystem.OpsQueueRepository;
-import com.qiumingjie.dao.formSystem.PatientInfoRepository;
-import com.qiumingjie.dao.formSystem.UserInfoRepository;
+import com.qiumingjie.dao.formSystem.info.OpsQueueRepository;
+import com.qiumingjie.dao.formSystem.info.PatientInfoRepository;
+import com.qiumingjie.dao.formSystem.info.UserInfoRepository;
 import com.qiumingjie.dto.PatientAndOperationAndUserInfoDto;
 import com.qiumingjie.entities.formSystem.info.OpsQueue;
 import com.qiumingjie.entities.formSystem.info.PatientInfo;
@@ -12,10 +12,7 @@ import com.qiumingjie.utils.CommonUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -86,7 +83,7 @@ public class InvokeController {
 
     @ApiOperation("获取医生基本信息")
     @RequestMapping(value = "/getDoctorInfo", method = RequestMethod.GET)
-    public JsonHandler getDoctorInfo(String id) {
+    public JsonHandler getDoctorInfo(Integer id) {
         Optional<UserInfo> byId = userInfoRepository.findById(id);
         if (byId.isPresent()) {
             return JsonHandler.succeed(byId.get());
@@ -96,13 +93,16 @@ public class InvokeController {
 
     @ApiOperation("获取所有病人信息，手术信息，用户信息")
     @PostMapping(value = "getPatientAndOperationAndUserInfo")
-    public JsonHandler getPatientAndOperationAndUserInfo(String patientId, String operationId, String userId) {
-        if (CommonUtils.empty(patientId) || CommonUtils.empty(userId)) {
-            return JsonHandler.fail("病人id为空或用户id为空");
+    public JsonHandler getPatientAndOperationAndUserInfo(@RequestBody PatientAndOperationAndUserInfoDto patientIdAndUserIdAndOperationId) {
+        String patientId = patientIdAndUserIdAndOperationId.getPatientId();
+        Integer userId = patientIdAndUserIdAndOperationId.getUserId();
+        String operationId = patientIdAndUserIdAndOperationId.getOperationId();
+        if (CommonUtils.empty(patientId) || CommonUtils.empty(userId)|| CommonUtils.empty(operationId)) {
+            return JsonHandler.fail("病人id为空或用户id或手术id为空");
         }
         Optional<PatientInfo> patientInfoOptional = patientInfoRepository.findById(patientId);
         Optional<OpsQueue> opsQueueOptional = opsQueueRepository.findById(operationId);
-        Optional<UserInfo> userInfoOptional = userInfoRepository.findById(userId);
+        Optional<UserInfo> userInfoOptional = userInfoRepository.findById( userId);
         PatientAndOperationAndUserInfoDto patientAndOperationAndUserInfoDto = new PatientAndOperationAndUserInfoDto();
         patientInfoOptional.ifPresent(patientAndOperationAndUserInfoDto::setPatientInfo);
         opsQueueOptional.ifPresent(patientAndOperationAndUserInfoDto::setOpsQueue);

@@ -1,4 +1,4 @@
-package com.qiumingjie.dao.formSystem;
+package com.qiumingjie.dao.formSystem.info;
 
 import com.qiumingjie.entities.formSystem.info.OpsQueue;
 import org.springframework.data.jpa.repository.JpaRepository;

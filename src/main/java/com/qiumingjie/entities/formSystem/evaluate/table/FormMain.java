@@ -29,7 +29,7 @@ public class FormMain extends BaseEntity implements Serializable {
 
     private String patientId;
 
-    private String creator;
+    private Integer userId;
 
     private String recordDateTime;
 

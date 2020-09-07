@@ -5,6 +5,7 @@ import cn.org.bjca.client.exceptions.ParameterTooLongException;
 import cn.org.bjca.client.exceptions.SVSConnectException;
 import cn.org.bjca.client.exceptions.UnkownException;
 import cn.org.bjca.client.security.SecurityEngineDeal;
+import com.qiumingjie.exception.SignServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +20,7 @@ public class SignUtils {
     private static SecurityEngineDeal dsvs = null;
     private static final SignUtils signUtils = new SignUtils();
 
-    public static SignUtils init() {
+    public static SignUtils init() throws SignServiceException {
         try {
             LOGGER.info("初始化");
             //读取配置文件里面文件
@@ -28,6 +29,7 @@ public class SignUtils {
             dsvs = SecurityEngineDeal.getInstance("SVSDefault");
         } catch (Exception e) {
             e.printStackTrace();
+            throw new SignServiceException(e.getMessage());
         }
         return signUtils;
     }

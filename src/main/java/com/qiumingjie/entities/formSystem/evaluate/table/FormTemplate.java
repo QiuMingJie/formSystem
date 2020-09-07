@@ -25,7 +25,7 @@ public class FormTemplate extends BaseEntity implements Serializable {
 
     private String templateName;
 
-    private String creator;
+    private Integer userId;
 
     private String recordDateTime;
 

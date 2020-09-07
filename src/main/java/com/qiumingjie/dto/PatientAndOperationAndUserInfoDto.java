@@ -12,6 +12,9 @@ import lombok.Data;
  */
 @Data
 public class PatientAndOperationAndUserInfoDto {
+    private String patientId;
+    private Integer userId;
+    private String operationId;
     OpsQueue opsQueue;
     PatientInfo patientInfo;
     UserInfo userInfo;

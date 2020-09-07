@@ -1,5 +1,6 @@
 package com.qiumingjie.handler;
 
+import com.qiumingjie.exception.SignServiceException;
 import com.qiumingjie.exception.ValidateException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
@@ -48,6 +49,12 @@ public class ExceptHandler {
         return JsonHandler.fail(e.getBindingResult().getFieldError().getDefaultMessage());
     }
 
+    @ExceptionHandler(SignServiceException.class)
+    public JsonHandler handleBindException(SignServiceException e) {
+        e.printStackTrace();
+        log.error(e.getMessage(), e);
+        return JsonHandler.fail("签名服务器初始化异常: "+e.getMessage());
+    }
 
     @ExceptionHandler(RuntimeException.class)
     public JsonHandler handleBindException(RuntimeException e) {
@@ -55,4 +62,14 @@ public class ExceptHandler {
         log.error(e.getMessage(), e);
         return JsonHandler.fail(e.getMessage());
     }
+
+
+    @ExceptionHandler(Exception.class)
+    public JsonHandler handleException(Exception e) {
+        e.printStackTrace();
+        log.error(e.getMessage(), e);
+        return JsonHandler.fail(e.getMessage());
+    }
+
+
 }

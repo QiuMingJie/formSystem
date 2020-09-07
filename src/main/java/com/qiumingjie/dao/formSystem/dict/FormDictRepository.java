@@ -5,6 +5,8 @@ import com.qiumingjie.entities.formSystem.evaluate.dict.FormDict;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author QiuMingJie
  * @date 2020-01-03 11:28
@@ -48,4 +50,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FormDictRepository extends JpaRepository<FormDict, String> {
 
+    List<FormDict> findAllByFormDictIdLike(String formDictLike);
 }

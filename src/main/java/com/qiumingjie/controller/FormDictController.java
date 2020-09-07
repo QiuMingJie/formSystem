@@ -1,11 +1,15 @@
 package com.qiumingjie.controller;
 
+import com.qiumingjie.dao.formSystem.info.RoleInfoRepository;
+import com.qiumingjie.dao.formSystem.info.UserInfoRepository;
 import com.qiumingjie.dto.FormDataDto;
 import com.qiumingjie.dto.FormDictDto;
+import com.qiumingjie.dto.UserAndRoleDto;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.service.FormAddDictService;
 import com.qiumingjie.service.FormAddValueService;
 import com.qiumingjie.service.FormDictService;
+import com.qiumingjie.service.UserAndRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +36,15 @@ public class FormDictController {
     @Autowired
     private FormAddValueService formAddValueService;
 
+    @Autowired
+    private UserInfoRepository userInfoRepository;
+
+    @Autowired
+    private RoleInfoRepository roleInfoRepository;
+
+    @Autowired
+    private UserAndRoleService userAndRoleService;
+
     @ApiOperation("新增字典表的方法")
     @RequestMapping("/addFormDict")
     public JsonHandler addFormDict(@RequestBody FormDictDto formDictDto) {
@@ -39,8 +52,6 @@ public class FormDictController {
     }
 
     /**
-     *
-     *
      * @param formId     表单id
      * @param deleteItem 是否删除项目，true/false
      * @return 运行过程
@@ -52,8 +63,6 @@ public class FormDictController {
     }
 
     /**
-     *
-     *
      * @param formId 表单id
      * @return 表单的基本信息
      */
@@ -87,4 +96,10 @@ public class FormDictController {
     }
 
 
+    @RequestMapping(value = "/getFormDictByUserId", method = RequestMethod.GET)
+    public JsonHandler getFormDictByUserId(Integer userId) {
+        UserAndRoleDto userAndRoleInfoByUserId = userAndRoleService.getUserAndRoleInfoByUserId(userId);
+        String roleName = userAndRoleInfoByUserId.getRoleInfo().getSmRoleName();
+        return JsonHandler.succeed(roleName,formDictService.getFormByRole(roleName));
+    }
 }

@@ -20,7 +20,7 @@ public interface FormMainRepository extends JpaRepository<FormMain, String> {
     @Query("select a from FormMain a where a.formId like ?1%  order by  a.formId desc ")
     List<FormMain> findFormMainBytemplateIdLike(String templateId);
 
-    List<FormMain> findAllByPatientIdAndOperationId(String patientId,String operationId);
+    List<FormMain> findAllByPatientIdAndOperationIdAndUserId(String patientId,String operationId,Integer userId);
 
     List<FormMain> findAllByPatientIdOrderByTemplateFormId(String patientId);
 

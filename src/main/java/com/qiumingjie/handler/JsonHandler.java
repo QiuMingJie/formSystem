@@ -1,12 +1,14 @@
 package com.qiumingjie.handler;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author QiuMingJie
  * @date 2020-01-20 21:14
  * @Description
  */
+@Slf4j
 public class JsonHandler implements java.io.Serializable {
     /**
      *
@@ -40,12 +42,16 @@ public class JsonHandler implements java.io.Serializable {
     public static JsonHandler succeed(Object data) {
         return new JsonHandler(JsonHandler.CD0[0], JsonHandler.CD0[1], data);
     }
+    public static JsonHandler succeed(String desc,Object data) {
+        return new JsonHandler(JsonHandler.CD0[0], desc, data);
+    }
 
     public static JsonHandler fail() {
         return new JsonHandler(JsonHandler.CD1[0], JsonHandler.CD1[1]);
     }
 
     public static JsonHandler fail(String desc) {
+        log.error("操作失败，失败信息："+desc);
         return new JsonHandler(JsonHandler.CD1[0], desc);
     }
 

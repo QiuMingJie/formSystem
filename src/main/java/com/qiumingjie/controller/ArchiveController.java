@@ -12,6 +12,7 @@ import com.qiumingjie.utils.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
 
@@ -34,6 +34,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/archive")
 @Api(description = "归档和取消归档接口")
+@Slf4j
 public class ArchiveController {
 
     @Autowired
@@ -54,7 +55,7 @@ public class ArchiveController {
     public JsonHandler archiveForm(
             @ApiParam(value = "只需传formId字段")
              String formId,
-            MultipartFile file) throws InstantiationException, IllegalAccessException, IOException {
+            MultipartFile file) throws InstantiationException, IllegalAccessException {
         if (CommonUtils.empty(formId)) {
             return JsonHandler.fail("表单id为空，归档失败");
         }
@@ -67,21 +68,20 @@ public class ArchiveController {
 //            return JsonHandler.fail("归档失败，表单存在未签名信息");
 //        }
         formMain.setArchiveFlag(true);
-        formMainRepository.save(formMain);
         JpaRepository repository = repositoryContext.getRepository(FormUtil.getFormDictId(formId));
         Optional formTemplateOptional = repository.findById(formId);
         if (!formTemplateOptional.isPresent()) {
             return JsonHandler.fail("表单信息不存在");
         }
         FormTemplate formTemplate = (FormTemplate)formTemplateOptional.get();
-//        formTemplate.setArchiveFlag(true);
-        repository.save(CopyUtils.formEntityTransfer(formTemplate, FormEnum.getEntityClazz(formTemplate)));
         try {
             FileUtils.saveToDisk(archiveFormFilePath, DateUtils.format(new Date(),"yyyyMMddHHmmss")+"_"+file.getOriginalFilename(), file.getInputStream());
         } catch (Exception e) {
             e.printStackTrace();
             return JsonHandler.fail("归档失败，保存归档文件失败"+e.getMessage());
         }
+        repository.save(CopyUtils.formEntityTransfer(formTemplate, FormEnum.getEntityClazz(formTemplate)));
+        formMainRepository.save(formMain);
         return JsonHandler.succeed(formValuesService.getForm(formId));
     }
 
@@ -91,11 +91,11 @@ public class ArchiveController {
         if (CommonUtils.empty(formId)) {
             return JsonHandler.fail("表单id为空，取消归档失败");
         }
-        Optional<FormMain> byId = formMainRepository.findById(formId);
-        if (!byId.isPresent()) {
+        Optional<FormMain> formMainOptional = formMainRepository.findById(formId);
+        if (!formMainOptional.isPresent()) {
             return JsonHandler.fail("获取表单失败");
         }
-        FormMain formMain = byId.get();
+        FormMain formMain = formMainOptional.get();
         formMain.setArchiveFlag(false);
         formMainRepository.save(formMain);
         return JsonHandler.succeed("取消归档成功");

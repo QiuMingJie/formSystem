@@ -1,4 +1,4 @@
-package com.qiumingjie.dao.formSystem;
+package com.qiumingjie.dao.formSystem.info;
 
 import com.qiumingjie.entities.formSystem.info.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
  * @description
  */
 @Repository
-public interface UserInfoRepository extends JpaRepository<UserInfo, String> {
+public interface UserInfoRepository extends JpaRepository<UserInfo, Integer> {
     UserInfo findAllByUserNumber(String userNumber);
+
+
 }

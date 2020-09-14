@@ -12,6 +12,7 @@ import com.qiumingjie.service.FormDictService;
 import com.qiumingjie.service.UserAndRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Api(description = "用于操作字典表！")
 @RequestMapping("/form")
+@Slf4j
 public class FormDictController {
     @Autowired
     private FormDictService formDictService;
@@ -98,6 +100,7 @@ public class FormDictController {
 
     @RequestMapping(value = "/getFormDictByUserId", method = RequestMethod.GET)
     public JsonHandler getFormDictByUserId(Integer userId) {
+        log.info("111");
         UserAndRoleDto userAndRoleInfoByUserId = userAndRoleService.getUserAndRoleInfoByUserId(userId);
         String roleName = userAndRoleInfoByUserId.getRoleInfo().getSmRoleName();
         return JsonHandler.succeed(roleName,formDictService.getFormByRole(roleName));

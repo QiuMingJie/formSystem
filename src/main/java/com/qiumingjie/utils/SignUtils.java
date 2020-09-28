@@ -6,6 +6,7 @@ import cn.org.bjca.client.exceptions.SVSConnectException;
 import cn.org.bjca.client.exceptions.UnkownException;
 import cn.org.bjca.client.security.SecurityEngineDeal;
 import com.qiumingjie.exception.SignServiceException;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
  * @date 2020-06-21 9:26
  * @description 签名工具
  */
+@Slf4j
 public class SignUtils {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(SignUtils.class);
@@ -22,12 +24,22 @@ public class SignUtils {
 
     public static SignUtils init() throws SignServiceException {
         try {
-            LOGGER.info("初始化");
+            LOGGER.info("初始化证书签名工具");
             //读取配置文件里面文件
             SecurityEngineDeal.setProfilePath("C:\\BJCAROOT");
             //公网测试服务器
             dsvs = SecurityEngineDeal.getInstance("SVSDefault");
+            if (dsvs == null) {
+                Validate.error("签名工具初始化异常");
+            }
+            log.info("签名工具初始化完毕，开始获取服务端证书");
+            String serverCertificate = getServerCertificate();
+            if (serverCertificate == null) {
+                Validate.error("服务器端证书为空,签名工具初始化失败！");
+            }
+            LOGGER.info("初始化服务器端证书：" + serverCertificate);
         } catch (Exception e) {
+            log.error("读取签名配置失败！");
             e.printStackTrace();
             throw new SignServiceException(e.getMessage());
         }
@@ -38,10 +50,8 @@ public class SignUtils {
      * 获取服务器证书
      * 成功返回Base64 编码的服务器证书。出错则返回空值
      */
-    public static void getServerCertificate() throws SVSConnectException {
-        String serverCertificate = dsvs.getServerCertificate();
-        LOGGER.info("serverCertificate:" + serverCertificate);
-
+    public static String getServerCertificate() throws SVSConnectException {
+        return  dsvs.getServerCertificate();
     }
 
     /**
@@ -113,9 +123,10 @@ public class SignUtils {
      * @return
      */
     public static String validateCert(String base64EncodeCert) throws Exception {
-        System.out.println(dsvs);
-        SignUtils.init();
-        System.out.println(base64EncodeCert);
+//        if (dsvs == null) {
+            SignUtils.init();
+//        }
+        log.info("证书原文：" + base64EncodeCert);
         int res = dsvs.validateCert(base64EncodeCert);
         LOGGER.info("证书验证结果：" + res);
         switch (res) {

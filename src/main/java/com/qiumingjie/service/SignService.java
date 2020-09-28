@@ -12,7 +12,7 @@ import com.qiumingjie.entities.formSystem.info.UserInfo;
 import com.qiumingjie.handler.JsonHandler;
 import com.qiumingjie.utils.SignUtils;
 import com.qiumingjie.utils.TimeStampSignUtils;
-import com.qiumingjie.utils.Validate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
  * @description
  */
 @Service
+@Slf4j
 public class SignService {
     @Autowired
     private FormMainRepository formMainRepository;
@@ -134,7 +135,16 @@ public class SignService {
             } else {
                 List<Sign> signList1 = signRepository.findAllByFormIdAndGroupId(formId, signDto.getGroupId());
                 if (signList1.size() == 0) {
-                    Validate.error("签名不存在");
+                    for (int i = 0; i < signDto.getSignerList().size(); i++) {
+                        Sign sign = new Sign();
+                        sign.setSignId(UUID.randomUUID().toString());
+                        sign.setSignValue(signDto.getSignValue());
+                        sign.setGroupId(signDto.getGroupId());
+                        sign.setSignFlag(false);
+                        sign.setFrontId(String.valueOf(signDto.getSignerList().get(i).get("frontId")));
+                        sign.setFormId(formId);
+                        signList.add(sign);
+                    }
                 }
                 if (twoJsonNoEqual(signDto.getSignValue(),signList1.get(0).getSignValue())) {
                     //值变了，取消次groupId下的全部签名
@@ -199,7 +209,8 @@ public class SignService {
                         result.add(part);
                     }
                 } else {
-                    Validate.error("签名数据不存在，签名id" + map.get("signId"));
+                    //跳过此处验证，后续会保存，
+                    log.info("签名数据不存在，参数为 {}", map);
                 }
             }
         }

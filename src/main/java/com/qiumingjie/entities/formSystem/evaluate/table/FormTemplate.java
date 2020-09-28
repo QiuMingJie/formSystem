@@ -29,9 +29,11 @@ public class FormTemplate extends BaseEntity implements Serializable {
 
     private String recordDateTime;
 
+    //表单的值
     @Column(columnDefinition = "varchar(max)")
     private String value;
 
+    //给前端储存的
     private String info;
     /**
      * 患者部分

@@ -17,14 +17,19 @@ import java.io.Serializable;
 public class FormTemplate extends BaseEntity implements Serializable {
 
     @Id
+    //表单id
     private String formId;
 
+    //操作者id，创建者id
     private String operationId;
 
+    //模板id
     private String templateFormId;
 
+    //表单名
     private String templateName;
 
+    //用户id
     private Integer userId;
 
     private String recordDateTime;
@@ -33,7 +38,7 @@ public class FormTemplate extends BaseEntity implements Serializable {
     @Column(columnDefinition = "varchar(max)")
     private String value;
 
-    //给前端储存的
+    //
     private String info;
     /**
      * 患者部分

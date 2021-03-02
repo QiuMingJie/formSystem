@@ -14,7 +14,7 @@ import javax.validation.constraints.NotEmpty;
  * @description 手术信息
  */
 @Entity
-@Table(name = "OPS_Queue")
+@Table(name = "V_OPS_QUEUE")
 @Data
 public class OpsQueue {
 
@@ -36,6 +36,8 @@ public class OpsQueue {
     private String patientBed;
     @Column(length = 100, columnDefinition = "varchar(100)")
     private String operationRoom;
+    @Column(length = 100, columnDefinition = "varchar(100)")
+    private String roomName;
     @Column(length = 100, columnDefinition = "varchar(100)")
     private String operationNo;
     @Column(length = 100, columnDefinition = "varchar(100)")

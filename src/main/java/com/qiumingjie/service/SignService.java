@@ -135,6 +135,7 @@ public class SignService {
             } else {
                 List<Sign> signList1 = signRepository.findAllByFormIdAndGroupId(formId, signDto.getGroupId());
                 if (signList1.size() == 0) {
+                    List<Sign> insertSignList = new ArrayList<>();
                     for (int i = 0; i < signDto.getSignerList().size(); i++) {
                         Sign sign = new Sign();
                         sign.setSignId(UUID.randomUUID().toString());
@@ -143,23 +144,25 @@ public class SignService {
                         sign.setSignFlag(false);
                         sign.setFrontId(String.valueOf(signDto.getSignerList().get(i).get("frontId")));
                         sign.setFormId(formId);
-                        signList.add(sign);
+                        insertSignList.add(sign);
                     }
-                }
-                if (twoJsonNoEqual(signDto.getSignValue(),signList1.get(0).getSignValue())) {
-                    //值变了，取消次groupId下的全部签名
-                    signList1.forEach(x -> {
-                        x.setSignerPhoto(null);
+                    signRepository.saveAll(insertSignList);
+                }else {
+                    if (twoJsonNoEqual(signDto.getSignValue(), signList1.get(0).getSignValue())) {
+                        //值变了，取消次groupId下的全部签名
+                        signList1.forEach(x -> {
+                            x.setSignerPhoto(null);
 //                        sign.setSigner("");
 //                        sign.setSignerName("");
 //                        sign.setAfterSignValue("");
 //                        sign.setCertificate("");
 //                        sign.setTwiceValue(new byte[]{});
 //                        sign.setSignFlag(false);
-                        x.setSignFlag(false);
-                        x.setSignValue(signDto.getSignValue());
-                    });
-                    signList.addAll(signList1);
+                            x.setSignFlag(false);
+                            x.setSignValue(signDto.getSignValue());
+                        });
+                        signList.addAll(signList1);
+                    }
                 }
             }
         }

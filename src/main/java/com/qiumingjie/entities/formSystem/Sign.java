@@ -57,7 +57,7 @@ public class Sign {
     private String certificate;
 
     @ApiModelProperty(value = "CA系统时间")
-    private Long dateTime;
+    private String  dateTime;
 
     @ApiModelProperty(value = "时间戳签名结果")
     @Column(columnDefinition = "varchar(max)")

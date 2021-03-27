@@ -7,9 +7,12 @@ import com.qiumingjie.dao.formSystem.info.UserInfoRepository;
 import com.qiumingjie.dao.formSystem.table.FormMainRepository;
 import com.qiumingjie.dto.SignDto;
 import com.qiumingjie.entities.formSystem.Sign;
+import com.qiumingjie.entities.formSystem.evaluate.dict.FormDict;
 import com.qiumingjie.entities.formSystem.evaluate.table.FormMain;
 import com.qiumingjie.entities.formSystem.info.UserInfo;
 import com.qiumingjie.handler.JsonHandler;
+import com.qiumingjie.utils.DateUtils;
+import com.qiumingjie.utils.FormUtil;
 import com.qiumingjie.utils.SignUtils;
 import com.qiumingjie.utils.TimeStampSignUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +45,10 @@ public class SignService {
 
     @Autowired
     UserInfoRepository userInfoRepository;
+
+
+    @Autowired
+    FormDictService formDictService;
 
     @Transactional(rollbackFor = RuntimeException.class)
     public JsonHandler sign(String signId, String signer, String certificate) {
@@ -91,7 +98,7 @@ public class SignService {
         sign.setSignerName(userInfo.getUserName());
         sign.setSignerPhoto(userInfo.getUserSignPhoto());
         sign.setAfterSignValue(afterSignValue);
-        sign.setDateTime(System.currentTimeMillis());
+        sign.setDateTime(DateUtils.getNowDateTime());
         sign.setTwiceValue(timeStampString);
         signRepository.save(sign);
         formMain.setSignFlag(checkSignAll(sign.getFormId()));
@@ -133,8 +140,8 @@ public class SignService {
                     signList.add(sign);
                 }
             } else {
-                List<Sign> signList1 = signRepository.findAllByFormIdAndGroupId(formId, signDto.getGroupId());
-                if (signList1.size() == 0) {
+                List<Sign> databaseSignValue = signRepository.findAllByFormIdAndGroupId(formId, signDto.getGroupId());
+                if (databaseSignValue.size() == 0) {
                     List<Sign> insertSignList = new ArrayList<>();
                     for (int i = 0; i < signDto.getSignerList().size(); i++) {
                         Sign sign = new Sign();
@@ -148,9 +155,14 @@ public class SignService {
                     }
                     signRepository.saveAll(insertSignList);
                 }else {
-                    if (twoJsonNoEqual(signDto.getSignValue(), signList1.get(0).getSignValue())) {
+                    //假如两个的值变了而且formDict 的changeDeleteSign标志为true的话才取消签名
+                    FormDict formdict = formDictService.getFromByFromDictId(FormUtil.getFormDictId(formId));
+                    if (formdict == null) {
+                        throw new RuntimeException("表单字典表form_dict表中无此表单");
+                    }
+                    if (twoJsonNoEqual(signDto.getSignValue(), databaseSignValue.get(0).getSignValue())&& formdict.getChangeDeleteSign()) {
                         //值变了，取消次groupId下的全部签名
-                        signList1.forEach(x -> {
+                        databaseSignValue.forEach(x -> {
                             x.setSignerPhoto(null);
 //                        sign.setSigner("");
 //                        sign.setSignerName("");
@@ -161,7 +173,7 @@ public class SignService {
                             x.setSignFlag(false);
                             x.setSignValue(signDto.getSignValue());
                         });
-                        signList.addAll(signList1);
+                        signList.addAll(databaseSignValue);
                     }
                 }
             }

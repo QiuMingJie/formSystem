@@ -30,6 +30,9 @@ public class FormDict extends BaseEntity implements Serializable {
     @Column(name = "FORM_TYPE")
     private String formType;
 
+    @Column(name = "CHANGE_DELETE_SIGN")
+    private Boolean changeDeleteSign;
+
     /**
      * 签名数量
      */
@@ -79,5 +82,13 @@ public class FormDict extends BaseEntity implements Serializable {
 
     public void setRepositoryClassName(String repositoryClassName) {
         this.repositoryClassName = repositoryClassName;
+    }
+
+    public Boolean getChangeDeleteSign() {
+        return changeDeleteSign;
+    }
+
+    public void setChangeDeleteSign(Boolean changeDeleteSign) {
+        this.changeDeleteSign = changeDeleteSign;
     }
 }

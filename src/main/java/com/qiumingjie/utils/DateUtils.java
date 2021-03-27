@@ -77,6 +77,11 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
     private static Log log = LogFactory.getLog(DateUtils.class);
 
+
+    public static String getNowDateTime() {
+        return format(new Date(), YY_UNTIL_SSS);
+    }
+
     /**
      * 医院最通用的日期格式
      */

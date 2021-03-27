@@ -20,7 +20,7 @@ public enum FormEnum {
     E0002_0007("E0002_0007", "手术患者转交接记录单", " - 1", RecOpraPatientTransRec.class),
 
     E0003_0003("E0003_0003", "麻醉术前访视记录单", "1", RecAnesthesiaBrforeOpra.class),
-    E0003_0004("E0003_0004", "麻醉经过及术后访视", "3", RecAnesthesiaInterview.class),
+    E0003_0004("E0003_0004", "麻醉术后访视记录", "3", RecAnesthesiaInterview.class),
     E0003_0005("E0003_0005", "麻醉知情同意书", "1", RecAnesthesiaKonwed.class),
     E0003_0006("E0003_0006", "术后镇痛知情同意书", "1", RecAnesthesiaAfterOpraKonwed.class),
     E0003_0007("E0003_0007", "使用自费、高费用项目同意书", " - 1", RecUseExpensiveKnowed.class),

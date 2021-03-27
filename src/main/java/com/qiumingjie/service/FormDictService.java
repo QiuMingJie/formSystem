@@ -61,5 +61,16 @@ public class FormDictService {
         return "";
     }
 
+
+    /**
+     * 医生-->E0002
+     * 护士-->E0003
+     * 管理员-->all
+     *
+     * @return
+     */
+    public FormDict getFromByFromDictId(String formDictId) {
+        return formDictRepository.findById(formDictId).orElse(null);
+    }
 }
 

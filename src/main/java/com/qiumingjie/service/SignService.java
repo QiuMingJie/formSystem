@@ -160,17 +160,17 @@ public class SignService {
                     if (formdict == null) {
                         throw new RuntimeException("表单字典表form_dict表中无此表单");
                     }
-                    if (twoJsonNoEqual(signDto.getSignValue(), databaseSignValue.get(0).getSignValue())&& formdict.getChangeDeleteSign()) {
+                    if (twoJsonNoEqual(signDto.getSignValue(), databaseSignValue.get(0).getSignValue()) && formdict.getChangeDeleteSign()) {
                         //值变了，取消次groupId下的全部签名
                         databaseSignValue.forEach(x -> {
                             x.setSignerPhoto(null);
-//                        sign.setSigner("");
-//                        sign.setSignerName("");
-//                        sign.setAfterSignValue("");
-//                        sign.setCertificate("");
-//                        sign.setTwiceValue(new byte[]{});
-//                        sign.setSignFlag(false);
                             x.setSignFlag(false);
+                            x.setSignValue(signDto.getSignValue());
+                        });
+                        signList.addAll(databaseSignValue);
+                    } else {
+                        //值没变，还是覆盖保存
+                        databaseSignValue.forEach(x -> {
                             x.setSignValue(signDto.getSignValue());
                         });
                         signList.addAll(databaseSignValue);
